@@ -1,0 +1,355 @@
+;
+; Modules LEFT
+; BSPWM
+[module/bspwm]
+type = internal/bspwm
+
+; Only show workspaces defined on the same output as the bar
+; NOTE: The bspwm and XRandR monitor names must match, which they do by default.
+; Default: true
+pin-workspaces = true
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = true
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Set the scroll cycle direction 
+; Default: true
+reverse-scroll = false
+
+; Label for focused workspaces
+label-focused = %name%
+label-focused-foreground = ${colors.light-white}
+label-focused-background = ${colors.light-black}
+label-focused-underline= ${colors.dark-yellow}
+label-focused-padding = 1
+
+; Label for occupied workspaces
+label-occupied = %name%
+label-occupied-foreground = ${colors.dark-yellow}
+label-occupied-padding = 1
+
+; Label for urgend workspaces
+label-urgent = %name%!
+label-urgent-background = ${colors.light-red}
+label-urgent-padding = 1
+
+; Label for empty workspaces
+label-empty = %name%
+label-empty-foreground = ${colors.dark-white}
+label-empty-padding = 1
+
+; filesystem
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+mount-1 = /home
+mount-2 = /boot
+mount-3 = /esp
+mount-4 = /tmp
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %used% (%percentage_used%%)/%free%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.dark-white}
+
+; Spacing between entries
+; Default: 2
+spacing = 1
+
+
+;
+; Modules CENTER
+[module/title]
+type = internal/xwindow
+
+format-foreground = ${colors.dark-white}
+format-padding = 1
+
+; Available tokens:
+;   %title%
+; Default: %title%
+label = %title%
+label-maxlen = 100
+
+;
+; Modules RIGHT
+; backlight - uses ACPI
+; (DEPRECAED!) - xbacklight does not work with modesetting driver
+[module/backlight]
+type = internal/backlight
+
+card = intel_backlight
+format = <label> <bar>
+format-underline = ${colors.dark-red}
+label = 
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = ${colors.dark-red} 
+bar-fill = ─
+bar-fill-foreground = ${colors.dark-red}
+bar-empty = ─
+bar-empty-foreground = ${colors.dark-white}
+
+; battery
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+
+; If an inotify event haven't been reported in this many
+; seconds, manually poll for new values.
+;
+; Needed as a fallback for systems that don't report events
+; on sysfs/procfs.
+;
+; Disable polling by setting the interval to 0.
+;
+; Default: 5
+poll-interval = 5
+
+; see "man date" for details on how to format the time string
+; NOTE: if you want to use syntax tags here you need to use %%{...}
+; Default: %H:%M:%S
+time-format = %H:%M
+
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = ${colors.dark-green}
+label-charging = %percentage%% %time%h
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-underline = ${self.format-charging-underline}
+label-discharging = %percentage%% %time%h
+
+format-full = <ramp-capacity>
+format-full-underline = ${self.format-charging-underline}
+
+; Only applies if <ramp-capacity> is used
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-font = 1
+
+; Only applies if <animation-charging> is used
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-font = 1
+; Framerate in milliseconds
+animation-charging-framerate = 750
+
+; CPU load
+[module/cpu]
+type = custom/script
+interval = 5
+exec = ~/.config/polybar/cpuload.sh
+
+label = CPU: %output%
+format = <label>
+format-underline = ${colors.dark-cyan}
+
+; Date (Clock and Date)
+[module/date]
+type = internal/date
+
+; refresh rate
+interval = 1
+
+; date syntax
+date = "%d.%m.%Y"
+; time syntax
+time = "%H:%M:%S"
+format-prefix-foreground = ${colors.dark-white}
+format-underline = ${colors.dark-blue}
+
+label =  %date%  %time%
+
+; Memory usage
+[module/memory]
+type = internal/memory
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 5
+
+format = <label>
+format-underline = ${colors.light-cyan}
+
+; Available tokens:
+;   %percentage_used% (default)
+;   %percentage_free%
+;   %gb_used%
+;   %gb_free%
+;   %gb_total%
+;   %mb_used%
+;   %mb_free%
+;   %mb_total%
+label = RAM: %gb_used%/%gb_free%
+
+; Only applies if <bar-used> is used
+bar-used-indicator =
+bar-used-width = 10
+bar-used-foreground-0 = #55aa55
+bar-used-foreground-1 = #557755
+bar-used-foreground-2 = #f5a70a
+bar-used-foreground-3 = #ff5555
+bar-used-fill = ▐
+bar-used-empty = ▐
+bar-used-empty-foreground = #444444
+
+; powermenu
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.dark-red}
+lable-open-font = 1
+label-close =  cancel
+label-close-foreground = ${colors.dark-red}
+label-separator = |
+label-separator-foreground = ${colors.dark-white}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = reboot
+menu-1-0-exec = reboot
+
+menu-2-0 = power off
+menu-2-0-exec = shutdown -h -t 0 now
+
+; volume
+[module/volume]
+type = internal/volume
+
+format-volume = <label-volume> <bar-volume>
+format-volume-underline = ${colors.dark-magenta}
+label-volume = 
+lable-volume-font = 2
+label-volume-foreground = ${root.foreground}
+
+format-muted-underline = ${self.format-volume-underline}
+format-muted-prefix = " "
+format-muted-prefix-font = 2
+format-muted-foreground = ${colors.dark-white}
+label-muted = sound muted
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-fill = ─
+bar-volume-empty = ─
+bar-volume-empty-foreground = ${colors.dark-white}
+
+; Soundcard to be used
+; Usually in the format hw:#
+master-soundcard = default
+speaker-soundcard = default
+headphone-soundcard = default
+
+; Name of the master mixer
+; Default: Master
+master-mixer = Master
+
+; Optionally define speaker and headphone mixers
+; Use the following command to list available mixer controls:
+; $ amixer scontrols | sed -nr "s/.*'([[:alnum:]]+)'.*/\1/p"
+; Default: none
+speaker-mixer = Speaker
+; Default: none
+headphone-mixer = Headphone
+
+; NOTE: This is required if headphone_mixer is defined
+; Use the following command to list available device controls
+; $ amixer controls | sed -r "/CARD/\!d; s/.*=([0-9]+).*name='([^']+)'.*/printf '%3.0f: %s\n' '\1' '\2'/e" | sort
+; Default: none
+headphone-id = 20
+
+; Use volume mapping (similar to amixer -M and alsamixer), where the increase in volume is linear to the ear
+; Default: false
+mapped = true
+
+; Internal Wifi card
+[module/wifi]
+type = internal/network
+interface = wlp2s0
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+format-connected = <label-connected>
+format-connected-underline = ${colors.dark-green}
+format-connected-prefix = " "
+format-connected-prefix-font = 2
+label-connected = (%signal%%) %ifname%: %essid% | IP: %local_ip% | UP: %upspeed% DOWN: %downspeed%
+label-connected-foreground = ${colors.dark-white}
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.dark-red}
+format-disconnected-prefix = " "
+format-disconnected-prefix-font = 2
+label-disconnected = %ifname%
+label-disconnected-foreground = ${colors.dark-white}
+
+; Left USB NIC
+[module/wired-network-usb-left]
+type = internal/network
+interface = enp0s20f0u2
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+format-connected-underline = ${colors.dark-green}
+format-connected-prefix = " "
+format-connected-prefix-font = 2
+format-connected-prefix-foreground = ${colors.dark-white}
+label-connected = %ifname% (%linkspeed%) | IP: %local_ip% | UP: %upspeed% DOWN: %downspeed%
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.dark-red}
+format-disconnected-prefix = " "
+format-disconnected-prefix-font = 2
+label-disconnected = %ifname%
+label-disconnected-foreground = ${colors.dark-white}
+
+; Right USB NIC
+[module/wired-network-usb-right]
+type = internal/network
+interface = enp0s20f0u1
+; Seconds to sleep between updates
+; Default: 5
+interval = 0.5
+
+format-connected-underline = ${colors.dark-green}
+format-connected-prefix = " "
+format-connected-prefix-font = 2
+format-connected-prefix-foreground = ${colors.dark-white}
+label-connected = %ifname% (%linkspeed%) | IP: %local_ip% | UP: %upspeed% DOWN: %downspeed%
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.dark-red}
+format-disconnected-prefix = " "
+format-disconnected-prefix-font = 2
+label-disconnected = %ifname%
+label-disconnected-foreground = ${colors.dark-white}

@@ -1,0 +1,5 @@
+" Enable syntaxhightlighting
+syntax on
+
+" Set Cholorscheme to smyck
+colorscheme smyck

@@ -1,0 +1,217 @@
+;=======================================
+;
+;    Polybar configuration for
+;    Dell XPS 15 9560
+;    with bspwm
+;
+;    by Philip "ShokiNN'" Henning
+;    <mail+polybar@philip-henning.com>   
+;
+;=======================================
+
+[colors]
+; Smyck color scheme by hukl
+; https://github.com/hukl/Smyck-Color-Scheme
+dark-black = #000
+light-black = #5D5D5D
+dark-red = #C75646
+light-red = #E09690
+dark-green = #8EB33B
+light-green = #CDEE69
+dark-yellow = #D0B03C
+light-yellow = #FFE377
+dark-blue = #4E90A7
+light-blue = #9CD9F0
+dark-magenta = #C8A0D1
+light-magenta = #FBB1F9
+dark-cyan = #218693
+light-cyan = #77DFD8
+dark-white = #B0B0B0
+light-white = #F7F7F7
+
+[bar/9560-top]
+; Define bar monitor
+monitor = "eDP-1"
+
+; Enable support for inter-process messaging
+; See the Messaging wiki page for more details.
+enable-ipc = true
+
+; Put the bar at the bottom of the screen
+bottom = false
+
+; Prefer fixed center position for the `modules-center` block
+; When false, the center position will be based on the size of the other blocks.
+fixed-center = false
+
+; Set size of the bar
+width = 100%
+height = 24
+
+; Bar offsets
+offset-x = 0%
+offset-y = 0
+
+; Number of spaces to add at the beginning/end of the bar
+; Individual side values can be defined using:
+;   padding-{left,right}
+padding = 2
+
+; Set Bar Colors
+background = ${colors.dark-black}
+foreground = ${colors.dark-white}
+
+; Under-/overline pixel size and argb color
+; Individual values can be defined using:
+;   {overline,underline}-size
+;   {overline,underline}-color
+line-size = 2
+
+; Fonts are defined using <font-name>;<vertical-offset>
+; Font names are specified using a fontconfig pattern.
+;   font-0 = NotoSans-Regular:size=8;2
+;   font-1 = MaterialIcons:size=10
+;   font-2 = Termsynu:size=8;-1
+;   font-3 = FontAwesome:size=10
+; See the Fonts wiki page for more details
+font-0 = SourceCodePro+Powerline+Awesome Regular-Regular:size=9
+font-1 = Font Awesome 5 Free Regular-Regular:size=9
+font-2 = Font Awesome 5 Free Solid-Solid:size=9
+font-3 = Font Awesome 5 Free Solid-Book:size=9
+font-4 = Font Awesome 5 Brands Regular-Regular:siye=9
+
+; The separator will be inserted between the output of each module
+separator =
+
+; Number of spaces to add before/after each module
+; Individual side values can be defined using:
+; module-margin-{left,right}
+module-margin = 1
+
+; Modules are added to one of the available blocks
+;   modules-left = cpu ram
+;   modules-center = xwindow xbacklight
+;   modules-right = ipc clock
+modules-left = bspwm
+modules-center = title
+modules-right = cpu memory backlight volume battery date
+
+; Position of the system tray window
+; If empty or undefined, tray support will be disabled
+; NOTE: A center aligned tray will cover center aligned modules
+;
+; Available positions:
+;   left
+;   center
+;   right
+tray-position = right
+
+; If true, the bar will not shift its
+; contents when the tray changes
+tray-detached = false
+
+; Tray icon max size
+tray-maxsize = 16
+
+; Enable pseudo transparency
+; Will automatically be enabled if a fully transparent
+; background color is defined using `tray-background`
+tray-transparent = false
+
+; Background color for the tray container
+; By default the tray container will use the bar
+; background color.
+; Note: 32 bit alpha blending is not supported.
+tray-background = ${root.background}
+
+; Tray offset defined as pixel value (e.g. 35) or percentage (e.g. 50%)
+tray-offset-x = 5
+tray-offset-y = 0
+
+; Pad the sides of each tray icon
+tray-padding = 1
+
+; Scale factor for tray clients
+tray-scale = 1.0
+
+; Locale used to localize various module data (e.g. date)
+; Expects a valid libc locale, for example: sv_SE.UTF-8
+locale = de_DE.UTF-8
+
+[bar/9560-bottom]
+; Define bar monitor
+monitor = "eDP-1"
+
+; Enable support for inter-process messaging
+; See the Messaging wiki page for more details.
+enable-ipc = true
+
+; Put the bar at the bottom of the screen
+bottom = true
+
+; Prefer fixed center position for the `modules-center` block
+; When false, the center position will be based on the size of the other blocks.
+fixed-center = false
+
+; Set size of the bar
+width = 100%
+height = 24
+
+; Bar offsets
+offset-x = 0%
+offset-y = 0
+
+; Number of spaces to add at the beginning/end of the bar
+; Individual side values can be defined using:
+;   padding-{left,right}
+padding = 2
+
+; Set Bar Colors
+background = ${colors.dark-black}
+foreground = ${colors.dark-white}
+
+; Under-/overline pixel size and argb color
+; Individual values can be defined using:
+;   {overline,underline}-size
+;   {overline,underline}-color
+line-size = 2
+
+; Fonts are defined using <font-name>;<vertical-offset>
+; Font names are specified using a fontconfig pattern.
+;   font-0 = NotoSans-Regular:size=8;2
+;   font-1 = MaterialIcons:size=10
+;   font-2 = Termsynu:size=8;-1
+;   font-3 = FontAwesome:size=10
+; See the Fonts wiki page for more details
+font-0 = SourceCodePro+Powerline+Awesome Regular-Regular:size=9
+font-1 = Font Awesome 5 Free Regular-Regular:size=9
+font-2 = Font Awesome 5 Free Solid-Solid:size=9
+font-3 = Font Awesome 5 Free Solid-Book:size=9
+font-4 = Font Awesome 5 Brands Regular-Regular:siye=9
+
+; The separator will be inserted between the output of each module
+separator =
+
+; Number of spaces to add before/after each module
+; Individual side values can be defined using:
+; module-margin-{left,right}
+module-margin = 1
+
+; Modules are added to one of the available blocks
+;   modules-left = cpu ram
+;   modules-center = xwindow xbacklight
+;   modules-right = ipc clock
+modules-left = filesystem
+modules-center =
+modules-right = wired-network-usb-right wired-network-usb-left wifi powermenu
+
+; Locale used to localize various module data (e.g. date)
+; Expects a valid libc locale, for example: sv_SE.UTF-8
+locale = de_DE.UTF-8
+
+
+;
+;
+; include modules configuration
+include-file = $HOME/.config/polybar/mod_config
+

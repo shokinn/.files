@@ -1,0 +1,86 @@
+/* Set each shell as loginShell */
+URxvt.loginShell:	true
+/* Set max lines for scrollback */
+URxvt.saveLines:	1000
+/* Set internal Border */
+URxvt.internalBorder:	3
+/* Set linespace to 0px */
+URxvt.lineSpace:	0
+/*
+ Set URxvt font
+ DON'T USE TrueType (ttf) FONTS!!!!!!!!!!! They'll kill KeePass! Use OpenType (otf) instead.
+*/
+URxvt.font:		xft:SourceCodePro+Powerline+Awesome Regular:pixelsize=14,atialias=true
+/* Set URxvt transparancy */
+!URxvt.transparent:	true
+!URxvt.shading:		30
+/* Deactivate scrollbar */
+URxvt.scrollBar:	false
+URxvt.scrollStyle:	rxvt
+/* Perl extensions */
+URxvt.perl-ext-common:	default,matcher
+URxvt.matcher.button:	1
+URxvt.urlLauncher:	firefox
+/* Cursor */
+URxvt.cursorBlink:	true
+URxvt.cursorColor:	#657b83
+URxvt.cursorUnderline:	false
+/* Pointer */
+URxvt.pointerBlank:	true
+
+/* Set Colors */
+URxvt.background:	rgba:2400/2400/2400/dcdc
+URxvt.foreground:	#FFFFFF
+!*fading:		40
+*fadeColor:		#002b36
+*cursorColor:		#93a1a1
+*pointerColorBackground:	#586e75
+*pointerColorForeground:	#93a1a1
+
+/* black dark/light */
+*color0:		#000000
+!*color0:		#073642
+*color8:		#5D5D5D
+!*color8:		#002b36
+
+/* red dark/light */
+*color1:		#C75646
+!*color1:		#dc322f
+*color9:		#E09690
+!*color9:		#cb4b16
+
+/* green dark/light */
+*color2:		#8EB33B
+!*color2:		#859900
+*color10:		#CDEE69
+!*color10:		#586e75
+
+/* yellow dark/light */
+*color3:		#D0B03C
+!*color3:		#b58900
+*color11:		#FFE377
+!*color11:		#657b83
+
+/* blue dark/light */
+*color4:		#72B3CC
+!*color4:		#268bd2
+*color12:		#9CD9F0
+!*color12:		#839496
+
+/* magenta dark/light */
+*color5:		#C8A0D1
+!*color5:		#d33682
+*color13:		#FBB1F9
+!*color13:		#6c71c4
+
+/* cyan dark/light */
+*color6:		#218693
+!*color6:		#2aa198
+*color14:		#77DFD8
+!*color14:		#93a1a1
+
+/* white dark/light */
+*color7:		#B0B0B0
+!*color7:		#eee8d5
+*color15:		#F7F7F7
+!*color15:		#fdf6e3

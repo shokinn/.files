@@ -1,0 +1,121 @@
+##
+# bspwm hotkeys
+##
+
+# Kill bspwm & polybar
+super + alt + Escape
+  bspc quit 1 && pkill -x polybar
+
+# Switch to desktop
+ctrl + alt + {Left,Right}
+  bspc desktop -f {prev,next}
+
+# Move current window
+# TODO Modifier dose not apply to all commands!!
+#ctrl + alt + shift + {Left,Right}
+#  bspc node -d {prev,next} \
+#  ;bspc desktop -f {prev,next}
+
+# Move current window to left
+ctrl + alt + shift + Left
+  bspc node -d prev \
+  ;bspc desktop -f prev
+
+# Move current window to right
+ctrl + alt + shift + Right
+  bspc node -d next \
+  ;bspc desktop -f next
+
+# Select (Switch)/Move Window
+super + {_,shift + }{Left,Down,Up,Right}
+  bspc node -{f,s} {west,south,north,east}
+
+# Preselect where to split
+super + alt + {space,Left,Down,Up,Right}
+  bspc node -p {cancel,west,south,north,east}
+
+# Set state of the current window (floating|fullscreen)
+super + {s,f,t}
+  bspc node -t {floating,fullscreen,tiled}
+
+# Move window with Mouse
+super + button{1-3}
+  bspc pointer -g {move,resize_side,resize_corner}
+
+# Close current window
+super + w
+  bspc node -c
+
+# Select desktop layout (monocle|tiled)
+# TODO, why sould I use this?
+#super + l
+#  bspc desktop -l next
+
+
+##
+# wm independent hotkeys
+##
+
+# Start urxvt terminal
+super + Return
+  urxvt
+
+# Open dynamic menu
+super + space
+  dmenu_run
+
+# Lower,Raise Volume Master
+{_,shift + }XF86Audio{Lower,Raise}Volume
+  amixer set Master {2%-,10%-,2%+,10%+}
+
+# Mute Master
+XF86AudioMute
+  amixer set Master toggle
+
+# Modify LCD Brightness
+# XF86MonBrightness{Down,Up} are the Display Birghtness Keys
+{_,shift + }XF86MonBrightness{Down,Up}
+  xbacklight {-1,-10,+1,+10}
+
+# Screenlock via slim
+#ctrl + alt + l
+super + l
+  slimlock
+
+# Lock & Suspend System (keep RAM in physical RAM)
+ctrl + alt + BackSpace
+  slimlock & systemctl suspend
+
+# Lock & Hybernate System (save RAM to SSD)
+ctrl + alt + Insert
+  slimlock & systemctl hibernate
+
+
+## Stratum 0
+## Holodeck
+# Holodeck nice white
+#ctrl + shift + 1
+#  curl http://holodeck.stratum0.net/holodeck/all/nicewhite
+
+# Holodeck cold white
+#ctrl + shift + 2
+#  curl http://holodeck.stratum0.net/holodeck/all/day
+
+# Holodeck red
+#ctrl + shift + 3
+#  curl http://holodeck.stratum0.net/holodeck/all/0.2,0,0,0
+
+# Holodeck nearly off (nightmode)
+#ctrl + shift + 4
+#  curl http://holodeck.stratum0.net/holodeck/all/night
+
+# Holodeck off
+#ctrl + shift + 5
+#  curl http://holodeck.stratum0.net/holodeck/all/off
+
+
+
+# sxhkd reload configuratoin
+# make sxhkd reload its configuration files:
+super + Escape
+  pkill -USR1 -x sxhkd

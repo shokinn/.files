@@ -1,0 +1,6 @@
+#!/bin/sh
+# load Xresources
+$HOME/.fehbg &
+sxhkd &
+exec bspwm
+xrdb -I$HOME -load ~/.Xresources
