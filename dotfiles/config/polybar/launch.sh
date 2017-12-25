@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
 
 # Terminate already running bar instances
 killall -q polybar

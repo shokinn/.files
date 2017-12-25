@@ -1,2 +1,7 @@
 #!/bin/sh
+
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
+
 'feh' '--image-bg' 'black' '--bg-center' '{{@@ env['HOME'] @@}}/.config/bspwm/bg.png' 

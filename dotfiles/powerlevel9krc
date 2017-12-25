@@ -1,3 +1,7 @@
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
+
 POWERLEVEL9K_MODE='awesome-patched'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%{%F{249}%}\u250f"

@@ -1,4 +1,8 @@
 ;
+; {{@@ env['dotdrop_warning'] @@}}
+;
+
+;
 ; Modules LEFT
 ; BSPWM
 [module/bspwm]

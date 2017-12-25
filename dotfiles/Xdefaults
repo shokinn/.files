@@ -1,3 +1,7 @@
+/*
+ {{@@ env['dotdrop_warning'] @@}}
+*/
+
 /* Set each shell as loginShell */
 URxvt.loginShell:	true
 /* Set max lines for scrollback */

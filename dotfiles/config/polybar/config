@@ -1,5 +1,7 @@
 ;=======================================
 ;
+;    {{@@ env['dotdrop_warning'] @@}}
+;
 ;    Polybar configuration for
 ;    Dell XPS 15 9560
 ;    with bspwm

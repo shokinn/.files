@@ -2,6 +2,8 @@
 
 ######################
 #
+# {{@@ env['dotdrop_warning'] @@}}
+#
 # This script detects if an USB NIC was connected and reloads the bar
 #
 
