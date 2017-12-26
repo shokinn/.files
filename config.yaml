@@ -1,6 +1,10 @@
 actions:
-  oh-my-zsh: if [ ! -d ~/.oh-my-zsh ]; then sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && if [ -f ~/.zshrc.pre-oh-my-zsh ]; then rm ~/.zshrc && mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc; fi; fi
-  powerlevel9k-theme: if [ ! -d ~/.oh-my-zsh/custom/themes ]; then mkdir -p ~/.oh-my-zsh/custom/themes; fi && if [ -d ~/.oh-my-zsh/custom/themes/powerlevel9k ];then git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k; fi
+  oh-my-zsh: if [ ! -d ~/.oh-my-zsh ]; then sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    && if [ -f ~/.zshrc.pre-oh-my-zsh ]; then rm ~/.zshrc && mv ~/.zshrc.pre-oh-my-zsh
+    ~/.zshrc; fi; fi
+  powerlevel9k-theme: if [ ! -d ~/.oh-my-zsh/custom/themes ]; then mkdir -p ~/.oh-my-zsh/custom/themes;
+    fi && if [ -d ~/.oh-my-zsh/custom/themes/powerlevel9k ];then git clone https://github.com/bhilburn/powerlevel9k.git
+    ~/.oh-my-zsh/custom/themes/powerlevel9k; fi
 config:
   backup: true
   create: true
@@ -9,21 +13,32 @@ dotfiles:
   d_bspwm:
     dst: ~/.config/bspwm
     src: config/bspwm
+  d_colors:
+    dst: ~/.vim/colors
+    src: vim/colors
   d_fonts:
     dst: ~/.local/share/fonts
     src: local/share/fonts
+  d_org.albert.frontend.boxmodel.widgets:
+    dst: ~/.local/share/albert/org.albert.frontend.boxmodel.widgets
+    src: local/share/albert/org.albert.frontend.boxmodel.widgets
   d_polybar:
     dst: ~/.config/polybar
     src: config/polybar
   d_sxhkd:
     dst: ~/.config/sxhkd
     src: config/sxhkd
-  d_vim:
-    dst: ~/.vim
-    src: vim
+  f_albert.conf:
+    dst: ~/.config/albert/albert.conf
+    src: config/albert/albert.conf
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
+  f_powerlevel9krc:
+    actions:
+    - powerlevel9k-theme
+    dst: ~/.powerlevel9krc
+    src: powerlevel9krc
   f_profile:
     dst: ~/.profile
     src: profile
@@ -40,15 +55,10 @@ dotfiles:
     dst: ~/.xsession
     src: xsession
   f_zshrc:
+    actions:
+    - oh-my-zsh
     dst: ~/.zshrc
     src: zshrc
-    actions:
-      - oh-my-zsh
-  f_powerlevel9krc:
-    dst: ~/.powerlevel9krc
-    src: powerlevel9krc
-    actions:
-      - powerlevel9k-theme
 profiles:
   yoetunheimr:
     dotfiles:
@@ -59,9 +69,11 @@ profiles:
     - f_fehbg
     - d_fonts
     - f_profile
-    - d_vim
     - f_vimrc
     - f_xinitrc
     - f_xsession
     - f_zshrc
     - f_powerlevel9krc
+    - f_albert.conf
+    - d_org.albert.frontend.boxmodel.widgets
+    - d_colors

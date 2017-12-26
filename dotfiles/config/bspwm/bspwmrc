@@ -20,3 +20,4 @@ bspc rule -a Screenkey manage=off
 # THIS SHOULD BE THE LAST!
 # Lauch polybar(s)
 $HOME/.config/polybar/launch.sh
+/usr/bin/albert

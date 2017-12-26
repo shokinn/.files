@@ -64,10 +64,6 @@ super + w
 super + Return
   urxvt
 
-# Open dynamic menu
-super + space
-  dmenu_run
-
 # Lower,Raise Volume Master
 {_,shift + }XF86Audio{Lower,Raise}Volume
   amixer set Master {2%-,10%-,2%+,10%+}
