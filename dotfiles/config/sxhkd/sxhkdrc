@@ -42,10 +42,6 @@ super + alt + {space,Left,Down,Up,Right}
 super + {s,f,t}
   bspc node -t {floating,fullscreen,tiled}
 
-# Move window with Mouse
-super + button{1-3}
-  bspc pointer -g {move,resize_side,resize_corner}
-
 # Close current window
 super + w
   bspc node -c
@@ -80,7 +76,7 @@ XF86AudioMute
 # Screenlock via slim
 #ctrl + alt + l
 super + l
-  slimlock
+  i3lock -u -i $HOME/.config/bspwm/lock.png
 
 # Lock & Suspend System (keep RAM in physical RAM)
 ctrl + alt + BackSpace
