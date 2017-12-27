@@ -76,7 +76,7 @@ XF86AudioMute
 # Screenlock via slim
 #ctrl + alt + l
 super + l
-  i3lock -u -i $HOME/.config/bspwm/lock.png
+  $HOME/.config/bspwm/lock.sh
 
 # Lock & Suspend System (keep RAM in physical RAM)
 ctrl + alt + BackSpace
