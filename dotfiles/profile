@@ -4,3 +4,7 @@
 
 XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CONFIG_HOME
+VISUAL='vim'
+export VISUAL
+EDITOR='vim'
+export EDITOR
