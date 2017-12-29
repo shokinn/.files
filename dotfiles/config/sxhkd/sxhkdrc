@@ -57,7 +57,7 @@ super + w
 ##
 
 # Start dmenu
-super + Space
+super + space
   dmenu_run
 
 # Start urxvt terminal
