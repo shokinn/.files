@@ -1,5 +1,5 @@
 /*
- {{@@ env['dotdrop_warning'] @@}}
+ {{@@ env['dotdrop_warning'] @@}} 
 */
 
 /* Set each shell as loginShell */

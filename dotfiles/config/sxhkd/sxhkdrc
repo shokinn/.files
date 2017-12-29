@@ -56,6 +56,10 @@ super + w
 # wm independent hotkeys
 ##
 
+# Start dmenu
+super + Space
+  dmenu
+
 # Start urxvt terminal
 super + Return
   urxvt

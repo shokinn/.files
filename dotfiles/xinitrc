@@ -3,8 +3,15 @@
 # {{@@ env['dotdrop_warning'] @@}}
 #
 
+# User Xdefaults
+#if [ -f $HOME/.Xdefaults ]; then
+#	xrdb -merge -I$HOME ~/.Xresources
+#fi
+
+# Start gnome keyring daemon
+eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets)
+export $(gnome-keyring-daemon --start --components=pkcs11,secrets,gpg)
+# Tells dbus to add DISPLAY to its own environment variables
+dbus-update-activation-environment --systemd DISPLAY
 # load Xresources
-$HOME/.fehbg &
-sxhkd &
 exec bspwm
-xrdb -I$HOME -load ~/.Xresources

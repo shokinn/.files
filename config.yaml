@@ -19,18 +19,12 @@ dotfiles:
   d_fonts:
     dst: ~/.local/share/fonts
     src: local/share/fonts
-  d_org.albert.frontend.boxmodel.widgets:
-    dst: ~/.local/share/albert/org.albert.frontend.boxmodel.widgets
-    src: local/share/albert/org.albert.frontend.boxmodel.widgets
   d_polybar:
     dst: ~/.config/polybar
     src: config/polybar
   d_sxhkd:
     dst: ~/.config/sxhkd
     src: config/sxhkd
-  f_albert.conf:
-    dst: ~/.config/albert/albert.conf
-    src: config/albert/albert.conf
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
@@ -45,12 +39,12 @@ dotfiles:
   f_vimrc:
     dst: ~/.vimrc
     src: vimrc
-  f_xdefaults:
-    dst: ~/.Xdefaults
-    src: Xdefaults
   f_xinitrc:
     dst: ~/.xinitrc
     src: xinitrc
+  f_xresources:
+    dst: ~/.Xresources
+    src: Xresources
   f_xsession:
     dst: ~/.xsession
     src: xsession
@@ -62,7 +56,6 @@ dotfiles:
 profiles:
   yoetunheimr:
     dotfiles:
-    - f_xdefaults
     - d_bspwm
     - d_polybar
     - d_sxhkd
@@ -74,6 +67,5 @@ profiles:
     - f_xsession
     - f_zshrc
     - f_powerlevel9krc
-    - f_albert.conf
-    - d_org.albert.frontend.boxmodel.widgets
     - d_colors
+    - f_xresources
