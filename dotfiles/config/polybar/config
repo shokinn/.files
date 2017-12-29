@@ -94,8 +94,8 @@ module-margin = 1
 ;   modules-left = cpu ram
 ;   modules-center = xwindow xbacklight
 ;   modules-right = ipc clock
-modules-left = bspwm
-modules-center = title
+modules-left = bspwm title
+modules-center = 
 modules-right = cpu memory backlight volume battery date
 
 ; Position of the system tray window
