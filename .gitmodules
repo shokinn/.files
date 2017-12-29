@@ -1,3 +1,6 @@
 [submodule "dotdrop"]
 	path = dotdrop
 	url = https://github.com/deadc0de6/dotdrop.git
+[submodule "graphics/sources/twt"]
+	path = graphics/sources/twt
+	url = https://lns.wtf/twt_git/twt.git
