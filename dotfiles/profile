@@ -2,9 +2,15 @@
 # {{@@ env['dotdrop_warning'] @@}}
 #
 
+# Set XDG_CONFIG_HOME
 XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CONFIG_HOME
+# SSH Agent (KeeAgent)
+SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+export SSH_AUTH_SOCK
+# Use vim as editor on X
 VISUAL='vim'
 export VISUAL
+# Use vim as standard editor
 EDITOR='vim'
 export EDITOR

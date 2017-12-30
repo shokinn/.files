@@ -36,6 +36,9 @@ dotfiles:
   f_profile:
     dst: ~/.profile
     src: profile
+  f_ssh-agent.service:
+    dst: ~/.config/systemd/user/ssh-agent.service
+    src: config/systemd/user/ssh-agent.service
   f_vimrc:
     dst: ~/.vimrc
     src: vimrc
@@ -69,3 +72,4 @@ profiles:
     - f_powerlevel9krc
     - d_colors
     - f_xresources
+    - f_ssh-agent.service
