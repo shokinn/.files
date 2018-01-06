@@ -14,6 +14,8 @@ $HOME/.config/polybar/launch.sh &
 /usr/bin/nm-applet &
 # Launch Nextcloud
 /usr/bin/nextcloud &
+# Set windomanager name to LG3D to get JAVA programs back to work
+wmname LG3D
 
 bspc config border_width        2
 bspc config window_gap          5
@@ -25,7 +27,4 @@ bspc config click_to_focus	true
 
 bspc monitor -d 0000 0001 0010 0011 0100 0101 0110 0111 
 
-bspc rule -a Gimp desktop=^8 follow=on floating=on
-bspc rule -a Chromium desktop=^2
-bspc rule -a mplayer2 floating=on
-bspc rule -a Screenkey manage=off
+bspc rule -a Gimp follow=on floating=on
