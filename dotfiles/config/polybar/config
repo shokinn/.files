@@ -35,6 +35,21 @@ light-white = #F7F7F7
 ; Define bar monitor
 monitor = "eDP-1"
 
+; Tell the Window Manager not to configure the window.
+; Use this to detach the bar if your WM is locking its size/position.
+override-redirect = false
+
+; Restack the bar window and put it above the
+; selected window manager's root
+;
+; Fixes the issue where the bar is being drawn
+; on top of fullscreen window's
+;
+; Currently supported WM's:
+;   bspwm
+;   i3 (requires: `override-redirect = true`)
+wm-restack = bspwm
+
 ; Enable support for inter-process messaging
 ; See the Messaging wiki page for more details.
 enable-ipc = true
@@ -143,6 +158,21 @@ locale = de_DE.UTF-8
 [bar/9560-bottom]
 ; Define bar monitor
 monitor = "eDP-1"
+
+; Tell the Window Manager not to configure the window.
+; Use this to detach the bar if your WM is locking its size/position.
+override-redirect = false
+
+; Restack the bar window and put it above the
+; selected window manager's root
+;
+; Fixes the issue where the bar is being drawn
+; on top of fullscreen window's
+;
+; Currently supported WM's:
+;   bspwm
+;   i3 (requires: `override-redirect = true`)
+wm-restack = bspwm
 
 ; Enable support for inter-process messaging
 ; See the Messaging wiki page for more details.
