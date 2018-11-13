@@ -25,6 +25,9 @@ dotfiles:
   d_sxhkd:
     dst: ~/.config/sxhkd
     src: config/sxhkd
+  f_compton.conf:
+    dst: ~/.config/compton/compton.conf
+    src: config/compton/compton.conf
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
@@ -36,6 +39,9 @@ dotfiles:
   f_profile:
     dst: ~/.profile
     src: profile
+  f_rofi_config:
+    dst: ~/.config/rofi/config
+    src: config/rofi/config
   f_ssh-agent.service:
     dst: ~/.config/systemd/user/ssh-agent.service
     src: config/systemd/user/ssh-agent.service
@@ -73,3 +79,5 @@ profiles:
     - d_colors
     - f_xresources
     - f_ssh-agent.service
+    - f_compton.conf
+    - f_rofi_config

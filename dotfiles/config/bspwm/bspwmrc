@@ -6,25 +6,23 @@
 # https://wiki.archlinux.org/index.php/GNOME/Keyring
 # Launch sxhkd
 sxhkd &
-# Set Wallpaper
-$HOME/.fehbg
 # Launch polybar(s)
 $HOME/.config/polybar/launch.sh &
-# Launch NetworkManager applet
-/usr/bin/nm-applet &
-# Launch Nextcloud
-/usr/bin/nextcloud &
 # Set windomanager name to LG3D to get JAVA programs back to work
 wmname LG3D
 
 bspc config border_width        2
 bspc config window_gap          5
 
-bspc config split_ratio         0.5
+bspc config split_ratio         0.52
 bspc config borderless_monocle  true
-bspc config gapless_monocle     true
+bspc config gapless_monocle     false
 bspc config click_to_focus	true
 
-bspc monitor -d 0000 0001 0010 0011 0100 0101 0110 0111 
+bspc monitor -d I II III IV V VI VII VIII IX X
 
 bspc rule -a Gimp follow=on floating=on
+bspc rule -a xfce4-notes floating=on
+bspc rule -a quassel desktop=^9 follow=on
+bspc rule -a franz desktop=^9 follow=on
+bspc rule -a spotify desktop=^10 follow=on

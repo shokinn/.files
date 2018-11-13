@@ -54,9 +54,8 @@ interval = 25
 
 mount-0 = /
 mount-1 = /home
-mount-2 = /boot
-mount-3 = /esp
-mount-4 = /tmp
+mount-2 = /efi
+mount-3 = /tmp
 
 label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %used% (%percentage_used%%)/%free%
 label-unmounted = %mountpoint% not mounted

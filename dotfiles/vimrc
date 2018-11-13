@@ -7,3 +7,6 @@ syntax on
 
 " Set Cholorscheme to smyck
 colorscheme smyck
+
+" Set backgrount to dark
+set background=dark
