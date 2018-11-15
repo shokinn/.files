@@ -24,5 +24,5 @@ bspc monitor -d I II III IV V VI VII VIII IX X
 bspc rule -a Gimp follow=on floating=on
 bspc rule -a xfce4-notes floating=on
 bspc rule -a quassel desktop=^9 follow=on
-bspc rule -a franz desktop=^9 follow=on
-bspc rule -a spotify desktop=^10 follow=on
+bspc rule -a Franz desktop=^9 follow=on
+bspc rule -a Spotify desktop=^10 follow=on
