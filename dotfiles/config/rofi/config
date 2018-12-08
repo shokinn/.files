@@ -63,17 +63,17 @@ rofi.modi:                           window,drun,ssh
 ! "Always show number of lines" Set from: Default
 ! rofi.fixed-num-lines:                true
 ! "Terminal to use" Set from: Default
-! rofi.terminal:                       rofi-sensible-terminal
+rofi.terminal:                       xfce4-terminal
 ! "Ssh client to use" Set from: Default
-! rofi.ssh-client:                     ssh
+rofi.ssh-client:                     ssh
 ! "Ssh command to execute" Set from: Default
-! rofi.ssh-command:                    {terminal} -e {ssh-client} {host}
+rofi.ssh-command:                    {terminal} -e "{ssh-client} {host}"
 ! "Run command to execute" Set from: Default
-! rofi.run-command:                    {cmd}
+rofi.run-command:                    {cmd}
 ! "Command to get extra run targets" Set from: Default
 ! rofi.run-list-command:
 ! "Run command to execute that runs in shell" Set from: Default
-! rofi.run-shell-command:              {terminal} -e {cmd}
+rofi.run-shell-command:              {terminal} -e "{cmd}"
 ! "Command executed on accep-entry-custom for window modus" Set from: Default
 ! rofi.window-command:                 xkill -id {window}
 ! "Disable history in run/ssh" Set from: Default
