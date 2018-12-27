@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+	echo "Usage: $0 <event> <talk-id>"
+	echo "e.g.: $0 35c3 9766"
+	exit 1
+fi
+
+mediainfo /video/video/encoded/$1/$2-hd.mp4
+
+read -p "Press any key to continue... " -n1 -s
+
+vlc /video/video/encoded/$1/$2-hd.mp4

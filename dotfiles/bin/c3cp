@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+	echo "Filepath missing."
+	exit 1
+fi
+
+rsync --verbose --progress --inplace $1 /tmp/

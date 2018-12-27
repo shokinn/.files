@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+	echo "Usage: $0 <event> <talk-id>"
+	echo "e.g.: $0 35c3 9766"
+	exit 1
+fi
+
+ls -lah --color=tty /video/fuse/$1/*/$2/

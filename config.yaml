@@ -25,12 +25,30 @@ dotfiles:
   d_sxhkd:
     dst: ~/.config/sxhkd
     src: config/sxhkd
+  f_c3check:
+    dst: ~/.bin/c3check
+    src: bin/c3check
+  f_c3cp:
+    dst: ~/.bin/c3cp
+    src: bin/c3cp
+  f_c3kdenlive:
+    dst: ~/.bin/c3kdenlive
+    src: bin/c3kdenlive
+  f_c3l:
+    dst: ~/.bin/c3l
+    src: bin/c3l
+  f_c3mpv:
+    dst: ~/.bin/c3mpv
+    src: bin/c3mpv
   f_compton.conf:
     dst: ~/.config/compton/compton.conf
     src: config/compton/compton.conf
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
+  f_mount_c3voc:
+    dst: ~/.bin/mount_c3voc
+    src: bin/mount_c3voc
   f_powerlevel9krc:
     actions:
     - powerlevel9k-theme
@@ -81,3 +99,9 @@ profiles:
     - f_ssh-agent.service
     - f_compton.conf
     - f_rofi_config
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
