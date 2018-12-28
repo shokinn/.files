@@ -9,12 +9,13 @@ if [[ $UID -ne 0 ]]; then
 	exit 1
 fi
 
+options=( storage aws )
+
 if [[ -z "$1" ]]; then
 	echo "Usage: $0 <project>"
 	echo "e.g.: $0 c3"
 	echo " "
 	echo "Valid options:"
-	options=( storage aws )
 	for i in "${options[@]}"; do
 		echo "    - $i"
 	done
@@ -40,4 +41,10 @@ case $1 in
 		mount.cifs //aws.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
                 mount.cifs //aws.lan.c3voc.de/video $video -o rw,guest -o uid=phg
 		;;
+	*)
+		echo "Mountpoint does not exist."
+		echo "Please use one of the following:"
+		for i in "${options[@]}"; do
+                	echo "    - $i"
+        	done
 esac
