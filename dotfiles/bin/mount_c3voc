@@ -5,5 +5,35 @@ if [[ $UID -ne 0 ]]; then
 	exit 1
 fi
 
-mount.cifs //storage.lan.c3voc.de/fuse /video/fuse -o rw,guest -o uid=phg
-mount.cifs //storage.lan.c3voc.de/video /video/video -o rw,guest -o uid=phg
+if [[ -z "$1" ]]; then
+	echo "Usage: $0 <project>"
+	echo "e.g.: $0 c3"
+	echo " "
+	echo "Valid options:"
+	options=( c3 c3cw )
+	for i in "${options[@]}"; do
+		echo "    - $i"
+	done
+fi
+
+fuse="/video/fuse"
+video="/video/video"
+
+if mount | grep $fuse > /dev/null; then
+    umount $fuse
+fi
+
+if mount | grep $video > /dev/null; then
+    umount $video
+fi
+
+case $1 in
+	c3)
+		mount.cifs //storage.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
+		mount.cifs //storage.lan.c3voc.de/video $video -o rw,guest -o uid=phg
+		;;
+	c3cw)
+		mount.cifs //aws.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
+                mount.cifs //aws.lan.c3voc.de/video $video -o rw,guest -o uid=phg
+		;;
+esac
