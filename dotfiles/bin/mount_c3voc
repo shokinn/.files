@@ -10,7 +10,7 @@ if [[ -z "$1" ]]; then
 	echo "e.g.: $0 c3"
 	echo " "
 	echo "Valid options:"
-	options=( c3 c3cw )
+	options=( storage aws )
 	for i in "${options[@]}"; do
 		echo "    - $i"
 	done
@@ -28,11 +28,11 @@ if mount | grep $video > /dev/null; then
 fi
 
 case $1 in
-	c3)
+	storage)
 		mount.cifs //storage.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
 		mount.cifs //storage.lan.c3voc.de/video $video -o rw,guest -o uid=phg
 		;;
-	c3cw)
+	aws)
 		mount.cifs //aws.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
                 mount.cifs //aws.lan.c3voc.de/video $video -o rw,guest -o uid=phg
 		;;
