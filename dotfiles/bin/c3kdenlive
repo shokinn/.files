@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
+
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
 	echo "Usage: $0 <event> <talk-id>"
 	echo "e.g.: $0 35c3 9766"

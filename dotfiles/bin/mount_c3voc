@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
+
 if [[ $UID -ne 0 ]]; then
 	echo "You have to run this script as root!"
 	exit 1

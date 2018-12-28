@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# {{@@ env['dotdrop_warning'] @@}}
+#
+
 if [[ -z "$1" ]]; then
 	echo "Filepath missing."
 	exit 1
