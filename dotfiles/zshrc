@@ -123,3 +123,31 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotdrop='eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh'
 
+# Funktions (or more complex aliasses)
+wttr() {
+    if [ -z "$1" ]; then
+        curl http://wttr.in
+    elif [[ "$1" == "help" ]]; then
+        cat << EOF
+usage: wttr (City|3-letter airport code|'~Special+Location')
+  City:
+    Just write down the name of the city.
+    e.G.:
+      wttr London
+  3-letter airport code:
+    Use 3-letter airport codes in order to get the weather information at a certain airport.
+    e.G.:
+      wttr muc #for Munich Internation Airpot, Germany
+  Special Location:
+    Let's say you'd like to get the weather for a geographical location other than a town or city -
+    maybe an attraction in a city, a mountain name, or some special location.
+    Add the character '~' before the name to look up that special location name before the weather is then retrieved.
+    e.G.:
+      wttr '~Eiffel+Tower'
+      wttr '~Kilimanjaro'
+EOF
+    else
+        curl http://wttr.in/$1
+    fi
+}
+
