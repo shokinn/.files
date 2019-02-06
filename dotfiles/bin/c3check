@@ -4,14 +4,14 @@
 # {{@@ env['dotdrop_warning'] @@}}
 #
 
-if [[ -z "$1" ]] || [[ -z "$2" ]]; then
-	echo "Usage: $0 <event> <talk-id>"
-	echo "e.g.: $0 35c3 9766"
+if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]; then
+	echo "Usage: $0 <player> <event> <talk-id>"
+	echo "e.g.: $0 vlc 35c3 9766"
 	exit 1
 fi
 
-mediainfo /video/video/encoded/$1/$2-hd.mp4
+mediainfo /video/video/encoded/$2/$3-hd.mp4
 
 read -p "Press any key to continue... " -n1 -s
 
-vlc /video/video/encoded/$1/$2-hd.mp4
+$1 /video/video/encoded/$2/$3-hd.mp4
