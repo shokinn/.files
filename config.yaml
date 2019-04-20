@@ -80,6 +80,9 @@ dotfiles:
     - oh-my-zsh
     dst: ~/.zshrc
     src: zshrc
+  f_zshrc:
+    dst: ~/.zshenv
+    src: zshenv
 profiles:
   yoetunheimr:
     dotfiles:
@@ -105,3 +108,4 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+    - f_zshrc
