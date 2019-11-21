@@ -96,7 +96,7 @@ profiles:
     - f_profile_win
     - f_vimrc
     - f_zshrc
-    - f_zshenv
+    - f_zshenv_win
     - f_powerlevel9krc
     - d_colors
     - f_compton.conf
