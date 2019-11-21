@@ -3,7 +3,7 @@ actions:
     && if [ -f ~/.zshrc.pre-oh-my-zsh ]; then rm ~/.zshrc && mv ~/.zshrc.pre-oh-my-zsh
     ~/.zshrc; fi; fi
   powerlevel9k-theme: if [ ! -d ~/.oh-my-zsh/custom/themes ]; then mkdir -p ~/.oh-my-zsh/custom/themes;
-    fi && if [ -d ~/.oh-my-zsh/custom/themes/powerlevel9k ];then git clone https://github.com/bhilburn/powerlevel9k.git
+    fi && if [ ! -d ~/.oh-my-zsh/custom/themes/powerlevel9k ];then git clone https://github.com/bhilburn/powerlevel9k.git
     ~/.oh-my-zsh/custom/themes/powerlevel9k; fi
 config:
   backup: true
@@ -57,6 +57,9 @@ dotfiles:
   f_profile:
     dst: ~/.profile
     src: profile
+  f_profile_win:
+    dst: ~/.profile
+    src: profile_win
   f_rofi_config:
     dst: ~/.config/rofi/config
     src: config/rofi/config
@@ -75,15 +78,35 @@ dotfiles:
   f_xsession:
     dst: ~/.xsession
     src: xsession
+  f_zshenv:
+    dst: ~/.zshenv
+    src: zshenv
+  f_zshenv_win:
+    dst: ~/.zshenv
+    src: zshenv_win
   f_zshrc:
     actions:
     - oh-my-zsh
     dst: ~/.zshrc
     src: zshrc
-  f_zshrc:
-    dst: ~/.zshenv
-    src: zshenv
 profiles:
+  YOETUNHEIMR:
+    dotfiles:
+    - d_fonts
+    - f_profile_win
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel9krc
+    - d_colors
+    - f_compton.conf
+    - f_rofi_config
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -96,6 +119,7 @@ profiles:
     - f_xinitrc
     - f_xsession
     - f_zshrc
+    - f_zshenv
     - f_powerlevel9krc
     - d_colors
     - f_xresources
@@ -108,4 +132,3 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_zshrc

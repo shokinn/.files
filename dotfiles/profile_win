@@ -1,0 +1,10 @@
+#
+# This file is managed by dotdrop, only edit it in your dotdrop files!
+#
+
+# Use vim as editor on X
+VISUAL='vim'
+export VISUAL
+# Use vim as standard editor
+EDITOR='vim'
+export EDITOR
