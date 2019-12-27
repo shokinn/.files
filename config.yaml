@@ -90,7 +90,7 @@ dotfiles:
     dst: ~/.zshrc
     src: zshrc
 profiles:
-  YOETUNHEIMR:
+  YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
     - f_profile_win
