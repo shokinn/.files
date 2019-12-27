@@ -78,6 +78,12 @@ dotfiles:
   f_xsession:
     dst: ~/.xsession
     src: xsession
+  f_zprofile:
+    dst: ~/.zprofile
+    src: profile 
+  f_zprofile_win:
+    dst: ~/.zprofile
+    src: profile_win 
   f_zshenv:
     dst: ~/.zshenv
     src: zshenv
@@ -107,6 +113,7 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+    - f_zprofile_win
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -118,6 +125,7 @@ profiles:
     - f_vimrc
     - f_xinitrc
     - f_xsession
+    - f_zprofile
     - f_zshrc
     - f_zshenv
     - f_powerlevel9krc
