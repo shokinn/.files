@@ -8,3 +8,5 @@ export VISUAL
 # Use vim as standard editor
 EDITOR='vim'
 export EDITOR
+# Set DOTNET_ROOT enviroment variable
+DOTNET_ROOT=/opt/dotnet
