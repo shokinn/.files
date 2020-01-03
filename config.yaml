@@ -98,6 +98,9 @@ dotfiles:
   f_start_systemd_shell.sh:
     src: start_systemd_shell.sh
     dst: ~/start_systemd_shell.sh
+  f_kite:
+    src: local/bin/kite
+    dst: ~/.local/bin/kite
 profiles:
   YOETUNHEIMR-wsl:
     dotfiles:
@@ -118,6 +121,7 @@ profiles:
     - f_c3check
     - f_zprofile_win
     - f_start_systemd_shell.sh
+    - f_kite
   yoetunheimr:
     dotfiles:
     - d_bspwm
