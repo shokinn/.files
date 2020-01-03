@@ -117,6 +117,13 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotdrop='eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh'
 
+# Enable pipx completions
+if [ -f "$HOME/.local/bin/pipx" ]; then
+	autoload -U bashcompinit
+	bashcompinit
+	eval "$(register-python-argcomplete pipx)"
+fi
+
 # Funktions (or more complex aliasses)
 wttr() {
     if [ -z "$1" ]; then
