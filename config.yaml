@@ -148,3 +148,13 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+  workspace:
+    dotfiles:
+    - d_fonts
+    - f_profile
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel9krc
+    - d_colors
+    - f_zprofile
