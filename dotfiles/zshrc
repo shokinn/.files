@@ -2,6 +2,13 @@
 # {{@@ env['dotdrop_warning'] @@}}
 #
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -14,8 +21,7 @@
 if [[ $TERM == 'linux' ]]; then
 	ZSH_THEME="agnoster"
 else
-	source ~/.powerlevel9krc
-	ZSH_THEME="powerlevel9k/powerlevel9k"
+	ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
 # Set list of themes to load
@@ -124,7 +130,10 @@ if [ -f "$HOME/.local/bin/pipx" ]; then
 	eval "$(register-python-argcomplete pipx)"
 fi
 
-# Funktions (or more complex aliasses)
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Functions (or more complex aliases)
 wttr() {
     if [ -z "$1" ]; then
         curl http://wttr.in
