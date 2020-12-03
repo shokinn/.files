@@ -80,6 +80,7 @@ plugins=(
 	git
 	git-extras
 	gitignore
+	kubectl
 	pip
 	pyenv
 	pylint
