@@ -126,7 +126,44 @@ profiles:
     - f_c3check
     - f_zprofile_win
     - f_start_systemd_shell.sh
-    - f_kite
+  AINCRAD:
+    dotfiles:
+    - d_fonts
+    - f_profile_win
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv_win
+    - f_powerlevel10krc
+    - d_colors
+    - f_compton.conf
+    - f_rofi_config
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile_win
+    - f_start_systemd_shell.sh
+  AINCRAD-wsl:
+    dotfiles:
+    - d_fonts
+    - f_profile_win
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv_win
+    - f_powerlevel10krc
+    - d_colors
+    - f_compton.conf
+    - f_rofi_config
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile_win
+    - f_start_systemd_shell.sh
   yoetunheimr:
     dotfiles:
     - d_bspwm
