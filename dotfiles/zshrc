@@ -123,6 +123,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotdrop='eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh'
+eval $(thefuck --alias)
 
 # Enable pipx completions
 if [ -f "$HOME/.local/bin/pipx" ]; then
