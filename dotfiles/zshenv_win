@@ -7,16 +7,22 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Disable Ansible cowsay
 export ANSIBLE_NOCOWS=1
+
 # Include ~/.bin to PATH
-if [ -d "$HOME/.bin" ] ; then
-	export PATH="$HOME/.bin:$PATH"
+if [ -d "${HOME}/.bin" ] ; then
+	export PATH="${HOME}/.bin:${PATH}"
 fi
 # Include ~/.local/bin to PATH
-if [ -d "$HOME/.local/bin" ] ; then
-	export PATH="$HOME/.local/bin:$PATH"
+if [ -d "${HOME}/.local/bin" ] ; then
+	export PATH="${HOME}/.local/bin:${PATH}"
+fi
+# Inclue ~/.krew/bin to PATH for krew kubectl extensions
+if [ -d "${HOME}/.krew/bin" ] ; then
+	export PATH="${HOME}/.krew/bin:${PATH}"
 fi
 
 # Connect to windows ssh pageant
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
 ss -a | grep -q $SSH_AUTH_SOCK
 if [ $? -ne 0 ]; then
@@ -25,6 +31,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Connect to windows gpg agent
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
 export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
 ss -a | grep -q $GPG_AGENT_SOCK
 if [ $? -ne 0 ]; then
@@ -34,3 +41,4 @@ fi
 
 # X410 (Windows X11 Server)
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
