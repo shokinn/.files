@@ -124,6 +124,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias dotdrop='eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh'
 eval $(thefuck --alias)
+# Use https://github.com/jgaa/shinysocks as simple socks5 proxy for windows
+alias proxy_kubectl="http_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 https_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 kubectl"
+alias pk='proxy_kubectl'
 
 # Enable pipx completions
 if [ -f "$HOME/.local/bin/pipx" ]; then
