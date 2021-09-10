@@ -1,10 +1,13 @@
 actions:
-  oh-my-zsh: if [ ! -d ${HOME}/.oh-my-zsh ]; then sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended;
-    if [ -f ${HOME}/.zshrc.pre-oh-my-zsh ]; then rm ${HOME}/.zshrc && mv ${HOME}/.zshrc.pre-oh-my-zsh ${HOME}/.zshrc; fi; fi
-  powerlevel9k-theme: if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes ]; then mkdir -p ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes;
-    fi; if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel9k ];then git clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel9k; fi
-  powerlevel10k-theme: if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes ]; then mkdir -p ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes;
-    fi; if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k ];then git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k; fi
+  oh-my-zsh: |
+    [[ ! -d ${{HOME}}/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended || echo "do nothing" >/dev/null
+    [[ -f ${{HOME}}/.zshrc.pre-oh-my-zsh ]] && rm ${{HOME}}/.zshrc && mv ${{HOME}}/.zshrc.pre-oh-my-zsh ${{HOME}}/.zshrc || echo "do nothing" >/dev/null
+  powerlevel9k-theme: |
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes || echo "do nothing" >/dev/null
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel9k ]] && git clone https://github.com/bhilburn/powerlevel9k.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel9k || echo "do nothing" >/dev/null
+  powerlevel10k-theme: |
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes || echo "do nothing" >/dev/null
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k ]] && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k || echo "do nothing" >/dev/null
 config:
   backup: true
   create: true
@@ -89,6 +92,9 @@ dotfiles:
   f_zprofile_win:
     dst: ~/.zprofile
     src: profile_win
+  f_zprofile_mac:
+    dst: ~/.zprofile
+    src: zprofile_mac
   f_zshenv:
     dst: ~/.zshenv
     src: zshenv
@@ -100,6 +106,11 @@ dotfiles:
     - oh-my-zsh
     dst: ~/.zshrc
     src: zshrc
+  f_zshrc_mac:
+    actions:
+    - oh-my-zsh
+    dst: ~/.zshrc
+    src: zshrc_mac
   f_start_systemd_shell.sh:
     src: start_systemd_shell.sh
     dst: ~/start_systemd_shell.sh
@@ -200,3 +211,17 @@ profiles:
     - f_powerlevel10krc
     - d_colors
     - f_zprofile
+  VWAGWOY00349:
+    dotfiles:
+    - f_vimrc
+    - f_zshrc_mac
+    - f_zshenv
+    - f_powerlevel10krc
+    - d_colors
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile_mac
