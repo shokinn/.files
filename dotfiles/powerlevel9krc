@@ -1,5 +1,5 @@
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 
 POWERLEVEL9K_MODE='awesome-patched'

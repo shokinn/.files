@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
+
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 export DOTNET_ROOT=/opt/dotnet
 

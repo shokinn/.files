@@ -1,13 +1,14 @@
 #! /bin/sh
+
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 
 # https://wiki.archlinux.org/index.php/GNOME/Keyring
 # Launch sxhkd
 sxhkd &
 # Launch polybar(s)
-$HOME/.config/polybar/launch.sh &
+{{@@ env['HOME'] @@}}/.config/polybar/launch.sh &
 # Set windomanager name to LG3D to get JAVA programs back to work
 wmname LG3D
 

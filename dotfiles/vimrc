@@ -1,5 +1,5 @@
 "
-" {{@@ env['dotdrop_warning'] @@}}
+" {{@@ header() @@}}
 "
 
 " Enable syntaxhightlighting

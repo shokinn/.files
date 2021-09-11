@@ -1,16 +1,26 @@
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
+
+{%@@ if profile == 'VWAGWOY00349' @@%}
+#### FIG ENV VARIABLES ####
+# Please make sure this block is at the start of this file.
+[ -s {{@@ env['HOME'] @@}}/.fig/shell/pre.sh ] && source {{@@ env['HOME'] @@}}/.fig/shell/pre.sh
+#### END FIG ENV VARIABLES ####
+{%@@ endif @@%}
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+if [[ -r "${XDG_CACHE_HOME:-{{@@ env['HOME'] @@}}/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-{{@@ env['HOME'] @@}}/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f {{@@ env['HOME'] @@}}/.p10k.zsh ]] || source {{@@ env['HOME'] @@}}/.p10k.zsh
+
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=${HOME}/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
   export ZSH={{@@ env['HOME'] @@}}/.oh-my-zsh
@@ -18,10 +28,10 @@ fi
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-if [[ $TERM == 'linux' ]]; then
-	ZSH_THEME="agnoster"
+if [[ ${TERM} == 'linux' ]]; then
+  ZSH_THEME="agnoster"
 else
-	ZSH_THEME="powerlevel10k/powerlevel10k"
+  ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
 # Set list of themes to load
@@ -74,26 +84,27 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	archlinux
-	colored-man-pages
-	cp
-	git
-	git-extras
-	gitignore
-	kubectl
-	pip
-	pyenv
-	pylint
-	python
-	screen
-	sublime
-	sudo
-	systemd
-	themes
-	zsh-navigation-tools
+{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' @@%}  archlinux
+{%@@ endif @@%}  colored-man-pages
+  cp
+  git
+  git-extras
+  gitignore
+  kubectl
+  pip
+  pyenv
+  pylint
+  python
+  screen
+  sublime
+  sudo
+  systemd
+  themes
+  vscode
+  zsh-navigation-tools
 )
 
-source $ZSH/oh-my-zsh.sh
+source ${ZSH}/oh-my-zsh.sh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -122,27 +133,36 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias dotdrop='eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh'
-eval $(thefuck --alias)
+[[ -f {{@@ env['HOME'] @@}}/.files/dotdrop.sh ]] && alias dotdrop='eval $(grep -v "^#" {{@@ env['HOME'] @@}}/.files/.env.public) {{@@ env['HOME'] @@}}/.files/dotdrop.sh'
+[[ $(command -v thefuck) ]] && eval $(thefuck --alias)
+{%@@ if profile == 'AINCRAD-wsl' or profile == 'YOETUNHEIMR-wsl' @@%}
 # Use https://github.com/jgaa/shinysocks as simple socks5 proxy for windows
-alias proxy_kubectl="http_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 https_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 kubectl"
-alias pk='proxy_kubectl'
+[[ $(command -v kubectl) ]] && alias proxy_kubectl="http_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 https_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 kubectl"
+[[ $(command -v kubectl) ]] && alias pk='proxy_kubectl'
+{%@@ endif @@%}
+
+# Initialize pyenv
+[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
 
 # Enable pipx completions
-if [ -f "$HOME/.local/bin/pipx" ]; then
-	autoload -U bashcompinit
-	bashcompinit
-	eval "$(register-python-argcomplete pipx)"
+if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
+  autoload -U bashcompinit
+  bashcompinit
+  eval "$(register-python-argcomplete pipx)"
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+{%@@ if profile == 'VWAGWOY00349' @@%}
+#### FIG ENV VARIABLES ####
+# Please make sure this block is at the end of this file.
+[ -s {{@@ env['HOME'] @@}}/.fig/fig.sh ] && source {{@@ env['HOME'] @@}}/.fig/fig.sh
+#### END FIG ENV VARIABLES ####
+{%@@ endif @@%}
 
 # Functions (or more complex aliases)
 wttr() {
-    if [ -z "$1" ]; then
+    if [ -z "${1}" ]; then
         curl http://wttr.in
-    elif [[ "$1" == "help" ]]; then
+    elif [[ "${1}" == "help" ]]; then
         cat << EOF
 usage: wttr (City|3-letter airport code|'~Special+Location')
   City:
@@ -162,7 +182,6 @@ usage: wttr (City|3-letter airport code|'~Special+Location')
       wttr '~Kilimanjaro'
 EOF
     else
-        curl http://wttr.in/$1
+        curl http://wttr.in/${1}
     fi
 }
-

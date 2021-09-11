@@ -1,6 +1,6 @@
 /*
  *
- * {{@@ env['dotdrop_warning'] @@}}
+ * {{@@ header() @@}}
  *
  * This theme was made using Albert theme creator (https://albertlauncher.github.io/docs/theming/themecreator/).
  *

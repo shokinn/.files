@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 
-if [[ $UID -ne 0 ]]; then
+if [[ ${UID} -ne 0 ]]; then
 	echo "You have to run this script as root!"
 	exit 1
 fi
 
 options=( storage aws umount )
 
-if [[ -z "$1" ]]; then
-	echo "Usage: $0 <project>"
-	echo "e.g.: $0 c3"
+if [[ -z "${1}" ]]; then
+	echo "Usage: ${0} <project>"
+	echo "e.g.: ${0} c3"
 	echo " "
 	echo "Valid options:"
 	for i in "${options[@]}"; do
-		echo "    - $i"
+		echo "    - ${i}"
 	done
 fi
 
@@ -25,28 +25,28 @@ fuse="/video/fuse"
 video="/video/video"
 tmp="/video/tmp"
 
-if mount | grep $fuse > /dev/null; then
-    umount $fuse
+if mount | grep ${fuse} > /dev/null; then
+    umount ${fuse}
 fi
 
-if mount | grep $video > /dev/null; then
-    umount $video
+if mount | grep ${video} > /dev/null; then
+    umount ${video}
 fi
 
-if mount | grep $tmp > /dev/null; then
-    umount $tmp
+if mount | grep ${tmp} > /dev/null; then
+    umount ${tmp}
 fi
 
-case $1 in
+case ${1} in
 	storage)
-		mount.cifs //storage.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
-		mount.cifs //storage.lan.c3voc.de/video $video -o rw,guest -o uid=phg
-		mount.cifs //storage.lan.c3voc.de/tmp $tmp -o rw,guest -o uid=phg
+		mount.cifs //storage.lan.c3voc.de/fuse ${fuse} -o rw,guest -o uid=phg
+		mount.cifs //storage.lan.c3voc.de/video ${video} -o rw,guest -o uid=phg
+		mount.cifs //storage.lan.c3voc.de/tmp ${tmp} -o rw,guest -o uid=phg
 		;;
 	aws)
-		mount.cifs //aws.lan.c3voc.de/fuse $fuse -o rw,guest -o uid=phg
-                mount.cifs //aws.lan.c3voc.de/video $video -o rw,guest -o uid=phg
-		mount.cifs //aws.lan.c3voc.de/tmp $tmp -o rw,guest -o uid=phg
+		mount.cifs //aws.lan.c3voc.de/fuse ${fuse} -o rw,guest -o uid=phg
+        mount.cifs //aws.lan.c3voc.de/video ${video} -o rw,guest -o uid=phg
+		mount.cifs //aws.lan.c3voc.de/tmp ${tmp} -o rw,guest -o uid=phg
 		;;
 	umount)
 		;;
@@ -54,6 +54,6 @@ case $1 in
 		echo "Mountpoint does not exist."
 		echo "Please use one of the following:"
 		for i in "${options[@]}"; do
-                	echo "    - $i"
+                	echo "    - ${i}"
         	done
 esac

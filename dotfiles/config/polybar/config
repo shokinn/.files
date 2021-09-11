@@ -1,6 +1,6 @@
 ;=======================================
 ;
-;    {{@@ env['dotdrop_warning'] @@}}
+;    {{@@ header() @@}}
 ;
 ;    Polybar configuration for
 ;    Dell XPS 15 9560

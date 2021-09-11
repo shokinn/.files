@@ -1,11 +1,11 @@
-#
-# {{@@ env['dotdrop_warning'] @@}}
-#
-
 #!/bin/bash
 
+#
+# {{@@ header() @@}}
+#
+
 # Set lock screen background
-lockscreen="$HOME/.config/bspwm/lock.png"
+lockscreen="{{@@ env['HOME'] @@}}/.config/bspwm/lock.png"
 
 # Lock all KeePass databases
 keepass --lock-all

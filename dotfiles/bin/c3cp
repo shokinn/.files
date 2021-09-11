@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 
-if [[ -z "$1" ]]; then
+if [[ -z "${1}" ]]; then
 	echo "Filepath missing."
 	exit 1
 fi
 
-rsync --verbose --progress --inplace $1 /tmp/
+rsync --verbose --progress --inplace ${1} /tmp/

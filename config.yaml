@@ -1,3 +1,7 @@
+config:
+  backup: true
+  create: true
+  dotpath: dotfiles
 actions:
   oh-my-zsh: |
     [[ ! -d ${{HOME}}/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended || echo "do nothing" >/dev/null
@@ -8,10 +12,6 @@ actions:
   powerlevel10k-theme: |
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k ]] && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k || echo "do nothing" >/dev/null
-config:
-  backup: true
-  create: true
-  dotpath: dotfiles
 dotfiles:
   d_bspwm:
     dst: ~/.config/bspwm
@@ -64,10 +64,7 @@ dotfiles:
     src: p10k.zsh
   f_profile:
     dst: ~/.profile
-    src: profile
-  f_profile_win:
-    dst: ~/.profile
-    src: profile_win
+    src: z_profile
   f_rofi_config:
     dst: ~/.config/rofi/config
     src: config/rofi/config
@@ -88,29 +85,15 @@ dotfiles:
     src: xsession
   f_zprofile:
     dst: ~/.zprofile
-    src: profile
-  f_zprofile_win:
-    dst: ~/.zprofile
-    src: profile_win
-  f_zprofile_mac:
-    dst: ~/.zprofile
-    src: zprofile_mac
+    src: z_profile
   f_zshenv:
     dst: ~/.zshenv
     src: zshenv
-  f_zshenv_win:
-    dst: ~/.zshenv
-    src: zshenv_win
   f_zshrc:
     actions:
     - oh-my-zsh
     dst: ~/.zshrc
     src: zshrc
-  f_zshrc_mac:
-    actions:
-    - oh-my-zsh
-    dst: ~/.zshrc
-    src: zshrc_mac
   f_start_systemd_shell.sh:
     src: start_systemd_shell.sh
     dst: ~/start_systemd_shell.sh
@@ -121,10 +104,10 @@ profiles:
   YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
-    - f_profile_win
+    - f_profile
     - f_vimrc
     - f_zshrc
-    - f_zshenv_win
+    - f_zshenv
     - f_powerlevel10krc
     - d_colors
     - f_compton.conf
@@ -135,15 +118,15 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_zprofile_win
+    - f_zprofile
     - f_start_systemd_shell.sh
   AINCRAD:
     dotfiles:
     - d_fonts
-    - f_profile_win
+    - f_profile
     - f_vimrc
     - f_zshrc
-    - f_zshenv_win
+    - f_zshenv
     - f_powerlevel10krc
     - d_colors
     - f_compton.conf
@@ -154,15 +137,15 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_zprofile_win
+    - f_zprofile
     - f_start_systemd_shell.sh
   AINCRAD-wsl:
     dotfiles:
     - d_fonts
-    - f_profile_win
+    - f_profile
     - f_vimrc
     - f_zshrc
-    - f_zshenv_win
+    - f_zshenv
     - f_powerlevel10krc
     - d_colors
     - f_compton.conf
@@ -173,7 +156,7 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_zprofile_win
+    - f_zprofile
     - f_start_systemd_shell.sh
   yoetunheimr:
     dotfiles:
@@ -214,7 +197,7 @@ profiles:
   VWAGWOY00349:
     dotfiles:
     - f_vimrc
-    - f_zshrc_mac
+    - f_zshrc
     - f_zshenv
     - f_powerlevel10krc
     - d_colors
@@ -224,4 +207,4 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_zprofile_mac
+    - f_zprofile

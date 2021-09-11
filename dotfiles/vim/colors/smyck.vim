@@ -1,6 +1,6 @@
 " ----------------------------------------------------------------------------
 "
-" {{@@ env['dotdrop_warning'] @@}}
+" {{@@ header() @@}}
 "
 " Vim color file
 " Maintainer:   John-Paul Bader <contact@smyck.org>

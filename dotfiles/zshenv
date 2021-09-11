@@ -1,5 +1,5 @@
 #
-# {{@@ env['dotdrop_warning'] @@}}
+# {{@@ header() @@}}
 #
 
 
@@ -7,12 +7,33 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Disable Ansible cowsay
 export ANSIBLE_NOCOWS=1
+
 # Include ~/.bin to PATH
-if [ -d "$HOME/.bin" ] ; then
-	export PATH="$HOME/.bin:$PATH"
-fi
-# Includ ~/.local/bin to PATH
-if [ -d "$HOME/.local/bin" ] ; then
-	export PATH="$HOME/.local/bin:$PATH"
+[[ -d "{{@@ env['HOME'] @@}}/.bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.bin:${PATH}"
+
+# Include ~/.local/bin to PATH
+[[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
+
+
+{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
+# Connect to windows ssh pageant
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
+export SSH_AUTH_SOCK={{@@ env['HOME'] @@}}/.ssh/agent.sock
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ $? -ne 0 ]; then
+        rm -f $SSH_AUTH_SOCK
+        (setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe >/dev/null 2>&1 &)
 fi
 
+# Connect to windows gpg agent
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
+export GPG_AGENT_SOCK={{@@ env['HOME'] @@}}/.gnupg/S.gpg-agent
+ss -a | grep -q $GPG_AGENT_SOCK
+if [ $? -ne 0 ]; then
+        rm -rf $GPG_AGENT_SOCK
+        (setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent" >/dev/null 2>&1 &)
+fi
+
+# X410 (Windows X11 Server)
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+{%@@ endif @@%}

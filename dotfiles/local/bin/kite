@@ -1,3 +1,7 @@
 #!/usr/bin/env zsh
 
-$HOME/.local/share/kite/kited > /dev/null 2>&1 &
+#
+# {{@@ header() @@}}
+#
+
+{{@@ env['HOME'] @@}}/.local/share/kite/kited > /dev/null 2>&1 &
