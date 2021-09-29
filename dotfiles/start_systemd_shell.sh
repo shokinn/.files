@@ -3,6 +3,6 @@
 #
 # {{@@ header() @@}}
 #
-export DOTNET_ROOT=/opt/dotnet
+#export DOTNET_ROOT=/opt/dotnet
 
 genie -s
