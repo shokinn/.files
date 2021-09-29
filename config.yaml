@@ -101,25 +101,6 @@ dotfiles:
     src: local/bin/kite
     dst: ~/.local/bin/kite
 profiles:
-  YOETUNHEIMR-wsl:
-    dotfiles:
-    - d_fonts
-    - f_profile
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_compton.conf
-    - f_rofi_config
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
-    - f_start_systemd_shell.sh
   AINCRAD:
     dotfiles:
     - d_fonts
@@ -184,6 +165,25 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+  YOETUNHEIMR-wsl:
+    dotfiles:
+    - d_fonts
+    - f_profile
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel10krc
+    - d_colors
+    - f_compton.conf
+    - f_rofi_config
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile
+    - f_start_systemd_shell.sh
   workspace:
     dotfiles:
     - d_fonts
