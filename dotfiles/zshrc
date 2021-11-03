@@ -85,8 +85,10 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 {%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' @@%}  archlinux
-{%@@ endif @@%}  colored-man-pages
+{%@@ endif @@%}  aws
+  colored-man-pages
   cp
+  fzf
   git
   git-extras
   gitignore
@@ -101,8 +103,15 @@ plugins=(
   systemd
   themes
   vscode
+  zsh-completions
   zsh-navigation-tools
 )
+
+autoload -U compinit && compinit
+
+# Try on linux without fig
+#source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+#zstyle ':completion:*' fzf-search-display true
 
 source ${ZSH}/oh-my-zsh.sh
 
