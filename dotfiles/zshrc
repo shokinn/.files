@@ -1,13 +1,13 @@
-#
-# {{@@ header() @@}}
-#
-
 {%@@ if profile == 'VWAGWOY00349' @@%}
 #### FIG ENV VARIABLES ####
 # Please make sure this block is at the start of this file.
-[ -s {{@@ env['HOME'] @@}}/.fig/shell/pre.sh ] && source {{@@ env['HOME'] @@}}/.fig/shell/pre.sh
+[ -s ~/.fig/shell/pre.sh ] && source ~/.fig/shell/pre.sh
 #### END FIG ENV VARIABLES ####
 {%@@ endif @@%}
+
+#
+# {{@@ header() @@}}
+#
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -161,10 +161,13 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
 fi
 
 {%@@ if profile == 'VWAGWOY00349' @@%}
-#### FIG ENV VARIABLES ####
-# Please make sure this block is at the end of this file.
-[ -s {{@@ env['HOME'] @@}}/.fig/fig.sh ] && source {{@@ env['HOME'] @@}}/.fig/fig.sh
-#### END FIG ENV VARIABLES ####
+# Decide which homebrew installation (x64_86 / arm64) should be used
+if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
+  local brew_path="/usr/local/homebrew/bin"
+else
+  local brew_path="/opt/homebrew/bin"
+fi
+export PATH="${brew_path}:${PATH}"
 {%@@ endif @@%}
 
 # Functions (or more complex aliases)
@@ -194,3 +197,10 @@ EOF
         curl http://wttr.in/${1}
     fi
 }
+
+{%@@ if profile == 'VWAGWOY00349' @@%}
+#### FIG ENV VARIABLES ####
+# Please make sure this block is at the end of this file.
+[ -s ~/.fig/fig.sh ] && source ~/.fig/fig.sh
+#### END FIG ENV VARIABLES ####
+{%@@ endif @@%}
