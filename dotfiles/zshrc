@@ -160,6 +160,9 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
   eval "$(register-python-argcomplete pipx)"
 fi
 
+# Add kind completions
+[[ $(command -v kind) ]] && kind completion zsh > ${ZSH_CUSTOM:-{{@@ env['HOME'] @@}}/.oh-my-zsh/custom}/completions/_kind
+
 {%@@ if profile == 'VWAGWOY00349' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
