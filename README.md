@@ -12,7 +12,10 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 6. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
 ```shell
 git clone https://github.com/shokinn/.files ~/.files \
-&& pip3 install --user -r ~/.files/dotdrop/requirements.txt \
+&& cd ~/.files \
+&& git submodule update --init \
+&& cd .. \
+&& pip install --user -r ~/.files/dotdrop/requirements.txt \
 && eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh install
 ```
 
