@@ -198,6 +198,20 @@ profiles:
     - f_powerlevel10krc
     - d_colors
     - f_zprofile
+  sbx0nucmac01.home.pphg.tech:
+    dotfiles:
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel10krc
+    - d_colors
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile
   VWAGWOY00349:
     dotfiles:
     - f_vimrc
