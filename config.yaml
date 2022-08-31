@@ -188,6 +188,22 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
+  ymir:
+    dotfiles:
+    - f_zshrc
+    - f_zshenv
+    - f_zprofile
+    - d_fonts
+    - f_profile
+    - f_vimrc
+    - f_powerlevel10krc
+    - d_colors
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
   workspace:
     dotfiles:
     - d_fonts

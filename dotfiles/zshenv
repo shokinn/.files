@@ -18,7 +18,7 @@ export ANSIBLE_NOCOWS=1
 [[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
 
 
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
+{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Connect to windows ssh pageant
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 export SSH_AUTH_SOCK={{@@ env['HOME'] @@}}/.ssh/agent.sock

@@ -19,19 +19,21 @@ export EDITOR
 {%@@ if profile == 'VWAGWOY00349' @@%}
 [[ $(command -v /opt/homebrew/bin/brew) ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 {%@@ endif @@%}
-[[ $(command -v pyenv) ]] && eval "$(pyenv init --path)"
+[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
 
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
 # Set DOTNET_ROOT enviroment variable
 DOTNET_ROOT=/opt/dotnet
 export DOTNET_ROOT
 
+{%@@ endif @@%}
+{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Set XDG_CONFIG_HOME
 XDG_CONFIG_HOME="{{@@ env['HOME'] @@}}/.config"
 export XDG_CONFIG_HOME
-{%@@ endif @@%}
 
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
+{%@@ endif @@%}
+{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Run VPN-Kit alpine VM to route traffic through Windows and if connected through VPNs
 wsl.exe -d wsl-vpnkit service wsl-vpnkit start
 {%@@ endif @@%}
