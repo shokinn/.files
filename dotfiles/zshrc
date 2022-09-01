@@ -103,15 +103,24 @@ plugins=(
   systemd
   themes
   vscode
-  zsh-completions
+  #zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
   zsh-navigation-tools
 )
 
 autoload -U compinit && compinit
 
-# Try on linux without fig
-#source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
-#zstyle ':completion:*' fzf-search-display true
+{%@@ if profile == 'ymir' @@%}
+# Source fzf-tab-completions
+# source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+# zstyle ':completion:*' fzf-search-display true
+
+# fpath extensions
+# Add zsh-completions to fpath (https://github.com/zsh-users/zsh-completions/issues/603)
+fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/zsh-completions/src
+# A set of custom completions
+fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/custom-completions
+{%@@ endif @@%}
+
 
 source ${ZSH}/oh-my-zsh.sh
 
@@ -142,7 +151,7 @@ source ${ZSH}/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-[[ -f {{@@ env['HOME'] @@}}/.files/dotdrop.sh ]] && alias dotdrop='eval $(grep -v "^#" {{@@ env['HOME'] @@}}/.files/.env.public) {{@@ env['HOME'] @@}}/.files/dotdrop.sh'
+# [[ -f {{@@ env['HOME'] @@}}/.files/dotdrop.sh ]] && alias dotdrop='eval $(grep -v "^#" {{@@ env['HOME'] @@}}/.files/.env.public) {{@@ env['HOME'] @@}}/.files/dotdrop.sh' # Not required anymore since I now use
 [[ $(command -v thefuck) ]] && eval $(thefuck --alias)
 #{%@@ if profile == 'AINCRAD-wsl' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}
 # Use https://github.com/jgaa/shinysocks as simple socks5 proxy for windows
@@ -151,7 +160,7 @@ source ${ZSH}/oh-my-zsh.sh
 #{%@@ endif @@%}
 
 # Initialize pyenv
-[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
+[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"; eval "$(pyenv virtualenv-init -)"
 
 # Enable pipx completions
 if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then

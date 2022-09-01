@@ -7,7 +7,8 @@ actions:
     [[ ! -d ${{HOME}}/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended || echo "do nothing" >/dev/null
     [[ -f ${{HOME}}/.zshrc.pre-oh-my-zsh ]] && rm ${{HOME}}/.zshrc && mv ${{HOME}}/.zshrc.pre-oh-my-zsh ${{HOME}}/.zshrc || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins || echo "do nothing" >/dev/null
-    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/completions ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/completions || echo "do nothing" >/dev/null
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions || echo "do nothing" >/dev/null
+    [[ ! -f ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh ]] && curl -o ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh https://raw.githubusercontent.com/deadc0de6/dotdrop/master/completion/_dotdrop.sh-completion.zsh || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion ]] && git clone https://github.com/lincheney/fzf-tab-completion.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion || echo "do nothing" >/dev/null
   powerlevel9k-theme: |
@@ -50,6 +51,9 @@ dotfiles:
   f_compton.conf:
     dst: ~/.config/compton/compton.conf
     src: config/compton/compton.conf
+  f_dotdrop.sh:
+    src: bin/dotdrop.sh
+    dst: ~/.bin/dotdrop.sh
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
@@ -204,6 +208,7 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+    - f_dotdrop.sh
   workspace:
     dotfiles:
     - d_fonts
