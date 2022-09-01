@@ -79,6 +79,9 @@ COMPLETION_WAITING_DOTS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# Load pyenv-virtualenv when found
+ZSH_PYENV_VIRTUALENV="true"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -160,7 +163,6 @@ source ${ZSH}/oh-my-zsh.sh
 #{%@@ endif @@%}
 
 # Initialize pyenv
-[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"; eval "$(pyenv virtualenv-init -)"
 
 # Enable pipx completions
 if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
@@ -168,9 +170,6 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
   bashcompinit
   eval "$(register-python-argcomplete pipx)"
 fi
-
-# Add kind completions
-[[ $(command -v kind) ]] && kind completion zsh > ${ZSH_CUSTOM:-{{@@ env['HOME'] @@}}/.oh-my-zsh/custom}/completions/_kind
 
 {%@@ if profile == 'VWAGWOY00349' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
