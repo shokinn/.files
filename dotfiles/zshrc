@@ -124,9 +124,6 @@ fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/zsh-completions/src
 fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/custom-completions
 {%@@ endif @@%}
 
-[[ -f ${HOME}/.kube/plugin-completion-config/zsh.yaml ]] && source <(kubectl plugin_completion plugin-completion zsh)
-
-
 source ${ZSH}/oh-my-zsh.sh
 
 # User configuration
