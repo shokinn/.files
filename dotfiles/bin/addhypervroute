@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+#
+# {{@@ header() @@}}
+#
+
+HYPER_V_SWITCH_ADDRESS=$(powershell.exe 'Get-NetIPAddress -ifAlias "vEthernet (Default Switch)" -AddressFamily IPv4 | Select -ExpandProperty IPAddress')
+HYPER_V_SWITCH_ADDRESS="${HYPER_V_SWITCH_ADDRESS%.*}.0"
+HYPER_V_SWITCH_PREFIX_LENGTH=$(echo "$(powershell.exe 'Get-NetIPAddress -ifAlias "vEthernet (Default Switch)" -AddressFamily IPv4 | Select -ExpandProperty PrefixLength')" | tr -d '\r')
+WSL_SWITCH_ADDRESS=$( echo "$(powershell.exe 'Get-NetIPAddress -ifAlias "vEthernet (WSL)" -AddressFamily IPv4 | Select -ExpandProperty IPAddress')" | tr -d '\r')
+
+sudo ip r add ${HYPER_V_SWITCH_ADDRESS}/${HYPER_V_SWITCH_PREFIX_LENGTH} via ${WSL_SWITCH_ADDRESS}

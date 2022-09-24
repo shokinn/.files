@@ -18,6 +18,9 @@ actions:
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k ]] && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel10k || echo "do nothing" >/dev/null
 dotfiles:
+  f_addhypervroute:
+    dst: ~/.bin/addhypervroute
+    src: bin/addhypervroute
   d_bspwm:
     dst: ~/.config/bspwm
     src: config/bspwm
@@ -128,6 +131,8 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
+    - f_dotdrop.sh
+    - f_addhypervroute
   AINCRAD-wsl:
     dotfiles:
     - d_fonts
@@ -147,6 +152,8 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
+    - f_dotdrop.sh
+    - f_addhypervroute
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -173,6 +180,8 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
+    - f_dotdrop.sh
+    - f_addhypervroute
   YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
@@ -192,6 +201,8 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
+    - f_dotdrop.sh
+    - f_addhypervroute
   ymir:
     dotfiles:
     - f_zshrc
@@ -209,6 +220,7 @@ profiles:
     - f_c3mpv
     - f_c3check
     - f_dotdrop.sh
+    - f_addhypervroute
   workspace:
     dotfiles:
     - d_fonts
