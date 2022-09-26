@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#
+# {{@@ header() @@}}
+#
+
+WINHOME="$(echo "$(cmd.exe /C "echo %USERPROFILE%")" | tr -d '\r')"
+WINHOMEWSL="$(wslpath ${WINHOME})"
+
+cat <<EOF > "${WINHOMEWSL}/enablewslhypervforwarding.ps1"
+#at top of script
+if (!
+    #current role
+    (New-Object Security.Principal.WindowsPrincipal(
+        [Security.Principal.WindowsIdentity]::GetCurrent()
+    #is admin?
+    )).IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator
+    )
+) {
+    #elevate script and exit current non-elevated runtime
+    Start-Process \`
+        -FilePath 'powershell' \`
+        -ArgumentList (
+            #flatten to single array
+            '-File', \$MyInvocation.MyCommand.Source, \$args \`
+            | %{ \$_ }
+        ) \`
+        -Verb RunAs
+    exit
+}
+
+Set-NetIPInterface -ifAlias "vEthernet (Default Switch)" -Forwarding Enabled
+Set-NetIPInterface -ifAlias "vEthernet (WSL)" -Forwarding Enabled
+
+EOF
+
+powershell.exe "${WINHOME}\enablewslhypervforwarding.ps1"
+powershell.exe "Get-NetIPInterface | select ifIndex,InterfaceAlias,AddressFamily,ConnectionState,Forwarding | Sort-Object -Property IfIndex | Format-Table"
+
+
+rm ${WINHOMEWSL}/enablewslhypervforwarding.ps1
