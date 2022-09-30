@@ -4,4 +4,4 @@
 # {{@@ header() @@}}
 #
 
-open {{@@ env['HOME'] @@}}/.bin/pu.inetloc
+open 'jamfselfservice://content?entity=policy&id=810&action=execute'

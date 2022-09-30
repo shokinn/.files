@@ -4,4 +4,4 @@
 # {{@@ header() @@}}
 #
 
-open {{@@ env['HOME'] @@}}/.bin/rpki.inetloc
+open 'jamfselfservice://content?entity=policy&id=2135&action=execute'

@@ -120,12 +120,6 @@ dotfiles:
   f_rpki:
     dst: ~/.bin/rpki
     src: bin/rpki
-  f_pu_helper:
-    dst: ~/.bin/pu.inetloc
-    src: bin/pu.inetloc
-  f_rpki_helper:
-    dst:  ~/.bin/rpki.inetloc
-    src: bin/rpki.inetloc
 profiles:
   AINCRAD:
     dotfiles:
@@ -282,5 +276,3 @@ profiles:
     - f_dotdrop.sh
     - f_pu
     - f_rpki
-    - f_pu_helper
-    - f_rpki_helper
