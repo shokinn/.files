@@ -4,4 +4,4 @@
 # {{@@ header() @@}}
 #
 
-open -j 'jamfselfservice://content?entity=policy&id=2135&action=execute'
+open -j -g 'jamfselfservice://content?entity=policy&id=2135&action=execute'
