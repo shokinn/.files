@@ -1,4 +1,4 @@
-{%@@ if profile == 'VWAGWOY00349' @@%}
+{%@@ if profile == 'WVDEWOBMC001307' @@%}
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 {%@@ endif @@%}
@@ -168,7 +168,7 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
   eval "$(register-python-argcomplete pipx)"
 fi
 
-{%@@ if profile == 'VWAGWOY00349' @@%}
+{%@@ if profile == 'WVDEWOBMC001307' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
   local brew_path="/usr/local/homebrew/bin"
@@ -206,7 +206,53 @@ EOF
     fi
 }
 
-{%@@ if profile == 'VWAGWOY00349' @@%}
+macnst (){
+  netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|"
+}
+
+{%@@ if profile == 'WVDEWOBMC001307' @@%}
+function setProxyEnv(){
+  local HIGHLIGHT='\033[36;1m'
+  local RESET='\033[0;0m'
+
+  local PROXY='127.0.0.1:9000'
+  local PROXY_CFG_HTTP="${PROXY}"
+  local PROXY_CFG_HTTPS="${PROXY}"
+  local NO_PROXY_CFG="127.0.0.1,localhost,vw.vwg"
+  
+  export NO_PROXY="${NO_PROXY_CFG}"
+  export no_proxy="${NO_PROXY_CFG}"
+  export HTTP_PROXY="${PROXY_CFG_HTTP}"
+  export HTTPS_PROXY="${PROXY_CFG_HTTPS}"
+  export http_proxy="${PROXY_CFG_HTTP}"
+  export https_proxy="${PROXY_CFG_HTTPS}"
+
+  echo -e "\n✈️  exported zscaler proxy: ${HIGHLIGHT}http://${PROXY}${RESET}"
+}
+
+function unsetProxyEnv(){
+  unset NO_PROXY
+  unset HTTP_PROXY
+  unset HTTPS_PROXY
+  unset no_proxy
+  unset http_proxy
+  unset https_proxy
+
+  echo -e "\n🔄 removed zscaler proxy cofiguration"
+}
+
+function setVpnGitRemote(){
+  local ORIGIN=vpn #e.g.
+  local HIGHLIGHT='\033[36;1m'
+  local RESET='\033[0;0m'
+
+  local repo="ssh://git@vpn.github.com:443/${$(git config remote.origin.url)#*git@github.com:}"
+  git remote add ${ORIGIN} "${repo}" 2> /dev/null
+
+  echo -e "🔗 git remote (${HIGHLIGHT}${ORIGIN}${RESET}): ${HIGHLIGHT}${repo}${RESET}\n"
+}
+
+
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
 {%@@ endif @@%}
