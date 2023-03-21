@@ -206,11 +206,11 @@ EOF
     fi
 }
 
+{%@@ if profile == 'WVDEWOBMC001307' @@%}
 macnst (){
   netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|"
 }
 
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
 function setProxyEnv(){
   local HIGHLIGHT='\033[36;1m'
   local RESET='\033[0;0m'
@@ -255,4 +255,10 @@ function setVpnGitRemote(){
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
+{%@@ endif @@%}
+
+{%@@ if profile == 'ymir' @@%}
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
 {%@@ endif @@%}
