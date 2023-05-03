@@ -11,6 +11,7 @@ actions:
     [[ ! -f ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh ]] && curl -o ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh https://raw.githubusercontent.com/deadc0de6/dotdrop/master/completion/_dotdrop.sh-completion.zsh || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion ]] && git clone https://github.com/lincheney/fzf-tab-completion.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion || echo "do nothing" >/dev/null
+    [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-ssh ]] && git clone https://github.com/sunlei/zsh-ssh  ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-ssh || echo "do nothing" >/dev/null
   powerlevel9k-theme: |
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel9k ]] && git clone https://github.com/bhilburn/powerlevel9k.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/themes/powerlevel9k || echo "do nothing" >/dev/null

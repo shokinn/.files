@@ -106,6 +106,7 @@ plugins=(
   vscode
   #zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
   zsh-navigation-tools
+  zsh-ssh
 )
 
 autoload -U compinit && compinit
