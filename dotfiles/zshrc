@@ -160,6 +160,8 @@ source ${ZSH}/oh-my-zsh.sh
 #[[ $(command -v kubectl) ]] && alias pk='proxy_kubectl'
 #{%@@ endif @@%}
 
+alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
 # Initialize pyenv
 
 # Enable pipx completions
