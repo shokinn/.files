@@ -35,9 +35,9 @@ Set-NetIPInterface -ifAlias "vEthernet (WSL)" -Forwarding Enabled
 
 EOF
 
-powershell.exe "${WINHOME}\enablewslhypervforwarding.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "${WINHOME}\enablewslhypervforwarding.ps1"
 sleep 3
-powershell.exe "Get-NetIPInterface | select ifIndex,InterfaceAlias,AddressFamily,ConnectionState,Forwarding | Sort-Object -Property IfIndex | Format-Table"
+powershell.exe -ExecutionPolicy Bypass "Get-NetIPInterface | select ifIndex,InterfaceAlias,AddressFamily,ConnectionState,Forwarding | Sort-Object -Property IfIndex | Format-Table"
 
 
 rm ${WINHOMEWSL}/enablewslhypervforwarding.ps1
