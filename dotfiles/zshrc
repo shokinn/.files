@@ -89,6 +89,7 @@ plugins=(
   git-extras
   gitignore
   kubectl
+  nix-zsh-completions
   pip
   pyenv
   pylint
