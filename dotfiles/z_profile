@@ -1,8 +1,3 @@
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zprofile.pre.zsh" ]] && . "$HOME/.fig/shell/zprofile.pre.zsh"
-{%@@ endif @@%}
-
 #
 # {{@@ header() @@}}
 #
@@ -21,9 +16,10 @@ export EDITOR
 export PATH="$PATH:/Users/vw6au89/Library/Application Support/JetBrains/Toolbox/scripts"
 {%@@ endif @@%}
 
+# Initialize pyenv
 [[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
-[[ $(command -v pyenv) ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-[[ $(command -v pyenv) ]] && eval "$(pyenv init --path)"
+[[ $(command -v pyenv) ]] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
 
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
 # Set DOTNET_ROOT enviroment variable
@@ -40,9 +36,4 @@ export XDG_CONFIG_HOME
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Run VPN-Kit alpine VM to route traffic through Windows and if connected through VPNs
 wsl.exe -d wsl-vpnkit service wsl-vpnkit start
-{%@@ endif @@%}
-
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zprofile.post.zsh" ]] && . "$HOME/.fig/shell/zprofile.post.zsh"
 {%@@ endif @@%}

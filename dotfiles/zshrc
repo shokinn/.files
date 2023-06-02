@@ -1,8 +1,3 @@
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
-{%@@ endif @@%}
-
 #
 # {{@@ header() @@}}
 #
@@ -163,6 +158,9 @@ source ${ZSH}/oh-my-zsh.sh
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Initialize pyenv
+[[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
+[[ $(command -v pyenv) ]] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
 
 # Enable pipx completions
 if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
@@ -254,10 +252,6 @@ function setVpnGitRemote(){
 
   echo -e "🔗 git remote (${HIGHLIGHT}${ORIGIN}${RESET}): ${HIGHLIGHT}${repo}${RESET}\n"
 }
-
-
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
 {%@@ endif @@%}
 
 {%@@ if profile == 'ymir' @@%}
