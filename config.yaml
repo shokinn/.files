@@ -122,6 +122,9 @@ dotfiles:
   f_rpki:
     dst: ~/.bin/rpki
     src: bin/rpki
+  f_rmquarantine:
+    dst: ~/.bin/rmquarantine
+    src: bin/rmquarantine
 profiles:
   AINCRAD:
     dotfiles:
@@ -278,3 +281,4 @@ profiles:
     - f_dotdrop.sh
     - f_pu
     - f_rpki
+    - f_rmquarantine

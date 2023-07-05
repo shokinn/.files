@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+#
+# {{@@ header() @@}}
+#
+
+xattr -r -d com.apple.quarantine ${1}
