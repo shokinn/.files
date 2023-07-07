@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# {{@@ header() @@}}
+# This dotfile is managed using dotdrop
 #
 
 WINHOME="$(echo "$(cmd.exe /C "echo %USERPROFILE%")" | tr -d '\r')"
@@ -23,6 +23,7 @@ if (!
         -FilePath 'powershell' \`
         -ArgumentList (
             #flatten to single array
+            '-ExecutionPolicy', 'Bypass', \`
             '-File', \$MyInvocation.MyCommand.Source, \$args \`
             | %{ \$_ }
         ) \`
@@ -35,7 +36,7 @@ Set-NetIPInterface -ifAlias "vEthernet (WSL)" -Forwarding Enabled
 
 EOF
 
-powershell.exe -ExecutionPolicy Bypass -File "${WINHOME}\enablewslhypervforwarding.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "${WINHOME}\\enablewslhypervforwarding.ps1"
 sleep 3
 powershell.exe -ExecutionPolicy Bypass "Get-NetIPInterface | select ifIndex,InterfaceAlias,AddressFamily,ConnectionState,Forwarding | Sort-Object -Property IfIndex | Format-Table"
 
