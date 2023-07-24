@@ -110,12 +110,12 @@ dotfiles:
   f_kite:
     src: local/bin/kite
     dst: ~/.local/bin/kite
-  f_addhypervroute:
-    dst: ~/.bin/addhypervroute
-    src: bin/addhypervroute
-  f_enablewslhypervforwarding:
-    dst: ~/.bin/enablewslhypervforwarding
-    src: bin/enablewslhypervforwarding
+  f_wsladdhypervroute:
+    dst: ~/.bin/wsladdhypervroute
+    src: bin/wsladdhypervroute
+  f_wslenablehypervforwarding:
+    dst: ~/.bin/wslenablehypervforwarding
+    src: bin/wslenablehypervforwarding
   f_pu:
     dst: ~/.bin/pu
     src: bin/pu
@@ -146,8 +146,8 @@ profiles:
     - f_zprofile
     - f_start_systemd_shell.sh
     - f_dotdrop.sh
-    - f_addhypervroute
-    - f_enablewslhypervforwarding
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
   AINCRAD-wsl:
     dotfiles:
     - d_fonts
@@ -168,8 +168,8 @@ profiles:
     - f_zprofile
     - f_start_systemd_shell.sh
     - f_dotdrop.sh
-    - f_addhypervroute
-    - f_enablewslhypervforwarding
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -197,8 +197,8 @@ profiles:
     - f_c3mpv
     - f_c3check
     - f_dotdrop.sh
-    - f_addhypervroute
-    - f_enablewslhypervforwarding
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
   YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
@@ -219,8 +219,8 @@ profiles:
     - f_zprofile
     - f_start_systemd_shell.sh
     - f_dotdrop.sh
-    - f_addhypervroute
-    - f_enablewslhypervforwarding
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
   ymir:
     dotfiles:
     - f_zshrc
@@ -238,8 +238,8 @@ profiles:
     - f_c3mpv
     - f_c3check
     - f_dotdrop.sh
-    - f_addhypervroute
-    - f_enablewslhypervforwarding
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
   workspace:
     dotfiles:
     - d_fonts
