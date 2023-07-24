@@ -116,6 +116,9 @@ dotfiles:
   f_wslenablehypervforwarding:
     dst: ~/.bin/wslenablehypervforwarding
     src: bin/wslenablehypervforwarding
+  f_wslshowhypervforwarding:
+    dst: ~/.bin/wslshowhypervforwarding
+    src: bin/wslshowhypervforwarding
   f_pu:
     dst: ~/.bin/pu
     src: bin/pu
@@ -148,6 +151,7 @@ profiles:
     - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
   AINCRAD-wsl:
     dotfiles:
     - d_fonts
@@ -170,6 +174,7 @@ profiles:
     - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -199,6 +204,7 @@ profiles:
     - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
   YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
@@ -221,6 +227,7 @@ profiles:
     - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
   ymir:
     dotfiles:
     - f_zshrc
@@ -240,6 +247,7 @@ profiles:
     - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
   workspace:
     dotfiles:
     - d_fonts
