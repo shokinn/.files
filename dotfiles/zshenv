@@ -42,3 +42,7 @@ fi
 # X410 (Windows X11 Server)
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 {%@@ endif @@%}
+{%@@ if profile == 'WVDEWOBMC001307' @@%}
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+
+{%@@ endif @@%}
