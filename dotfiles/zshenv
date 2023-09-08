@@ -20,6 +20,22 @@ export ANSIBLE_NOCOWS=1
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
+# exa
+if [[ $(command -v exa) ]]; then
+        [[ $(whence -w l) == *alias* ]] && unalias l
+        lfunc() {
+                exal -T -L ${1:-1}
+        }
+        [[ $(whence -w la) == *alias* ]] && unalias la
+        lafunc() {
+                exal -a -T -L ${1:-1}
+        }
+        alias exal="exa -l -F -g -h --extended --git --group-directories-first --icons"
+        alias l='lfunc'
+        alias la='lafunc'
+        alias ll="lfunc 2"
+fi
+
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Connect to windows ssh pageant
 # https://github.com/BlackReloaded/wsl2-ssh-pageant

@@ -158,6 +158,22 @@ source ${ZSH}/oh-my-zsh.sh
 
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
+# exa
+if [[ $(command -v exa) ]]; then
+        [[ $(whence -w l) == *alias* ]] && unalias l
+        lfunc() {
+                exal -T -L ${1:-1}
+        }
+        [[ $(whence -w la) == *alias* ]] && unalias la
+        lafunc() {
+                exal -a -T -L ${1:-1}
+        }
+        alias exal="exa -l -F -g -h --extended --git --group-directories-first --icons"
+        alias l='lfunc'
+        alias la='lafunc'
+        alias ll="lfunc 2"
+fi
+
 # Initialize pyenv
 [[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
 [[ $(command -v pyenv) ]] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
