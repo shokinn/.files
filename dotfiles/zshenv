@@ -22,11 +22,9 @@ export ANSIBLE_NOCOWS=1
 
 # exa
 if [[ $(command -v exa) ]]; then
-        [[ $(whence -w l) == *alias* ]] && unalias l
         lfunc() {
                 exal -T -L ${1:-1}
         }
-        [[ $(whence -w la) == *alias* ]] && unalias la
         lafunc() {
                 exal -a -T -L ${1:-1}
         }
@@ -34,6 +32,7 @@ if [[ $(command -v exa) ]]; then
         alias l='lfunc'
         alias la='lafunc'
         alias ll="lfunc 2"
+        alias lla='lafunc 2'
 fi
 
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
