@@ -158,21 +158,6 @@ source ${ZSH}/oh-my-zsh.sh
 
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-# exa
-if [[ $(command -v exa) ]]; then
-        lfunc() {
-                exal -T -L ${1:-1}
-        }
-        lafunc() {
-                exal -a -T -L ${1:-1}
-        }
-        alias exal="exa -l -F -g -h --extended --git --group-directories-first --icons"
-        alias l='lfunc'
-        alias la='lafunc'
-        alias ll="lfunc 2"
-        alias lla='lafunc 2'
-fi
-
 # Initialize pyenv
 [[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
 [[ $(command -v pyenv) ]] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
@@ -196,79 +181,7 @@ export PATH="${brew_path}:${PATH}"
 {%@@ endif @@%}
 
 # Functions (or more complex aliases)
-wttr() {
-    if [ -z "${1}" ]; then
-        curl http://wttr.in
-    elif [[ "${1}" == "help" ]]; then
-        cat << EOF
-usage: wttr (City|3-letter airport code|'~Special+Location')
-  City:
-    Just write down the name of the city.
-    e.G.:
-      wttr London
-  3-letter airport code:
-    Use 3-letter airport codes in order to get the weather information at a certain airport.
-    e.G.:
-      wttr muc #for Munich Internation Airpot, Germany
-  Special Location:
-    Let's say you'd like to get the weather for a geographical location other than a town or city -
-    maybe an attraction in a city, a mountain name, or some special location.
-    Add the character '~' before the name to look up that special location name before the weather is then retrieved.
-    e.G.:
-      wttr '~Eiffel+Tower'
-      wttr '~Kilimanjaro'
-EOF
-    else
-        curl http://wttr.in/${1}
-    fi
-}
-
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
-macnst (){
-  netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|"
-}
-
-function setProxyEnv(){
-  local HIGHLIGHT='\033[36;1m'
-  local RESET='\033[0;0m'
-
-  local PROXY='127.0.0.1:9000'
-  local PROXY_CFG_HTTP="${PROXY}"
-  local PROXY_CFG_HTTPS="${PROXY}"
-  local NO_PROXY_CFG="127.0.0.1,localhost,vw.vwg"
-  
-  export NO_PROXY="${NO_PROXY_CFG}"
-  export no_proxy="${NO_PROXY_CFG}"
-  export HTTP_PROXY="${PROXY_CFG_HTTP}"
-  export HTTPS_PROXY="${PROXY_CFG_HTTPS}"
-  export http_proxy="${PROXY_CFG_HTTP}"
-  export https_proxy="${PROXY_CFG_HTTPS}"
-
-  echo -e "\n✈️  exported zscaler proxy: ${HIGHLIGHT}http://${PROXY}${RESET}"
-}
-
-function unsetProxyEnv(){
-  unset NO_PROXY
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset no_proxy
-  unset http_proxy
-  unset https_proxy
-
-  echo -e "\n🔄 removed zscaler proxy cofiguration"
-}
-
-function setVpnGitRemote(){
-  local ORIGIN=vpn #e.g.
-  local HIGHLIGHT='\033[36;1m'
-  local RESET='\033[0;0m'
-
-  local repo="ssh://git@vpn.github.com:443/${$(git config remote.origin.url)#*git@github.com:}"
-  git remote add ${ORIGIN} "${repo}" 2> /dev/null
-
-  echo -e "🔗 git remote (${HIGHLIGHT}${ORIGIN}${RESET}): ${HIGHLIGHT}${repo}${RESET}\n"
-}
-{%@@ endif @@%}
+source {{@@ env['HOME'] @@}}/.commonfunc
 
 {%@@ if profile == 'ymir' @@%}
 autoload -Uz compinit

@@ -20,29 +20,14 @@ export ANSIBLE_NOCOWS=1
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
-# exa
-if [[ $(command -v exa) ]]; then
-        lfunc() {
-                exal -T -L ${1:-1}
-        }
-        lafunc() {
-                exal -a -T -L ${1:-1}
-        }
-        alias exal="exa -l -F -g -h --extended --git --group-directories-first --icons"
-        alias l='lfunc'
-        alias la='lafunc'
-        alias ll="lfunc 2"
-        alias lla='lafunc 2'
-fi
-
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Connect to windows ssh pageant
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 export SSH_AUTH_SOCK={{@@ env['HOME'] @@}}/.ssh/agent.sock
 ss -a | grep -q $SSH_AUTH_SOCK
 if [ $? -ne 0 ]; then
-        rm -f $SSH_AUTH_SOCK
-        (setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe >/dev/null 2>&1 &)
+  rm -f $SSH_AUTH_SOCK
+  (setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe >/dev/null 2>&1 &)
 fi
 
 # Connect to windows gpg agent
@@ -50,8 +35,8 @@ fi
 export GPG_AGENT_SOCK={{@@ env['HOME'] @@}}/.gnupg/S.gpg-agent
 ss -a | grep -q $GPG_AGENT_SOCK
 if [ $? -ne 0 ]; then
-        rm -rf $GPG_AGENT_SOCK
-        (setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent" >/dev/null 2>&1 &)
+  rm -rf $GPG_AGENT_SOCK
+  (setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"{{@@ env['HOME'] @@}}/.ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent" >/dev/null 2>&1 &)
 fi
 
 # X410 (Windows X11 Server)
@@ -61,3 +46,5 @@ export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
 
 {%@@ endif @@%}
+
+source {{@@ env['HOME'] @@}}/.commonfunc
