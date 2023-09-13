@@ -11,13 +11,13 @@
 # exa - set aliasses for exa to use it as ls replacement
 if [[ $(command -v exa) ]]; then
   exafunc() {
-    exa -l -F -g -h --extended --git --group-directories-first --icons ${@:-}
+    exa -l -F -g -h --git --group-directories-first --icons ${@:-}
   }
   lfunc() {
     exafunc -T -L ${1:-1}
   }
   lafunc() {
-    exafunc -a -T -L ${1:-1}
+    exafunc -a -T -L ${1:-1} --extended
   }
   alias l='lfunc'
   alias la='lafunc'
