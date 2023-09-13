@@ -8,16 +8,16 @@
 # {{@@ header() @@}}
 #
 
-# exa - set aliasses for exa to use it as ls replacement
-if [[ $(command -v exa) ]]; then
-  exafunc() {
-    exa -l -F -g -h --git --group-directories-first --icons ${@:-}
+# eza - set aliasses for eza to use it as ls replacement
+if [[ $(command -v eza) ]]; then
+  ezafunc() {
+    eza -l -F -g -h --git --group-directories-first --icons ${@:-}
   }
   lfunc() {
-    exafunc -T -L ${1:-1}
+    ezafunc -T -L ${1:-1}
   }
   lafunc() {
-    exafunc -a -T -L ${1:-1} --extended
+    ezafunc -a -T -L ${1:-1} --extended
   }
   alias l='lfunc'
   alias la='lafunc'
