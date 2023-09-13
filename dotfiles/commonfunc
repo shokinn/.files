@@ -17,12 +17,17 @@ if [[ $(command -v eza) ]]; then
     ezafunc -T -L ${1:-1}
   }
   lafunc() {
+    ezafunc -a -T -L ${1:-1}
+  }
+  lefunc() {
     ezafunc -a -T -L ${1:-1} --extended
   }
   alias l='lfunc'
   alias la='lafunc'
-  alias ll="lfunc 2"
+  alias le='lefunc'
+  alias ll='lfunc 2'
   alias lla='lafunc 2'
+  alias lle='lefunc 2'
 fi
 
 # wttr - show the weather forecast in Terminal
