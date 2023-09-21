@@ -14,17 +14,17 @@ if [[ $(command -v eza) ]]; then
     eza -l -F -g -h --git --group-directories-first --icons ${@:-}
   }
   lfunc() {
-    ezafunc -T -L ${1:-1}
+    ezafunc -T -L ${@:-}
   }
   lafunc() {
-    ezafunc -a -T -L ${1:-1}
+    ezafunc -a -T -L ${@:-}
   }
   lefunc() {
-    ezafunc -a -T -L ${1:-1} --extended
+    ezafunc -a -T -L ${@:-} --extended
   }
-  alias l='lfunc'
-  alias la='lafunc'
-  alias le='lefunc'
+  alias l='lfunc 1'
+  alias la='lafunc 1'
+  alias le='lefunc 1'
   alias ll='lfunc 2'
   alias lla='lafunc 2'
   alias lle='lefunc 2'
