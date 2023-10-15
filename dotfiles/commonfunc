@@ -75,7 +75,6 @@ if [[ $(command -v age) ]]; then
     local tmp_path="$(mktemp -p /dev/shm)"
     local recipients_list=$(ageGetRecipientsList "${secret_path}")
     local identity="${MASTERKEY_FILE:-$([[ -f "$(realpath "secrets/hostkeys/masterkey.privkey")" ]] && echo -n "$(realpath "secrets/hostkeys/masterkey.privkey")" || echo -n "/dev/stdin")}"
-    # [[ -f "$(realpath "secrets/hostkeys/masterkey.privkey")" ]] && local identity="$(realpath "secrets/hostkeys/masterkey.privkey")" || 
 
     if test -e "${secret_path}"; then
       set +e +o pipefail
@@ -101,7 +100,7 @@ if [[ $(command -v age) ]]; then
 
       if test "${mod_time_before}" != "${mod_time_after}"; then
         echo "change detected, reencrypting file" > /dev/stderr
-        age ${recipients_list[@]} --encrypt --armor --output "${secret_path}" "${tmp_path}"
+        age $(sed -e "s/^\'//" -e "s/\'$//" <<<"${recipients_list[@]}") --encrypt --armor --output "${secret_path}" "${tmp_path}"
       else
         echo "no change detected, not reencrypting file" > /dev/stderr
       fi
@@ -143,7 +142,7 @@ if [[ $(command -v age) ]]; then
         }
         if test $? -eq 0 ; then
             echo -n "${content}" \
-                | age ${recipients[@]} \
+                | age $(sed -e "s/^\'//" -e "s/\'$//" <<<"${recipients[@]}") \
                 --encrypt \
                 --armor \
                 --output "${line}"
