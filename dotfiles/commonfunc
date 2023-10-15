@@ -61,7 +61,7 @@ if [[ $(command -v age) ]]; then
 
     mkdir -p "${dirname}"
 
-    echo -n ${data} | age $(echo -n "${recipients_list[@]}" | sed -e "s/^\'//" -e "s/\'$//") --encrypt --armor --output "${secret_path}"
+    echo -n ${data} | age $(sed -e "s/^\'//" -e "s/\'$//" <<<"${recipients_list[@]}") --encrypt --armor --output "${secret_path}"
 
     set +efu +o pipefail
   }
