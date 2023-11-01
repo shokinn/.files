@@ -131,6 +131,9 @@ dotfiles:
   f_commonfunc:
     dst: ~/.commonfunc
     src: commonfunc
+  f_gpgagent:
+    dst: ~/.gnupg/gpg-agent.conf
+    src: gnupg/gpg-agent.conf
 profiles:
   AINCRAD:
     dotfiles:
@@ -252,6 +255,7 @@ profiles:
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
     - f_commonfunc
+    - f_gpgagent
   workspace:
     dotfiles:
     - d_fonts
