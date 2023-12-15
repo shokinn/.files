@@ -134,6 +134,9 @@ dotfiles:
   f_gpgagent:
     dst: ~/.gnupg/gpg-agent.conf
     src: gnupg/gpg-agent.conf
+  f_secretfiles:
+    dst: ~/.bin/secretfiles
+    src: bin/secretfiles
 profiles:
   AINCRAD:
     dotfiles:
@@ -256,6 +259,7 @@ profiles:
     - f_wslshowhypervforwarding
     - f_commonfunc
     - f_gpgagent
+    - f_secretfiles
   workspace:
     dotfiles:
     - d_fonts
@@ -301,3 +305,4 @@ profiles:
     - f_rpki
     - f_rmquarantine
     - f_commonfunc
+    - f_secretfiles
