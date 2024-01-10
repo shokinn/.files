@@ -80,17 +80,25 @@ ZSH_PYENV_VIRTUALENV="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}  archlinux
-{%@@ endif @@%}  aws
+  ag
+  aws
   colored-man-pages
   cp
+  docker
+  docker-compose
+  emoji
+  emoji-clock
+  encode64
   fzf
   git
   git-extras
   gitignore
+  kind
   kubectl
+  man
   nix-zsh-completions
   pip
+  podman
   pyenv
   pylint
   python
@@ -98,11 +106,19 @@ plugins=(
   sublime
   sudo
   systemd
+  tig
   themes
   vscode
   #zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
   zsh-navigation-tools
   zsh-ssh
+{%@@ if profile == 'ymir' or profile == 'susanoo.int.r3w.de' @@%}  # Mac specifics
+  brew
+  iterm2
+  macos
+  {%@@ endif @@%}{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}  # Archlinux specifics
+  archlinux
+  {%@@ endif @@%}
 )
 
 autoload -U compinit && compinit
