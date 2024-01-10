@@ -107,7 +107,7 @@ plugins=(
 
 autoload -U compinit && compinit
 
-{%@@ if profile == 'ymir' @@%}
+{%@@ if profile == 'ymir' or profile == 'susanoo.int.r3w.de' @@%}
 # Source fzf-tab-completions
 # source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 # zstyle ':completion:*' fzf-search-display true
@@ -170,7 +170,7 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
   eval "$(register-python-argcomplete pipx)"
 fi
 
-{%@@ if profile == 'WVDEWOBMC001307' @@%}
+{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
   local brew_path="/usr/local/homebrew/bin"

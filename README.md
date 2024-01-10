@@ -7,15 +7,19 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 1. Install [Homebrew](https://brew.sh/)
 2. Install `coreutils` via Homebrew.
 3. Install [pyenv](https://github.com/pyenv/pyenv)
-4. Install the latest python version via pyenv
-5. Configure the latest python version as system (global) default
+  a. Install [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
+  b. Add pyenv temporarly to your path: `export PATH=$(pyenv root)/shims:${PATH}`
+  c. Install the latest python version via pyenv
+  d. Create a new virtual-env caleld `dotdrop` via `pyenv virtualenv <just installed python verison> dotdrop`
+4. Initialize pyenv; run `pyenv init` for instructions
+5. Activate the `dotdrop` virtualenv by using `pyenv shell dotdrop`
 6. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
 ```shell
 git clone https://github.com/shokinn/.files ~/.files \
 && cd ~/.files \
 && git submodule update --init \
 && cd .. \
-&& pip install --user -r ~/.files/dotdrop/requirements.txt \
+&& pip install -r ~/.files/dotdrop/requirements.txt \
 && eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh install
 ```
 

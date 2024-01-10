@@ -184,6 +184,39 @@ profiles:
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
+  sbx0nucmac01.home.pphg.tech:
+    dotfiles:
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel10krc
+    - d_colors
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile
+    - f_commonfunc
+  susanoo.int.r3w.de:
+    dotfiles:
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_powerlevel10krc
+    - d_colors
+    - f_c3cp
+    - f_mount_c3voc
+    - f_c3l
+    - f_c3kdenlive
+    - f_c3mpv
+    - f_c3check
+    - f_zprofile
+    - f_dotdrop.sh
+    - f_rmquarantine
+    - f_commonfunc
+    - f_secretfiles
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -269,21 +302,6 @@ profiles:
     - f_zshenv
     - f_powerlevel10krc
     - d_colors
-    - f_zprofile
-    - f_commonfunc
-  sbx0nucmac01.home.pphg.tech:
-    dotfiles:
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
     - f_zprofile
     - f_commonfunc
   WVDEWOBMC001307:
