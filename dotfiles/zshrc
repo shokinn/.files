@@ -199,6 +199,9 @@ export PATH="${brew_path}:${PATH}"
 # Functions (or more complex aliases)
 source {{@@ env['HOME'] @@}}/.commonfunc
 
+# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
+[[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
+
 {%@@ if profile == 'ymir' @@%}
 autoload -Uz compinit
 zstyle ':completion:*' menu select

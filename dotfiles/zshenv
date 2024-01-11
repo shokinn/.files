@@ -20,6 +20,9 @@ export ANSIBLE_NOCOWS=1
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
+# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
+[[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
+
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
 # Connect to windows ssh pageant
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
