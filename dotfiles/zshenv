@@ -17,7 +17,10 @@ export ANSIBLE_NOCOWS=1
 # Include ~/.local/bin to PATH
 [[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
 
-# Include $(go env GOPATH) to PATH
+{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
+[[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
+
+{%@@ endif @@%}# Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
 {%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
