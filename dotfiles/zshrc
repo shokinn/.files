@@ -186,6 +186,9 @@ if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
   eval "$(register-python-argcomplete pipx)"
 fi
 
+# Include $(go env GOPATH) to PATH
+[[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
+
 {%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
