@@ -173,6 +173,7 @@ source ${ZSH}/oh-my-zsh.sh
 #{%@@ endif @@%}
 
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 
 # Initialize pyenv
 [[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
