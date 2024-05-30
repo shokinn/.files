@@ -1,4 +1,4 @@
-#! /bin/sed 2,5!d;s/^#.//
+#! /usr/bin/env sed 2,5!d;s/^#.//
 # This script must be sourced from within a shell
 # and not executed. For instance with:
 # 
@@ -8,29 +8,95 @@
 # {{@@ header() @@}}
 #
 
+#######################################
+# Function description.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
+
 # eza - set aliasses for eza to use it as ls replacement
 if [[ $(command -v eza) ]]; then
+  #######################################
+  # Run eza with a standard set of options.
+  # Globals:
+  #   None
+  # Arguments:
+  #   n arguments for using / configuring eza
+  # Outputs:
+  #   Writes file and directory list to stdout
+  # Returns:
+  #   None
+  #######################################
   ezafunc() {
     eza -l -F -g -h --git --group-directories-first --icons ${@:-}
   }
-  lfunc() {
-    ezafunc -T -L ${@:-}
+  #######################################
+  # Run eza in a ls -l style.
+  # Globals:
+  #   None
+  # Arguments:
+  #   Depth modifier, for how many level of directories should be shown
+  # Outputs:
+  #   None
+  # Returns:
+  #   None
+  #######################################
+  ezafunc::l() {
+    ezafunc -T -L ${@:-1}
   }
-  lafunc() {
-    ezafunc -a -T -L ${@:-}
+  #######################################
+  # Run eza in a ls -la style.
+  # Globals:
+  #   None
+  # Arguments:
+  #   Depth modifier, for how many level of directories should be shown
+  # Outputs:
+  #   None
+  # Returns:
+  #   None
+  #######################################
+  ezafunc::la() {
+    ezafunc -a -T -L ${@:-1}
   }
-  lefunc() {
-    ezafunc -a -T -L ${@:-} --extended
+  #######################################
+  # Run eza in a ls -la style with extended information.
+  # Globals:
+  #   None
+  # Arguments:
+  #   Depth modifier, for how many level of directories should be shown
+  # Outputs:
+  #   None
+  # Returns:
+  #   None
+  #######################################
+  ezafunc::le() {
+    ezafunc -a -T -L ${@:-1} --extended
   }
-  alias l='lfunc 1'
-  alias la='lafunc 1'
-  alias le='lefunc 1'
-  alias ll='lfunc 2'
-  alias lla='lafunc 2'
-  alias lle='lefunc 2'
+  alias l='ezafunc::l'
+  alias la='ezafunc::la'
+  alias le='ezafunc::le'
+  alias ll='ezafunc::l 2'
+  alias lla='ezafunc::la 2'
+  alias lle='ezafunc::le 2'
 fi
 
-# wttr - show the weather forecast in Terminal
+#######################################
+# wttr - show the weather forecast in Terminal.
+# Globals:
+#   None
+# Arguments:
+#   Location based on City, 3-letter airport code or '~Special+Location'
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
 wttr() {
     if [ -z "${1}" ]; then
         curl http://wttr.in
@@ -59,11 +125,210 @@ EOF
 }
 
 {%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}
-macnst (){
+#######################################
+# Shows a netstat -tulpn styled output on mac.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
+macnst() {
   netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname;colred="\033[01;31m";colclr="\033[0m"; print colred "proto: " colclr $1 colred " | addr.port: " colclr $4 colred " | pid: " colclr $9 colred " | name: " colclr procname;  }' | column -t -s "|"
 }
+
+#######################################
+# Get current active Hardware Port.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Writes Network service, device and mac address to stdout, when not called by another function
+# Returns:
+#   _currentservice
+#######################################
+confv6::get_active_network_device() {
+  local services=$(networksetup -listnetworkserviceorder | grep 'Hardware Port')
+
+  while read line; do
+      local sname=$(echo ${line} | awk -F  "(, )|(: )|[)]" '{print $2}')
+      local sdev=$(echo ${line} | awk -F  "(, )|(: )|[)]" '{print $4}')
+      #echo "Current service: $sname, $sdev, $currentservice"
+      if [ -n "${sdev}" ]; then
+          local ifout="$(ifconfig ${sdev} 2>/dev/null)"
+          echo "${ifout}" | grep 'status: active' > /dev/null 2>&1
+          local rc="$?"
+          if [ "$rc" -eq 0 ]; then
+              _currentservice="${sname}"
+              local _currentdevice="${sdev}"
+              local _currentmac=$(echo "${ifout}" | awk '/ether/{print $2}')
+          fi
+      fi
+  done <<< "$(echo "$services")"
+
+  if [[ ${#funcstack[@]} -le 1 ]]; then
+    if [ -n "${_currentservice}" ]; then
+        echo "Network Service:  ${_currentservice}"
+        echo "Device:           ${_currentdevice}"
+        echo "Mac Address:      ${_currentmac}"
+    else
+        >&2 echo "Could not find current service"
+        return 1
+    fi
+  elif [[ ${#funcstack[@]} -ge 2 ]]; then
+    if [ -n "${_currentservice}" ]; then
+      return
+    else
+      return 1
+    fi
+  fi
+}
+
+#######################################
+# Unsets used variabls.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
+confv6::unset() {
+  unset service
+  unset configuration
+  unset address
+  unset prefixlength
+  unset router
+  return
+}
+
+#######################################
+# Enable IPv6 on a interface (by default it's using the active interface and setting the network service for IPv6 to automatic).
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Writes device status message to stdout or errors to stderr
+# Returns:
+#   None
+#######################################
+confv6() {
+  # Brace expansions are great for specifying short and long
+  # option names without duplicating any information.
+  zparseopts -D -F -K -- \
+    {h,-help}=help \
+    {n,-network-service-name}:=service \
+    {c,-configuration}:=configuration \
+    {a,-address}:=address \
+    {p,-prefixlength}:=prefixlength \
+    {r,-router}:=router || return 1
+  # zparseopts prints an error message if it cannot parse
+  # arguments, so we can simply return on error.
+
+  if (( $#help )); then
+    print -rC1 -- \
+      "$0 [-h|--help]" \
+      "$0 [-n|--network-service-name=<network service name>] [-c|--configuration=<automatic|manual|link-local|off>] [-a|--address=<address>] [-p|--prefixlength=<prefixlength>] [-r|--router=<router>]" \
+      "E.g.:" \
+      "  Set the IPv6 configuration to automatic for the current active network service:" \
+      "    $0" \
+      "  Set the IPv6 configuation to off for the current active network service:" \
+      "    $0 -c=off" \
+      "  Set the IPv6 configuration to manual for a specified network service:" \
+      "    $0 -n='USB 10/100/1000 LAN' -c='manual -a fd00:c0de:cafe::2' -p='64' -r='fd00:c0de:cafe::1'"
+    confv6::unset
+    return
+  fi
+
+  if [[ -z ${service} ]]; then
+    confv6::get_active_network_device
+    if [[ ${?} -ne 0 ]]; then
+      >&2 echo "Either no active Network service found nor specified via options"
+      return 2
+    else
+      service=${_currentservice}
+    fi
+  else
+    service=${(q+)service[-1]/=}
+  fi
+
+  if [[ -n ${configuration} ]]; then
+    configuration=${(q+)configuration[-1]/=}
+  fi
+
+  if [[ -n ${address} ]]; then
+    address=${(q+)address[-1]/=}
+  fi
+
+  if [[ -n ${prefixlength} ]]; then
+    prefixlength=${(q+)prefixlength[-1]/=}
+  fi
+  
+  if [[ -n ${router} ]]; then
+    router=${(q+)router[-1]/=}
+  fi
+
+  if [[ ${configuration} == "automatic" || -z ${configuration} ]]; then
+    networksetup -setv6automatic "${service}"
+    networksetup -getinfo "${service}"
+    confv6::unset
+    return
+  fi
+
+  if [[ ${configuration} == "manual" ]]; then
+    if [[ -n ${address} && -n ${prefixlength} && -n ${router} ]]; then
+      >&2 print -rC1 -- \
+        "-c='manual' requires the options:" \
+        "  [-a|--address=<address>] [-p|--prefixlength=<prefixlength>] [-r|--router=<router>]"
+
+        return 3
+    fi
+
+    networksetup -setv6manual "${service}" "${address}" "${prefixlength}" "${router}"
+    networksetup -getinfo "${service}"
+    confv6::unset
+    return
+  fi
+
+  if [[ ${configuration} == "link-local" ]]; then
+    networksetup -setv6LinkLocal "${service}"
+    networksetup -getinfo "${service}"
+    confv6::unset
+    return
+  fi
+
+  if [[ ${configuration} == "off" ]]; then
+    networksetup -setv6off "${service}"
+    networksetup -getinfo "${service}"
+    confv6::unset
+    return
+  fi
+
+  if [[ -n ${configuration} ]]; then
+    print -rC1 -- \
+      >&2 "Wrong configuration option for [-c|--configuration=<automatic|manual|link-local|off>]."
+    return 4
+  fi
+
+  if [[ -z ${return_code} ]]; then
+    
+    return 5
+  fi
+
+  confv6::unset
+  >&2 echo "General error. Actually I don't know what went wrong ¯\_(ツ)_/¯"
+  return 5
+}
+
 {%@@ endif @@%}{%@@ if profile == 'WVDEWOBMC001307' @@%}
-function setProxyEnv(){
+setProxyEnv() {
   local HIGHLIGHT='\033[36;1m'
   local RESET='\033[0;0m'
 
@@ -83,7 +348,7 @@ function setProxyEnv(){
   echo -e "\n✈️  exported zscaler proxy: ${HIGHLIGHT}http://${PROXY}${RESET}"
 }
 
-function unsetProxyEnv(){
+unsetProxyEnv() {
   unset NO_PROXY
   unset HTTP_PROXY
   unset HTTPS_PROXY
@@ -95,7 +360,7 @@ function unsetProxyEnv(){
   echo -e "\n🔄 removed zscaler proxy cofiguration"
 }
 
-function setVpnGitRemote(){
+setVpnGitRemote() {
   local ORIGIN=vpn #e.g.
   local HIGHLIGHT='\033[36;1m'
   local RESET='\033[0;0m'
