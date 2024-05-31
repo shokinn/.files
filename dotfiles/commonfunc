@@ -206,6 +206,7 @@ confv6::unset() {
   unset prefixlength
   unset router
   unset help
+  unset show
   return
 }
 
@@ -225,6 +226,7 @@ confv6() {
   # option names without duplicating any information.
   zparseopts -D -F -K -- \
     {h,-help}=help \
+    {s,-show}=show \
     {n,-network-service-name}:=service \
     {c,-configuration}:=configuration \
     {a,-address}:=address \
@@ -274,6 +276,12 @@ confv6() {
   
   if [[ -n ${router} ]]; then
     router=${(q+)router[-1]/=}
+  fi
+
+  if (( $#show )); then
+    networksetup -getinfo "${service}"
+    confv6::unset
+    return
   fi
 
   if [[ ${configuration} == "automatic" || -z ${configuration} ]]; then
