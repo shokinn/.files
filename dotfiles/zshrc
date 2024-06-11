@@ -112,7 +112,7 @@ plugins=(
   #zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
   zsh-navigation-tools
   zsh-ssh
-{%@@ if profile == 'ymir' or profile == 'susanoo.int.r3w.de' @@%}  # Mac specifics
+{%@@ if profile == 'ymir' or profile == 'susanoo.local' @@%}  # Mac specifics
   brew
   iterm2
   macos
@@ -123,7 +123,7 @@ plugins=(
 
 autoload -U compinit && compinit
 
-{%@@ if profile == 'ymir' or profile == 'susanoo.int.r3w.de' @@%}
+{%@@ if profile == 'ymir' or profile == 'susanoo.local' @@%}
 # Source fzf-tab-completions
 # source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 # zstyle ':completion:*' fzf-search-display true
@@ -190,7 +190,7 @@ fi
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}
+{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
   local brew_path="/usr/local/homebrew/bin"

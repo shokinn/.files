@@ -138,6 +138,10 @@ dotfiles:
   f_secretfiles:
     dst: ~/.bin/secretfiles
     src: bin/secretfiles
+  f_config:
+    src: ssh/config
+    dst: ~/.ssh/config
+    chmod: '600'
 profiles:
   AINCRAD:
     dotfiles:
@@ -162,6 +166,7 @@ profiles:
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
+    - f_config
   AINCRAD-wsl:
     dotfiles:
     - d_fonts
@@ -185,6 +190,7 @@ profiles:
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
+    - f_config
   sbx0nucmac01.home.pphg.tech:
     dotfiles:
     - f_vimrc
@@ -200,7 +206,8 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_commonfunc
-  susanoo.int.r3w.de:
+    - f_config
+  susanoo.local:
     dotfiles:
     - f_vimrc
     - f_zshrc
@@ -218,6 +225,7 @@ profiles:
     - f_rmquarantine
     - f_commonfunc
     - f_secretfiles
+    - f_config
   yoetunheimr:
     dotfiles:
     - d_bspwm
@@ -248,6 +256,7 @@ profiles:
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
+    - f_config
   YOETUNHEIMR-wsl:
     dotfiles:
     - d_fonts
@@ -271,6 +280,7 @@ profiles:
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
+    - f_config
   ymir:
     dotfiles:
     - f_zshrc
@@ -294,6 +304,7 @@ profiles:
     - f_commonfunc
     - f_gpgagent
     - f_secretfiles
+    - f_config
   workspace:
     dotfiles:
     - d_fonts
@@ -305,6 +316,7 @@ profiles:
     - d_colors
     - f_zprofile
     - f_commonfunc
+    - f_config
   WVDEWOBMC001307:
     dotfiles:
     - f_vimrc
@@ -325,3 +337,4 @@ profiles:
     - f_rmquarantine
     - f_commonfunc
     - f_secretfiles
+    - f_config

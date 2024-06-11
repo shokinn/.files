@@ -124,7 +124,7 @@ EOF
     fi
 }
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.int.r3w.de' @@%}
+{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
 #######################################
 # Shows a netstat -tulpn styled output on mac.
 # Globals:
