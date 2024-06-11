@@ -4,8 +4,8 @@ Include /Users/phg/.colima/ssh_config
 # {{@@ header() @@}}
 #
 
-Include config.d/*
-Include config.d/*/*
+Include config.d/*.config
+Include config.d/*/*.config
 
 {%@@ if profile == 'susanoo.local' or profile == 'WVDEWOBMC001307' @@%}Host *
    IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
