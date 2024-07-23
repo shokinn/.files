@@ -1,0 +1,250 @@
+#!/usr/bin/env bash
+# More safety, by turning some bugs into errors.
+# Without `errexit` you don’t need ! and can replace
+# ${PIPESTATUS[0]} with a simple $?, but I prefer safety.
+set -euf -o pipefail
+
+#---------------------------------------------------
+#
+# {{@@ header() @@}}
+#
+# age encryption / decryption helpers
+# based on https://github.com/ryantm/agenix
+#
+# For macOS coreutils and gnu-getopt are required
+# to run this script.
+# brew install coreutils gnu-getopt
+#
+#---------------------------------------------------
+
+#TMPPATH="/dev/shm"
+TMPPATH="/tmp"
+
+[[ -d "/opt/homebrew/opt/coreutils/libexec/gnubin" ]] && export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:${PATH}"
+[[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
+
+update_keys() {
+    local file="${1}"
+    local start_marker="${2}"
+    local end_marker="${3}"
+    local new_key="${4}"
+    local list_name="${5}"
+    local tmp_file=$(mktemp -p ${TMPPATH})
+    local content_file=$(mktemp -p ${TMPPATH})
+
+    local content_array=()
+    local content_array_unsorted=()
+    # Get current configured keys and save them to the array "content_array"
+    mapfile -t content_array_unsorted < <(awk "/${start_marker}/{f=1;next} /${end_marker}/{f=0} f" ${file})
+    # Add new key to the array "content_array"
+    content_array_unsorted+=("${new_key}")
+    # Sort content alphabetically
+    IFS=$'\n' content_array=($(sort <<<"${content_array_unsorted[*]}")); unset IFS
+
+    # Remove duplicates from the array
+    declare -A seen=()
+    unique_content_array=()
+    for item in "${content_array[@]}"; do
+        key="${item%%=*}" # Extract the key part
+        if [[ -z "${seen[$key]+unset}" ]]; then
+            unique_content_array+=("${item}")
+            seen[$key]=1
+        fi
+    done
+
+    # Write the unique contents of the array to a temporary file
+    printf "%s\n" "${unique_content_array[@]}" > "${content_file}"
+
+    # Process the file to replace the keyword list and the block of text
+    awk -v start="${start_marker}" -v end="${end_marker}" -v content_file="${content_file}" -v keys="${!seen[*]}" -v list_name="${list_name}" '
+    BEGIN {
+        in_block = 0
+        split(keys, key_array, " ")
+    }
+    {
+        if ($0 ~ start) {
+            print
+            in_block = 1
+            while ((getline line < content_file) > 0) {
+                print line
+            }
+            close(content_file)
+            next
+        }
+        if ($0 ~ end) {
+            in_block = 0
+            print
+            next
+        }
+        if (!in_block) {
+            if ($0 ~ list_name " = \\[.*\\];") {
+                # Recreate the list_name list from the keys of unique_content_array
+                printf "  %s = [ ", list_name
+                sep = ""
+                for (i in key_array) {
+                    gsub(/^ +/, "", key_array[i])  # Remove leading spaces from keys
+                    printf "%s%s", sep, key_array[i]
+                    sep = " "
+                }
+                print " ];"
+                next
+            }
+            print
+        }
+    }
+    ' "${file}" > "${tmp_file}"
+
+    # Move the temporary file to the original file
+    mv "${tmp_file}" "${file}"
+    rm "${content_file}"
+}
+
+gen-user-key() {
+  local keyname="${1}"
+  local public_key="${2}"
+  local working_directory="${3:-$(pwd)}"
+  local begin_marker='#-----BEGIN USER-SECRETS-----'
+  local end_marker='#------END USER-SECRETS------'
+  local input_file="${working_directory}/secrets.nix"
+  local userkey
+
+  if [[ ${public_key} == "EMPTY" ]]; then
+    echo "generating new keys for host ${keyname}";
+    ssh-keygen \
+      -t ed25519 \
+      -f ~/.ssh/${keyname} \
+      -C "agenix@${keyname}" \
+      -N ''
+  
+    echo "getting user public key for user ${keyname}"
+    userkey=$(echo -n "  ${keyname} = \"$(cat ~/.ssh/${keyname}.pub | awk -F' ' '{ print $1, $2 }')\";")
+  else
+    userkey=$(echo -n "  ${keyname} = \"$(echo -n "${public_key}" | awk -F' ' '{ print $1, $2 }')\";")
+  fi
+  
+  update_keys "${input_file}" "${begin_marker}" "${end_marker}" "${userkey}" "users"
+}
+
+get-host-key() {
+  local keyname="${1}"
+  local target="${2}"
+  local type="${3:-ssh-ed25519}"
+  local working_directory="${4:-$(pwd)}"
+  local begin_marker='#-----BEGIN SYSTEM-SECRETS-----'
+  local end_marker='#------END SYSTEM-SECRETS------'
+  local input_file="${working_directory}/secrets.nix"
+  local hostkey
+
+  echo "getting host public key for host ${keyname}"
+  hostkey=$(echo -n "  ${keyname} = \"$(ssh-keyscan -t ${type} ${target} 2>/dev/null | awk -F' ' '{ print $2, $3 }')\";")
+
+  update_keys "${input_file}" "${begin_marker}" "${end_marker}" "${hostkey}" "systems"
+}
+
+help() {
+  echo "Usage: $(basename ${0}) < gen-user-key [argument ...] | get-host-key [argument ...] >"
+  echo ""
+  echo "Options:"
+  echo "    gen-user-key                        generates a new ssh-ed25519 keypair and adds the public key to secrets.nix"
+  echo ""
+  echo "                      -k, --public-key  provide a public key, instead of generiting a new keypair (format: \"ssh-ed25519 AAAAC3N...\")"
+  echo "                      -n, --name        keyname, usually the hostname (e.g. <hostname>)"
+  echo "                      -p, --path        path to the root directory for the nixOS configuration files, defaults to \`pwd\`"
+  echo ""
+  echo ""
+  echo "    get-host-key                        get a ssh host public key via ssh-keyscan and adds it to secrets.nix"
+  echo ""
+  echo "                      -t, --target      hostname, fqdn or IP from whom the host key is requested"
+  echo "                      -n, --name        keyname, usually the hostname (e.g. <hostname>)"
+  echo "                      -p, --path        path to the root directory for the nixOS configuration files, defaults to \`pwd\`"
+  echo "                          --type        type of the key which is requested via ssh-keyscan, defaults to \`ssh-ed25519\`"
+}
+
+
+# -allow a command to fail with !’s side effect on errexit
+# -use return value from ${PIPESTATUS[0]}, because ! hosed $?
+! getopt --test > /dev/null 
+if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
+    echo 'I’m sorry, `getopt --test` failed in this environment.'
+    exit 1
+fi
+
+# option --output/-o requires 1 argument
+OPTIONS=hk:n:p:t:
+LONGOPTS=help,name:,path:,public-key:,target:,type:
+
+# -regarding ! and PIPESTATUS see above
+# -temporarily store output to be able to check for errors
+# -activate quoting/enhanced mode (e.g. by writing out “--options”)
+# -pass arguments only via   -- "$@"   to separate them correctly
+! PARSED=$(getopt --options=${OPTIONS} --longoptions=${LONGOPTS} --name "$(basename ${0})" -- "${@:--h}")
+if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+    # e.g. return value is 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+# read getopt’s output this way to handle the quoting right:
+eval set -- "${PARSED}"
+
+# now enjoy the options in order and nicely split until we see --
+while true; do
+  case "${1}" in
+    -h|--help)
+      shift
+      help
+      exit
+      ;;
+    -k|--public-key)
+      public_key="${2}"
+      shift 2
+      ;;
+    -n|--name)
+      name="${2}"
+      shift 2
+      ;;
+    -p|--path)
+      path="${2}"
+      shift 2
+      ;;
+    -t|--target)
+      target="${2}"
+      shift 2
+      ;;
+    --type)
+      type="${2}"
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "This option (${1}) does not exist. Exiting."
+      exit 3
+      ;;
+  esac
+done
+
+# handle non-option arguments
+if [[ ${#} -eq 1 ]]; then
+  while true; do
+    case "${1}" in
+      gen-user-key)
+        gen-user-key "${name:?Error, missing option \"-n\"}" "${public_key:-"EMPTY"}" "${path:-}"
+        shift
+        exit
+        ;;
+      get-host-key)
+        get-host-key "${name:?Error, missing option \"-n\"}" "${target:?Error, missing option \"-t\"}" "${type:-}" "${path:-}"
+        shift
+        exit
+        ;;
+      *)
+        echo "Wrong sub command, use -h to print the help."
+        exit 4
+        ;;
+    esac
+  done
+else
+  echo "No sub command provided, use -h to print the help."
+fi

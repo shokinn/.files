@@ -138,6 +138,9 @@ dotfiles:
   f_secretfiles:
     dst: ~/.bin/secretfiles
     src: bin/secretfiles
+  f_agenix_helper:
+    dst: ~/.bin/agenix-helper
+    src: bin/agenix-helper
   f_config:
     src: ssh/config
     dst: ~/.ssh/config
@@ -225,6 +228,7 @@ profiles:
     - f_rmquarantine
     - f_commonfunc
     - f_secretfiles
+    - f_agenix_helper
     - f_config
   yoetunheimr:
     dotfiles:
@@ -304,6 +308,7 @@ profiles:
     - f_commonfunc
     - f_gpgagent
     - f_secretfiles
+    - f_agenix_helper
     - f_config
   workspace:
     dotfiles:
@@ -337,4 +342,5 @@ profiles:
     - f_rmquarantine
     - f_commonfunc
     - f_secretfiles
+    - f_agenix_helper
     - f_config
