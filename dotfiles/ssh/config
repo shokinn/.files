@@ -7,6 +7,9 @@ Include /Users/phg/.colima/ssh_config
 Include config.d/*.config
 Include config.d/*/*.config
 
-{%@@ if profile == 'susanoo.local' or profile == 'WVDEWOBMC001307' @@%}Host *
+{%@@ if profile == 'susanoo.local' or profile == 'WVDEWOBMC001307' @@%}#
+# This have to be LAST
+#
+Host *
    IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
 {%@@ endif @@%}
