@@ -103,8 +103,8 @@ gen-user-key() {
   local keyname="${1}"
   local public_key="${2}"
   local working_directory="${3:-$(pwd)}"
-  local begin_marker='#-----BEGIN USER-SECRETS-----'
-  local end_marker='#------END USER-SECRETS------'
+  local begin_marker='#-----BEGIN USER PUBLIC KEYS-----'
+  local end_marker='#------END USER PUBLIC KEYS------'
   local input_file="${working_directory}/secrets/secrets.nix"
   local userkey
 
@@ -130,8 +130,8 @@ get-host-key() {
   local target="${2}"
   local type="${3:-ssh-ed25519}"
   local working_directory="${4:-$(pwd)}"
-  local begin_marker='#-----BEGIN SYSTEM-SECRETS-----'
-  local end_marker='#------END SYSTEM-SECRETS------'
+  local begin_marker='#-----BEGIN SYSTEM PUBLIC KEYS-----'
+  local end_marker='#------END SYSTEM PUBLIC KEYS------'
   local input_file="${working_directory}/secrets/secrets.nix"
   local hostkey
 
