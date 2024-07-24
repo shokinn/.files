@@ -105,7 +105,7 @@ gen-user-key() {
   local working_directory="${3:-$(pwd)}"
   local begin_marker='#-----BEGIN USER-SECRETS-----'
   local end_marker='#------END USER-SECRETS------'
-  local input_file="${working_directory}/secrets.nix"
+  local input_file="${working_directory}/secrets/secrets.nix"
   local userkey
 
   if [[ ${public_key} == "EMPTY" ]]; then
@@ -132,7 +132,7 @@ get-host-key() {
   local working_directory="${4:-$(pwd)}"
   local begin_marker='#-----BEGIN SYSTEM-SECRETS-----'
   local end_marker='#------END SYSTEM-SECRETS------'
-  local input_file="${working_directory}/secrets.nix"
+  local input_file="${working_directory}/secrets/secrets.nix"
   local hostkey
 
   echo "getting host public key for host ${keyname}"
