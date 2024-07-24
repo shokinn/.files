@@ -80,7 +80,6 @@ ZSH_PYENV_VIRTUALENV="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  ag
   aws
   colored-man-pages
   cp
@@ -109,7 +108,6 @@ plugins=(
   tig
   themes
   vscode
-  #zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
   zsh-navigation-tools
   zsh-ssh
 {%@@ if profile == 'ymir' or profile == 'susanoo.local' @@%}  # Mac specifics
