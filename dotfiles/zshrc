@@ -175,7 +175,7 @@ alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strong
 alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix'
 alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/agenix-phg -e"
 alias ane='agenix-edit'
-alias cane='EDITOR='code -w' agenix-edit'
+alias cane="EDITOR='code -w' agenix-edit"
 
 # Initialize pyenv
 [[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
