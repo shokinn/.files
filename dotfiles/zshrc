@@ -107,6 +107,7 @@ plugins=(
   systemd
   tig
   themes
+  uv
   vscode
   zsh-navigation-tools
   zsh-ssh
