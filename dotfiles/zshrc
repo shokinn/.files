@@ -72,9 +72,6 @@ COMPLETION_WAITING_DOTS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Load pyenv-virtualenv when found
-ZSH_PYENV_VIRTUALENV="true"
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -96,10 +93,7 @@ plugins=(
   kubectl
   man
   nix-zsh-completions
-  pip
   podman
-  pyenv
-  pylint
   python
   screen
   sublime
@@ -111,18 +105,17 @@ plugins=(
   vscode
   zsh-navigation-tools
   zsh-ssh
-{%@@ if profile == 'ymir' or profile == 'susanoo.local' @@%}  # Mac specifics
+{%@@ if profile == 'WVDEWOBMC001307' or profile == 'ymir' or profile == 'susanoo.local' @@%}  # Mac specifics
   brew
   iterm2
   macos
-  {%@@ endif @@%}{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}  # Archlinux specifics
+{%@@ endif @@%}{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}  # Archlinux specifics
   archlinux
-  {%@@ endif @@%}
+{%@@ endif @@%}
 )
 
 autoload -U compinit && compinit
 
-{%@@ if profile == 'ymir' or profile == 'susanoo.local' @@%}
 # Source fzf-tab-completions
 # source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 # zstyle ':completion:*' fzf-search-display true
@@ -132,7 +125,6 @@ autoload -U compinit && compinit
 fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/zsh-completions/src
 # A set of custom completions
 fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/custom-completions
-{%@@ endif @@%}
 
 source ${ZSH}/oh-my-zsh.sh
 
@@ -171,24 +163,12 @@ source ${ZSH}/oh-my-zsh.sh
 #[[ $(command -v kubectl) ]] && alias pk='proxy_kubectl'
 #{%@@ endif @@%}
 
-alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix'
 alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/agenix-phg -e"
 alias ane='agenix-edit'
 alias cane="EDITOR='code -w' agenix-edit"
-
-# Initialize pyenv
-[[ $(command -v pyenv) ]] && export PYENV_ROOT="$HOME/.pyenv"
-[[ $(command -v pyenv) ]] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-[[ $(command -v pyenv) ]] && eval "$(pyenv init -)"
-
-# Enable pipx completions
-if [ -f "{{@@ env['HOME'] @@}}/.local/bin/pipx" ]; then
-  autoload -U bashcompinit
-  bashcompinit
-  eval "$(register-python-argcomplete pipx)"
-fi
+alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"

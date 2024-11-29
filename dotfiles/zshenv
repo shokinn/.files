@@ -8,12 +8,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Disable Ansible cowsay
 export ANSIBLE_NOCOWS=1
 
-# Include ~/.bin to PATH
-[[ -d "{{@@ env['HOME'] @@}}/.bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.bin:${PATH}"
-
-# Inclue ~/.krew/bin to PATH for krew kubectl extensions
-[[ -d "{{@@ env['HOME'] @@}}/.krew/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.krew/bin:${PATH}"
-
 # Include ~/.local/bin to PATH
 [[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
 

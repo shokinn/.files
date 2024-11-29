@@ -4,23 +4,26 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 
 ## How to install
 
+### Script
+
+```shell
+[[ ! $(command -v brew) ]] && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+  ; brew update \
+  && brew install coreutils libmagic uv \
+  && uv tool install --allow-python-downloads --python 3.11 dotdrop \
+  && git clone https://github.com/shokinn/.files ~/.files \
+  && ~/.local/bin/dotdrop --cfg=~/.files/config.yaml install
+```
+
+### Manual
+
 1. Install [Homebrew](https://brew.sh/)
-2. Install `coreutils` via Homebrew.
-3. Install [pyenv](https://github.com/pyenv/pyenv)
-  a. Install [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
-  b. Add pyenv temporarly to your path: `export PATH=$(pyenv root)/shims:${PATH}`
-  c. Install the latest python version via pyenv
-  d. Create a new virtual-env caleld `dotdrop` via `pyenv virtualenv <just installed python verison> dotdrop`
-4. Initialize pyenv; run `pyenv init` for instructions
-5. Activate the `dotdrop` virtualenv by using `pyenv shell dotdrop`
-6. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
+2. Install `coreutils`, `libmagic` and `uv` via Homebrew.
+3. Install `drotdrop` via `uv` (`uv tool install --allow-python-downloads --python 3.11 dotdrop`).
+4. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
 ```shell
 git clone https://github.com/shokinn/.files ~/.files \
-&& cd ~/.files \
-&& git submodule update --init \
-&& cd .. \
-&& pip install -r ~/.files/dotdrop/requirements.txt \
-&& eval $(grep -v "^#" ~/.files/.env.public) ~/.files/dotdrop.sh install
+&& ~/.local/bin/dotdrop --cfg=~/.files/config.yaml install
 ```
 
 ## Documentation

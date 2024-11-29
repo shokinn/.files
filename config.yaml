@@ -8,7 +8,7 @@ actions:
     [[ -f ${{HOME}}/.zshrc.pre-oh-my-zsh ]] && rm ${{HOME}}/.zshrc && mv ${{HOME}}/.zshrc.pre-oh-my-zsh ${{HOME}}/.zshrc || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions ]] && mkdir -p ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions || echo "do nothing" >/dev/null
-    [[ ! -f ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh ]] && curl -o ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop.sh-completion.zsh https://raw.githubusercontent.com/deadc0de6/dotdrop/master/completion/_dotdrop.sh-completion.zsh || echo "do nothing" >/dev/null
+    [[ ! -f ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop-completion.zsh ]] && curl -o ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_dotdrop-completion.zsh https://raw.githubusercontent.com/deadc0de6/dotdrop/master/completion/_dotdrop-completion.zsh || echo "do nothing" >/dev/null
     [[ ! -f ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_diskutil.zsh ]] && curl -o ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/custom-completions/_diskutil.zsh https://github.com/zchee/zsh-completions/blob/main/src/macOS/_diskutil || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/zsh-completions || echo "do nothing" >/dev/null
     [[ ! -d ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion ]] && git clone https://github.com/lincheney/fzf-tab-completion.git ${{ZSH_CUSTOM:-${{HOME}}/.oh-my-zsh/custom}}/plugins/fzf-tab-completion || echo "do nothing" >/dev/null
@@ -37,32 +37,29 @@ dotfiles:
     dst: ~/.config/sxhkd
     src: config/sxhkd
   f_c3check:
-    dst: ~/.bin/c3check
-    src: bin/c3check
+    dst: ~/.local/bin/c3check
+    src: local/bin/c3check
   f_c3cp:
-    dst: ~/.bin/c3cp
-    src: bin/c3cp
+    dst: ~/.local/bin/c3cp
+    src: local/bin/c3cp
   f_c3kdenlive:
-    dst: ~/.bin/c3kdenlive
-    src: bin/c3kdenlive
+    dst: ~/.local/bin/c3kdenlive
+    src: local/bin/c3kdenlive
   f_c3l:
-    dst: ~/.bin/c3l
-    src: bin/c3l
+    dst: ~/.local/bin/c3l
+    src: local/bin/c3l
   f_c3mpv:
-    dst: ~/.bin/c3mpv
-    src: bin/c3mpv
+    dst: ~/.local/bin/c3mpv
+    src: local/bin/c3mpv
   f_compton.conf:
     dst: ~/.config/compton/compton.conf
     src: config/compton/compton.conf
-  f_dotdrop.sh:
-    src: bin/dotdrop.sh
-    dst: ~/.bin/dotdrop.sh
   f_fehbg:
     dst: ~/.fehbg
     src: fehbg
   f_mount_c3voc:
-    dst: ~/.bin/mount_c3voc
-    src: bin/mount_c3voc
+    dst: ~/.local/bin/mount_c3voc
+    src: local/bin/mount_c3voc
   f_powerlevel9krc:
     actions:
     - powerlevel9k-theme
@@ -112,23 +109,23 @@ dotfiles:
     src: local/bin/kite
     dst: ~/.local/bin/kite
   f_wsladdhypervroute:
-    dst: ~/.bin/wsladdhypervroute
-    src: bin/wsladdhypervroute
+    dst: ~/.local/bin/wsladdhypervroute
+    src: local/bin/wsladdhypervroute
   f_wslenablehypervforwarding:
-    dst: ~/.bin/wslenablehypervforwarding
-    src: bin/wslenablehypervforwarding
+    dst: ~/.local/bin/wslenablehypervforwarding
+    src: local/bin/wslenablehypervforwarding
   f_wslshowhypervforwarding:
-    dst: ~/.bin/wslshowhypervforwarding
-    src: bin/wslshowhypervforwarding
+    dst: ~/.local/bin/wslshowhypervforwarding
+    src: local/bin/wslshowhypervforwarding
   f_pu:
-    dst: ~/.bin/pu
-    src: bin/pu
+    dst: ~/.local/bin/pu
+    src: local/bin/pu
   f_rpki:
-    dst: ~/.bin/rpki
-    src: bin/rpki
+    dst: ~/.local/bin/rpki
+    src: local/bin/rpki
   f_rmquarantine:
-    dst: ~/.bin/rmquarantine
-    src: bin/rmquarantine
+    dst: ~/.local/bin/rmquarantine
+    src: local/bin/rmquarantine
   f_commonfunc:
     dst: ~/.commonfunc
     src: commonfunc
@@ -136,11 +133,11 @@ dotfiles:
     dst: ~/.gnupg/gpg-agent.conf
     src: gnupg/gpg-agent.conf
   f_secretfiles:
-    dst: ~/.bin/secretfiles
-    src: bin/secretfiles
+    dst: ~/.local/bin/secretfiles
+    src: local/bin/secretfiles
   f_agenix_helper:
-    dst: ~/.bin/agenix-helper
-    src: bin/agenix-helper
+    dst: ~/.local/bin/agenix-helper
+    src: local/bin/agenix-helper
   f_config:
     src: ssh/config
     dst: ~/.ssh/config
@@ -165,7 +162,6 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
-    - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
@@ -189,7 +185,6 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
-    - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
@@ -224,7 +219,6 @@ profiles:
     - f_c3mpv
     - f_c3check
     - f_zprofile
-    - f_dotdrop.sh
     - f_rmquarantine
     - f_commonfunc
     - f_secretfiles
@@ -256,7 +250,6 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
@@ -280,7 +273,6 @@ profiles:
     - f_c3check
     - f_zprofile
     - f_start_systemd_shell.sh
-    - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
@@ -301,7 +293,6 @@ profiles:
     - f_c3kdenlive
     - f_c3mpv
     - f_c3check
-    - f_dotdrop.sh
     - f_wsladdhypervroute
     - f_wslenablehypervforwarding
     - f_wslshowhypervforwarding
@@ -336,7 +327,6 @@ profiles:
     - f_c3mpv
     - f_c3check
     - f_zprofile
-    - f_dotdrop.sh
     - f_pu
     - f_rpki
     - f_rmquarantine

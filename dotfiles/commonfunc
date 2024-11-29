@@ -336,6 +336,21 @@ confv6() {
   return 5
 }
 
+#######################################
+# Runs dotdrop installed by uv with the cfg option set to my dotdrop config file in my .files repo
+# Globals:
+#   None
+# Arguments:
+#   n arguments for using / configuring dotdrop
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
+dotdrop() {
+  {{@@ env['HOME'] @@}}/.local/bin/dotdrop --cfg={{@@ env['HOME'] @@}}/.files/config.yaml ${@}
+}
+
 {%@@ endif @@%}{%@@ if profile == 'WVDEWOBMC001307' @@%}
 setProxyEnv() {
   local HIGHLIGHT='\033[36;1m'
