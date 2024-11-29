@@ -185,6 +185,10 @@ export PATH="${brew_path}:${PATH}"
 # Include /opt/homebrew/opt/gnu-getopt/bin to PATH
 [[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
 
+# https://hynek.me/articles/macos-dyld-env/
+# https://github.com/astral-sh/uv/issues/7764#issuecomment-2471059239
+export DYLD_FALLBACK_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib"
+
 # Fix nix inbetween systemupdates
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
