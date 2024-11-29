@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# This dotfile is managed using dotdrop
+# {{@@ header() @@}}
 #
 
 WINHOME="$(echo "$(cmd.exe /C "echo %USERPROFILE%")" | tr -d '\r')"

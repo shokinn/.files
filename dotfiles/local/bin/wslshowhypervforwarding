@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 #
-# This dotfile is managed using dotdrop
+# {{@@ header() @@}}
 #
 powershell.exe -ExecutionPolicy Bypass "Get-NetIPInterface | select ifIndex,InterfaceAlias,AddressFamily,ConnectionState,Forwarding | Sort-Object -Property IfIndex | Format-Table"
