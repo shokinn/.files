@@ -369,6 +369,21 @@ setProxyEnv() {
   export https_proxy="${PROXY_CFG_HTTPS}"
   export GIT_SSH_COMMAND='ssh -o ProxyCommand="/opt/homebrew/bin/corkscrew localhost 9000 %h %p"'
 
+  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data/tailscaled-env.txt" || true
+  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data/tailscaled-env.txt" || true
+  [[ -d "/etc/tailscale" ]] && local TAILSCALEPATH="/etc/tailscale/tailscaled-env.txt" || true
+  if [[ -n ${TAILSCALEPATH} ]]; then
+    cat <<EOF > "${TAILSCALEPATH}"
+NO_PROXY="${NO_PROXY_CFG}"
+no_proxy="${NO_PROXY_CFG}"
+HTTP_PROXY="${PROXY_CFG_HTTP}"
+HTTPS_PROXY="${PROXY_CFG_HTTPS}"
+http_proxy="${PROXY_CFG_HTTP}"
+https_proxy="${PROXY_CFG_HTTPS}"
+
+EOF
+  fi
+
   echo -e "\n✈️  exported zscaler proxy: ${HIGHLIGHT}http://${PROXY}${RESET}"
 }
 
@@ -380,6 +395,14 @@ unsetProxyEnv() {
   unset http_proxy
   unset https_proxy
   unset GIT_SSH_COMMAND
+
+  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data/tailscaled-env.txt" || true
+  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data/tailscaled-env.txt" || true
+  [[ -d "/etc/tailscale" ]] && local TAILSCALEPATH="/etc/tailscale/tailscaled-env.txt" || true
+
+  if [[ -n ${TAILSCALEPATH} ]]; then
+    rm "${TAILSCALEPATH}"
+  fi
 
   echo -e "\n🔄 removed zscaler proxy cofiguration"
 }
