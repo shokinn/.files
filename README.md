@@ -9,10 +9,15 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 ```shell
 [[ ! $(command -v brew) ]] && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   ; brew update \
-  && brew install coreutils libmagic uv \
+  && brew install coreutils libmagic uv fzf \
   && uv tool install --allow-python-downloads --python 3.11 dotdrop \
   && git clone https://github.com/shokinn/.files ~/.files \
-  && ~/.local/bin/dotdrop --cfg=~/.files/config.yaml install
+  && echo "Enter profile name (leave empty for default): " \
+  && read DOTDROP_PROFILE \
+  && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p ${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
+  && ~/.local/bin/dotdrop ${DOTDROP_PROFILE} --cfg=~/.files/config.yaml install \
+  ; unset DOTDROP_PROFILE \
+  && ${SHELL}
 ```
 
 ### Manual
