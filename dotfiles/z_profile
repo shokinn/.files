@@ -9,26 +9,26 @@ export VISUAL
 EDITOR='vim'
 export EDITOR
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
+{%@@ if distro == 'macos' @@%}
 [[ $(command -v /opt/homebrew/bin/brew) ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Added by Toolbox App
 export PATH="$PATH:{{@@ env['HOME'] @@}}/Library/Application Support/JetBrains/Toolbox/scripts"
 {%@@ endif @@%}
 
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' @@%}
+{%@@ if linux == true @@%}
 # Set DOTNET_ROOT enviroment variable
 DOTNET_ROOT=/opt/dotnet
 export DOTNET_ROOT
 
 {%@@ endif @@%}
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
+{%@@ if linux == true @@%}
 # Set XDG_CONFIG_HOME
 XDG_CONFIG_HOME="{{@@ env['HOME'] @@}}/.config"
 export XDG_CONFIG_HOME
 
 {%@@ endif @@%}
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
+{%@@ if wsl == true @@%}
 # Run VPN-Kit alpine VM to route traffic through Windows and if connected through VPNs
 wsl.exe -d wsl-vpnkit service wsl-vpnkit start
 {%@@ endif @@%}

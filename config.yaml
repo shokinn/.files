@@ -143,194 +143,69 @@ dotfiles:
     dst: ~/.ssh/config
     chmod: '600'
 profiles:
-  AINCRAD:
+  meta_base:
+    variables:
+      linux: false
+      vw: false
+      wsl: false
     dotfiles:
-    - d_fonts
-    - f_profile
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
     - d_colors
-    - f_compton.conf
-    - f_rofi_config
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
-    - f_start_systemd_shell.sh
-    - f_wsladdhypervroute
-    - f_wslenablehypervforwarding
-    - f_wslshowhypervforwarding
-    - f_config
-  AINCRAD-wsl:
-    dotfiles:
-    - d_fonts
-    - f_profile
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_compton.conf
-    - f_rofi_config
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
-    - f_start_systemd_shell.sh
-    - f_wsladdhypervroute
-    - f_wslenablehypervforwarding
-    - f_wslshowhypervforwarding
-    - f_config
-  sbx0nucmac01.home.pphg.tech:
-    dotfiles:
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
+    - f_agenix_helper
     - f_commonfunc
     - f_config
-  susanoo.local:
-    dotfiles:
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
     - f_powerlevel10krc
-    - d_colors
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
     - f_rmquarantine
-    - f_commonfunc
     - f_secretfiles
-    - f_agenix_helper
-    - f_config
-  yoetunheimr:
-    dotfiles:
-    - d_bspwm
-    - d_polybar
-    - d_sxhkd
-    - f_fehbg
-    - d_fonts
-    - f_profile
     - f_vimrc
-    - f_xinitrc
-    - f_xsession
     - f_zprofile
-    - f_zshrc
     - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_xresources
-    - f_ssh-agent.service
-    - f_compton.conf
-    - f_rofi_config
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_wsladdhypervroute
-    - f_wslenablehypervforwarding
-    - f_wslshowhypervforwarding
-    - f_config
-  YOETUNHEIMR-wsl:
+    - f_zshrc
+  meta_linux:
+    variables:
+      linux: true
     dotfiles:
     - d_fonts
     - f_profile
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_compton.conf
-    - f_rofi_config
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
-    - f_start_systemd_shell.sh
-    - f_wsladdhypervroute
-    - f_wslenablehypervforwarding
-    - f_wslshowhypervforwarding
-    - f_config
-  ymir:
+  meta_vw:
+    variables:
+      vw: true
     dotfiles:
-    - f_zshrc
-    - f_zshenv
-    - f_zprofile
-    - d_fonts
-    - f_profile
-    - f_vimrc
-    - f_powerlevel10krc
-    - d_colors
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_wsladdhypervroute
-    - f_wslenablehypervforwarding
-    - f_wslshowhypervforwarding
-    - f_commonfunc
-    - f_gpgagent
-    - f_secretfiles
-    - f_agenix_helper
-    - f_config
-  workspace:
-    dotfiles:
-    - d_fonts
-    - f_profile
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_zprofile
-    - f_commonfunc
-    - f_config
-  WVDEWOBMC001307:
-    dotfiles:
-    - f_vimrc
-    - f_zshrc
-    - f_zshenv
-    - f_powerlevel10krc
-    - d_colors
-    - f_c3cp
-    - f_mount_c3voc
-    - f_c3l
-    - f_c3kdenlive
-    - f_c3mpv
-    - f_c3check
-    - f_zprofile
     - f_pu
     - f_rpki
+  meta_wsl:
+    variables:
+      wsl: true
+    dotfiles:
+    - f_wsladdhypervroute
+    - f_wslenablehypervforwarding
+    - f_wslshowhypervforwarding
+  os_macos:
+    variables:
+      distro: macos
+    include:
+    - meta_base
+    dotfiles:
     - f_rmquarantine
-    - f_commonfunc
-    - f_secretfiles
-    - f_agenix_helper
-    - f_config
+  os_ubuntu:
+    variables:
+      distro: ubuntu
+    include:
+    - meta_base
+    - meta_linux
+  sbx0nucmac01.home.pphg.tech:
+    include:
+    - os_macos
+  susanoo.local:
+    include:
+    - os_macos
+  workspace:
+    include:
+    - os_ubuntu
+  WVDEWOBMC001307:
+    include:
+    - os_macos
+    - meta_vw
+  WVDEWOBMC002277:
+    include:
+    - os_macos
+    - meta_vw

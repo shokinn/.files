@@ -11,13 +11,13 @@ export ANSIBLE_NOCOWS=1
 # Include ~/.local/bin to PATH
 [[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
+{%@@ if distro == 'macos' @@%}# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
 [[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
 
 {%@@ endif @@%}# Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
-{%@@ if profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'yoetunheimr' or profile == 'ymir' @@%}
+{%@@ if wsl == true @@%}
 # Connect to windows ssh pageant
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 export SSH_AUTH_SOCK={{@@ env['HOME'] @@}}/.ssh/agent.sock
@@ -43,7 +43,7 @@ export GPG_TTY=$(tty)
 # X410 (Windows X11 Server)
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 {%@@ endif @@%}
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
+{%@@ if distro == 'macos' @@%}
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
 
 {%@@ endif @@%}

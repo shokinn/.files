@@ -124,7 +124,7 @@ EOF
     fi
 }
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
+{%@@ if distro == 'macos' @@%}
 #######################################
 # Shows a netstat -tulpn styled output on mac.
 # Globals:
@@ -351,7 +351,7 @@ dotdrop() {
   {{@@ env['HOME'] @@}}/.local/bin/dotdrop --cfg={{@@ env['HOME'] @@}}/.files/config.yaml ${@}
 }
 
-{%@@ endif @@%}{%@@ if profile == 'WVDEWOBMC001307' @@%}
+{%@@ endif @@%}{%@@ if vw == true @@%}
 setProxyEnv() {
   local HIGHLIGHT='\033[36;1m'
   local RESET='\033[0;0m'

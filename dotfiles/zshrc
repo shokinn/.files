@@ -105,11 +105,11 @@ plugins=(
   vscode
   zsh-navigation-tools
   zsh-ssh
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'ymir' or profile == 'susanoo.local' @@%}  # Mac specifics
+{%@@ if distro == 'macos' @@%}  # Mac specifics
   brew
   iterm2
   macos
-{%@@ endif @@%}{%@@ if profile == 'yoetunheimr' or profile == 'AINCRAD-wsl' or profile == 'AINCRAD' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}  # Archlinux specifics
+{%@@ endif @@%}{%@@ if distro == 'arch' @@%}  # Archlinux specifics
   archlinux
 {%@@ endif @@%}
 )
@@ -157,7 +157,7 @@ source ${ZSH}/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # [[ -f {{@@ env['HOME'] @@}}/.files/dotdrop.sh ]] && alias dotdrop='eval $(grep -v "^#" {{@@ env['HOME'] @@}}/.files/.env.public) {{@@ env['HOME'] @@}}/.files/dotdrop.sh' # Not required anymore since I now use
 [[ $(command -v thefuck) ]] && eval $(thefuck --alias)
-#{%@@ if profile == 'AINCRAD-wsl' or profile == 'YOETUNHEIMR-wsl' or profile == 'ymir' @@%}
+#{%@@ if linux == true @@%}
 # Use https://github.com/jgaa/shinysocks as simple socks5 proxy for windows
 #[[ $(command -v kubectl) ]] && alias proxy_kubectl="http_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 https_proxy=socks5://$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):1080 kubectl"
 #[[ $(command -v kubectl) ]] && alias pk='proxy_kubectl'
@@ -173,7 +173,7 @@ alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strong
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
 
-{%@@ if profile == 'WVDEWOBMC001307' or profile == 'susanoo.local' @@%}
+{%@@ if distro == 'macos' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
   local brew_path="/usr/local/homebrew/bin"
