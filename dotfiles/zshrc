@@ -171,6 +171,7 @@ alias cane="EDITOR='code -w' agenix-edit"
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 alias yeet="git push"
+alias trust="yeet --force"
 
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
