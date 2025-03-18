@@ -11,6 +11,9 @@ export ANSIBLE_NOCOWS=1
 # Include ~/.local/bin to PATH
 [[ -d "{{@@ env['HOME'] @@}}/.local/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.local/bin:${PATH}"
 
+# Include krew to PATH
+[[ -d "{{@@ env['HOME'] @@}}/.krew/bin" ]] && export PATH="{{@@ env['HOME'] @@}}/.krew/bin:${PATH}"
+
 {%@@ if distro == 'macos' @@%}# Include /opt/homebrew/opt/gnu-getopt/bin to PATH
 [[ -d "/opt/homebrew/opt/gnu-getopt/bin" ]] && export PATH="/opt/homebrew/opt/gnu-getopt/bin:${PATH}"
 
