@@ -6,12 +6,15 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 
 ### Script
 
+1. Install [Homebrew](https://brew.sh/)
+2. 
+
 ```shell
 [[ ! $(command -v brew) ]] && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   ; brew update \
-  && brew install coreutils libmagic uv fzf \
-  && uv tool install --allow-python-downloads --python 3.11 dotdrop \
   && git clone https://github.com/shokinn/.files ~/.files \
+  && brew bundle install --file=~/.files/misc/bootstrap.Brewfile \
+  && uv tool install --allow-python-downloads --python 3.11 dotdrop \
   && echo "Enter profile name (leave empty for default): " \
   && read DOTDROP_PROFILE \
   && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p ${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
