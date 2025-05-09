@@ -1,0 +1,64 @@
+brew "age"
+brew "bat"
+brew "btop"
+brew "colima", restart_service: :changed
+brew "coreutils"
+brew "docker"
+brew "eza"
+brew "fzf"
+brew "gnu-getopt"
+brew "htop"
+brew "iproute2mac"
+brew "jq"
+brew "libmagic"
+brew "macmon"
+brew "magic-wormhole"
+brew "mas"
+brew "mosh"
+brew "mpv"
+brew "ncdu"
+brew "nmap"
+brew "pssh"
+brew "pv"
+brew "ruff"
+brew "telnet"
+brew "the_silver_searcher"
+brew "tig"
+brew "tldr"
+brew "tmux"
+brew "uv"
+brew "watch"
+brew "wget"
+brew "yq"
+brew "yt-dlp"
+brew "zsh"
+cask "aldente"
+cask "alfred"
+cask "bruno"
+cask "crystalfetch"
+cask "iina"
+cask "iterm2"
+cask "jordanbaird-ice"
+cask "mist"
+cask "monitorcontrol"
+cask "nextcloud"
+cask "rambox"
+cask "utm"
+cask "visual-studio-code"
+cask "zen"
+mas "AdGuard for Safari", id: 1440147259
+mas "Amphetamine", id: 937984704
+mas "DeArrow", id: 6451469297
+mas "Moom Classic", id: 419330170
+mas "openterface", id: 6478481082
+mas "Parcel", id: 639968404
+mas "Perplexity", id: 6714467650
+mas "reMarkable", id: 1276493162
+mas "Slack", id: 803453959
+mas "SponsorBlock", id: 1573461917
+mas "Strongbox", id: 1481853033
+mas "Table Tool", id: 1122008420
+mas "Tailscale", id: 1475387142
+mas "Tampermonkey", id: 6738342400
+mas "WireGuard", id: 1451685025
+mas "Yubico Authenticator", id: 1497506650
