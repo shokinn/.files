@@ -172,6 +172,7 @@ alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/n
 alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 alias yeet="git push"
 alias trust="yeet --force"
+alias zotify="uvx git+https://github.com/Googolplexed0/zotify.git"
 
 # Include $(go env GOPATH) to PATH
 [[ $(command -v go) ]] && [[ -d "$(go env GOPATH)/bin" ]] && export PATH="$(go env GOPATH)/bin:${PATH}"
