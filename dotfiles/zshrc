@@ -169,7 +169,6 @@ alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/agenix-phg -e"
 alias ane='agenix-edit'
 alias cane="EDITOR='code -w' agenix-edit"
 alias du="duf"
-alias fabric="fabric-ai"
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
 alias yeet="git push"

@@ -87,6 +87,21 @@ if [[ $(command -v eza) ]]; then
 fi
 
 #######################################
+# Wrapper for fabric-ai command.
+# Globals:
+#   None
+# Arguments:
+#   Arguments to pass to fabric-ai
+# Outputs:
+#   Output from fabric-ai command
+# Returns:
+#   Exit code from fabric-ai command
+#######################################
+fabric() {
+  fabric-ai ${@:-}
+}
+
+#######################################
 # wttr - show the weather forecast in Terminal.
 # Globals:
 #   None
