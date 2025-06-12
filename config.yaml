@@ -210,3 +210,7 @@ profiles:
     include:
     - os_macos
     - meta_vw
+  WVDEWOBMC007670:
+    include:
+    - os_macos
+    - meta_vw
