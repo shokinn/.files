@@ -17,7 +17,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
   && uv tool install --allow-python-downloads --python 3.11 dotdrop \
   && echo "Enter profile name (leave empty for default): " \
   && read DOTDROP_PROFILE \
-  && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p ${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
+  && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
   && ~/.local/bin/dotdrop ${DOTDROP_PROFILE} --cfg=~/.files/config.yaml install \
   ; unset DOTDROP_PROFILE \
   && brew bundle install --file=~/.files/misc/Brewfile \
