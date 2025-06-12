@@ -8,7 +8,8 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 
 ```shell
 [[ ! $(command -v brew) ]] && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-  ; brew update \
+  ; eval "$(/opt/homebrew/bin/brew shellenv)" \
+  && brew update \
   && git clone https://github.com/shokinn/.files ~/.files \
   && brew bundle install --file=~/.files/misc/bootstrap.Brewfile \
   && sudo sh -c "echo \"/opt/homebrew/bin/zsh\" >> /etc/shells" \
