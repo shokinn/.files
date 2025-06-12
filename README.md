@@ -21,6 +21,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
   && ~/.local/bin/dotdrop ${DOTDROP_PROFILE} --cfg=~/.files/config.yaml install \
   ; unset DOTDROP_PROFILE \
   && brew bundle install --file=~/.files/misc/Brewfile \
+  && mkdir -p ~/workspace/{privat,work} \
   && ${SHELL}
 ```
 
