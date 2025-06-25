@@ -47,7 +47,7 @@ export GPG_TTY=$(tty)
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
 {%@@ endif @@%}
 {%@@ if distro == 'macos' @@%}
-export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+export HOMEBREW_CASK_OPTS="--appdir={{@@ env['HOME'] @@}}/Applications"
 
 {%@@ endif @@%}
 

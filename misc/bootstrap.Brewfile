@@ -1,6 +1,0 @@
-brew "coreutils"
-brew "fzf"
-brew "libmagic"
-brew "mas"
-brew "uv"
-brew "zsh"

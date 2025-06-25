@@ -11,7 +11,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
   ; eval "$(/opt/homebrew/bin/brew shellenv)" \
   && brew update \
   && git clone https://github.com/shokinn/.files ~/.files \
-  && brew bundle install --file=~/.files/misc/bootstrap.Brewfile \
+  && brew bundle install --file=~/.files/bootstrap/Brewfile \
   && sudo sh -c "echo \"/opt/homebrew/bin/zsh\" >> /etc/shells" \
   && chsh -s /opt/homebrew/bin/zsh \
   && uv tool install --allow-python-downloads --python 3.11 dotdrop \
@@ -20,8 +20,10 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
   && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
   && ~/.local/bin/dotdrop ${DOTDROP_PROFILE} --cfg=~/.files/config.yaml install \
   ; unset DOTDROP_PROFILE \
-  && brew bundle install --file=~/.files/misc/Brewfile \
+  && export HOMEBREW_CASK_OPTS="--appdir=${HOME}/Applications" \
+  && brew bundle install --file=~/.files/config/brew/Brewfile \
   && mkdir -p ~/workspace/{privat,work} \
+  && ${SHELL} -c ~/.files/bootstrap/.macos \
   && ${SHELL}
 ```
 
@@ -30,7 +32,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 1. Install [Homebrew](https://brew.sh/)
 2. Install `coreutils`, `fzf`, `libmagic`, `mas`, `uv` and `zsh` via Homebrew.  
    ```shell
-   brew bundle install --file=~/.files/misc/bootstrap.Brewfile
+   brew bundle install --file=~/.files/bootstrap/Brewfile
    ```
 3. Install `drotdrop` via `uv` (`uv tool install --allow-python-downloads --python 3.11 dotdrop`).
 4. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
@@ -40,8 +42,32 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
    ```
 5. Install my default set of tools:  
    ```shell
-   brew bundle install --file=~/.files/misc/Brewfile
+   brew bundle install --file=~/.files/config/brew/Brewfile
    ```
+
+## Backup/Restore settings for macOS native user preferences
+
+See here for a defaults documentation: <https://macos-defaults.com/>
+
+### App list
+
+| App    | Domain                                      |
+| ------ | ------------------------------------------- |
+| Alfred | `com.runningwithcrayons.Alfred-Preferences` |
+| Ice    | `com.jordanbaird.Ice`                       |
+| Moom   | `com.manytricks.Moom`                       |
+
+### Backup settings
+
+```shell
+defaults export <domain> ~/.files/config/plist/<app>.plist
+```
+
+### Restore settings
+
+```shell
+defaults import <domain>  ~/.files/config/plist/<app>.plist
+```
 
 ## Documentation
 
