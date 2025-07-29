@@ -103,6 +103,7 @@ plugins=(
   themes
   uv
   vscode
+  zoxide
   zsh-navigation-tools
   zsh-ssh
 {%@@ if distro == 'macos' @@%}  # Mac specifics
@@ -210,5 +211,3 @@ autoload -Uz compinit
 zstyle ':completion:*' menu select
 fpath+=~/.zfunc
 {%@@ endif @@%}
-
-[[ $(command -v zoxide) ]] && eval "$(zoxide init zsh)"
