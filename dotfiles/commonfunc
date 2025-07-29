@@ -139,6 +139,15 @@ EOF
     fi
 }
 
+# zoxide z functions, since my default zoxide init will overwrite the cd command
+z () {
+	__zoxide_z "$@"
+}
+
+zi () {
+	__zoxide_zi "$@"
+}
+
 {%@@ if distro == 'macos' @@%}
 #######################################
 # Shows a netstat -tulpn styled output on mac.
