@@ -80,7 +80,6 @@ ZOXIDE_CMD_OVERRIDE="cd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  asdf
   aws
   colored-man-pages
   cp
@@ -96,6 +95,7 @@ plugins=(
   kind
   kubectl
   man
+  mise
   nix-zsh-completions
   podman
   python

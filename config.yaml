@@ -143,9 +143,6 @@ dotfiles:
     src: ssh/config
     dst: ~/.ssh/config
     chmod: '600'
-  f_tool-versions:
-    src: tool-versions
-    dst: ~/.tool-versions
 profiles:
   meta_base:
     variables:
@@ -160,7 +157,6 @@ profiles:
     - f_powerlevel10krc
     - f_rmquarantine
     - f_secretfiles
-    - f_tool-versions
     - f_vimrc
     - f_zprofile
     - f_zshenv
