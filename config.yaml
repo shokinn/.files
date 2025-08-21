@@ -143,6 +143,9 @@ dotfiles:
     src: ssh/config
     dst: ~/.ssh/config
     chmod: '600'
+  f_p10k_mise:
+    dst: ~/.config/zsh/p10k.mise.zsh
+    src: config/zsh/p10k.mise.zsh
 profiles:
   meta_base:
     variables:
@@ -154,6 +157,7 @@ profiles:
     - f_agenix_helper
     - f_commonfunc
     - f_config
+    - f_p10k_mise
     - f_powerlevel10krc
     - f_rmquarantine
     - f_secretfiles
