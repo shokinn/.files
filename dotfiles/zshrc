@@ -77,7 +77,11 @@ COMPLETION_WAITING_DOTS="true"
 ZOXIDE_CMD_OVERRIDE="cd"
 
 # zsh-autosuggestions - https://github.com/zsh-users/zsh-autosuggestions?tab=readme-ov-file#suggestion-highlight-style
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffaa33,bold"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold"
+
+# zsh-syntax-highlighting - unknown tokens / errors
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=black,bg=red,bold'
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -115,6 +119,7 @@ plugins=(
   zsh-autosuggestions
   zsh-navigation-tools
   zsh-ssh
+  zsh-syntax-highlighting
 {%@@ if distro == 'macos' @@%}  # Mac specifics
   brew
   iterm2
