@@ -76,6 +76,9 @@ COMPLETION_WAITING_DOTS="true"
 # set zoxide command to cd
 ZOXIDE_CMD_OVERRIDE="cd"
 
+# zsh-autosuggestions - https://github.com/zsh-users/zsh-autosuggestions?tab=readme-ov-file#suggestion-highlight-style
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffaa33,bold"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -104,11 +107,12 @@ plugins=(
   sublime
   sudo
   systemd
-  tig
   themes
+  tig
   uv
   vscode
   zoxide
+  zsh-autosuggestions
   zsh-navigation-tools
   zsh-ssh
 {%@@ if distro == 'macos' @@%}  # Mac specifics
