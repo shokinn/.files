@@ -79,8 +79,9 @@ ZOXIDE_CMD_OVERRIDE="cd"
 # zsh-autosuggestions - https://github.com/zsh-users/zsh-autosuggestions?tab=readme-ov-file#suggestion-highlight-style
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="bold"
 
-# zsh-syntax-highlighting - unknown tokens / errors
+# zsh-syntax-highlighting - https://github.com/zsh-users/zsh-syntax-highlighting
 typeset -A ZSH_HIGHLIGHT_STYLES
+# unknown tokens / errors
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=black,bg=red,bold'
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
