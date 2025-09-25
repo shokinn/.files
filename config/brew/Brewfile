@@ -62,7 +62,7 @@ cask "istat-menus"
 cask "iterm2"
 cask "jordanbaird-ice"
 cask "keycastr"
-cask "little-snitch"
+cask "little-snitch", args: { appdir: "/Applications" }
 cask "mist"
 cask "monitorcontrol"
 cask "moom"
