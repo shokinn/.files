@@ -50,11 +50,32 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
    brew bundle install --file=~/.files/config/brew/Brewfile
    ```
 
-## Import new files
+## Encrypted files
+
+### Initially import a dot file as encrypted file
 
 ```shell
 dotdrop import --transw=_encrypt --transr=_decrypt <file>
 ```
+
+Installs/updates will now be automatically decrypted/encrypted.
+
+### Decrypt a dotfile manually
+
+```shell
+age --decrypt -i ~/.ssh/identities/phg-age-dotfiles -o <ouput paht for decrypted file> <path to encrypted file>
+```
+
+### Encrypt a dotfile manually
+
+```shell
+cat <path to plain file> | age -R ~/.ssh/identities/phg-age-dotfiles.pub > <path to encrypted file>
+```
+
+### Edit an encrypted dotfile
+
+TBD
+
 
 ## Backup/Restore settings for macOS native user preferences
 
