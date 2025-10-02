@@ -60,6 +60,8 @@ cask "browserino", args: { no_quarantine: true }
 cask "bruno"
 cask "crossover"
 cask "crystalfetch"
+cask "firefox"
+cask "firefox@developer-edition"
 cask "finicky"
 cask "iina"
 cask "istat-menus"
