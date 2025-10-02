@@ -6,6 +6,10 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 
 ### Script
 
+> [!IMPORTANT]  
+> Copy ssh public/private key for age, to encrypt/decrypt files to `~/.ssh/identities/phg-age-dotfiles` and `~/.ssh/identities/phg-age-dotfiles.pub`
+> Otherwise empty files will be created instead.
+
 ```shell
 [[ ! $(command -v brew) ]] && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   ; eval "$(/opt/homebrew/bin/brew shellenv)" \
@@ -30,20 +34,27 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 ### Manual
 
 1. Install [Homebrew](https://brew.sh/)
-2. Install `coreutils`, `fzf`, `libmagic`, `mas`, `uv` and `zsh` via Homebrew.  
+2. Install `age`, `coreutils`, `fzf`, `libmagic`, `mas`, `uv` and `zsh` via Homebrew.  
    ```shell
    brew bundle install --file=~/.files/bootstrap/Brewfile
    ```
 3. Install `drotdrop` via `uv` (`uv tool install --allow-python-downloads --python 3.11 dotdrop`).
-4. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
+4. Copy ssh public/private key for age, to encrypt/decrypt files to `~/.ssh/identities/phg-age-dotfiles` and `~/.ssh/identities/phg-age-dotfiles.pub`
+5. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
    ```shell
    git clone https://github.com/shokinn/.files ~/.files \
    && ~/.local/bin/dotdrop --cfg=~/.files/config.yaml install
    ```
-5. Install my default set of tools:  
+6. Install my default set of tools:  
    ```shell
    brew bundle install --file=~/.files/config/brew/Brewfile
    ```
+
+## Import new files
+
+```shell
+dotdrop import --transw=_encrypt --transr=_decrypt <file>
+```
 
 ## Backup/Restore settings for macOS native user preferences
 
