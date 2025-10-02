@@ -77,7 +77,6 @@ cask "snagit"
 cask "soundsource"
 cask "sublime-text"
 cask "visual-studio-code"
-cask "zen"
 mas "AdGuard for Safari", id: 1440147259
 mas "Amphetamine", id: 937984704
 mas "AusweisApp", id: 948660805
