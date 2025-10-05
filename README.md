@@ -7,7 +7,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
 ### Script
 
 > [!IMPORTANT]  
-> Copy ssh public/private key for age, to encrypt/decrypt files to `~/.ssh/identities/phg-age-dotfiles` and `~/.ssh/identities/phg-age-dotfiles.pub`
+> Copy ssh public/private key for age, to encrypt/decrypt files to `~/.age/phg-age-dotfiles` and `~/.age/phg-age-dotfiles.pub`
 > Otherwise empty files will be created instead.
 
 ```shell
@@ -39,7 +39,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
    brew bundle install --file=~/.files/bootstrap/Brewfile
    ```
 3. Install `drotdrop` via `uv` (`uv tool install --allow-python-downloads --python 3.11 dotdrop`).
-4. Copy ssh public/private key for age, to encrypt/decrypt files to `~/.ssh/identities/phg-age-dotfiles` and `~/.ssh/identities/phg-age-dotfiles.pub`
+4. Copy ssh public/private key for age, to encrypt/decrypt files to `~/.age/phg-age-dotfiles` and `~/.age/phg-age-dotfiles.pub`
 5. Clone dotfiles, install dependencies for dotdrop and install dotfiles.  
    ```shell
    git clone https://github.com/shokinn/.files ~/.files \
@@ -63,19 +63,39 @@ Installs/updates will now be automatically decrypted/encrypted.
 ### Decrypt a dotfile manually
 
 ```shell
-age --decrypt -i ~/.ssh/identities/phg-age-dotfiles -o <ouput paht for decrypted file> <path to encrypted file>
+age --decrypt -i ~/.age/phg-age-dotfiles -o <ouput paht for decrypted file> <path to encrypted file>
 ```
 
 ### Encrypt a dotfile manually
 
 ```shell
-cat <path to plain file> | age -R ~/.ssh/identities/phg-age-dotfiles.pub > <path to encrypted file>
+cat <path to plain file> | age -a -R ~/.age/phg-age-dotfiles.pub > <path to encrypted file>
 ```
 
 ### Edit an encrypted dotfile
 
-TBD
+1. Install [age-edit](https://github.com/dbohdan/age-edit)
 
+#### Manual command
+
+**Default editor:**
+
+```shell
+age-edit -t /tmp/ -M -a ~/.age/phg-age-dotfiles <path to file to edit>
+```
+
+**VS Code as editor:**
+
+```shell
+age-edit -e "${HOME}/.local/bin/codew" -t /tmp/ -M -a ~/.age/phg-age-dotfiles <path to file to edit>
+```
+
+#### Aliases for file editing
+
+- `ade` uses the default editor
+- `cade` uses vs code for editing the file
+
+Both aliases are configured via my `.zshrc`.
 
 ## Backup/Restore settings for macOS native user preferences
 

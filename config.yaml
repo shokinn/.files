@@ -3,15 +3,15 @@ config:
   create: true
   dotpath: dotfiles
 variables:
-  ageidentity: ${{HOME}}/.ssh/identities/phg-age-dotfiles
-  SHELL_ERR_MESSAGE: '\033[41;30m'
-  SHELL_RESET_COLOR: '\033[0m'
+  ageidentity: ${{HOME}}/.age/phg-age-dotfiles
+  SHELL_ERR_MESSAGE: \033[41;30m
+  SHELL_RESET_COLOR: \033[0m
 trans_install:
   _decrypt: |
     [[ -f {{@@ ageidentity @@}} ]] && age --decrypt -i {{@@ ageidentity @@}} -o {1} {0} || ([[ ! -f {{@@ _dotfile_abs_dst @@}} ]] && (echo "{{@@ SHELL_ERR_MESSAGE @@}}Missing age identity file {{@@ ageidentity @@}}, cannot decrypt {0}, creating empty file instead{{@@ SHELL_RESET_COLOR @@}}"; echo "" > {1}) || (echo "{{@@ SHELL_ERR_MESSAGE @@}}Missing age identity file {{@@ ageidentity @@}}, cannot decrypt {0}{{@@ SHELL_RESET_COLOR @@}}"; cp {{@@ _dotfile_abs_dst @@}} {1}))
 trans_update:
   _encrypt: |
-    [[ -f {{@@ ageidentity @@}}.pub ]] && cat {0} | age -R {{@@ ageidentity @@}}.pub > {1} || echo "{{@@ SHELL_ERR_MESSAGE @@}}Missing age identity file {{@@ ageidentity @@}}.pub, cannot encrypt {0}{{@@ SHELL_RESET_COLOR @@}}"
+    [[ -f {{@@ ageidentity @@}}.pub ]] && cat {0} | age -a -R {{@@ ageidentity @@}}.pub > {1} || echo "{{@@ SHELL_ERR_MESSAGE @@}}Missing age identity file {{@@ ageidentity @@}}.pub, cannot encrypt {0}{{@@ SHELL_RESET_COLOR @@}}"
 actions:
   oh-my-zsh: |
     [[ ! -d ${{HOME}}/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended || echo "do nothing" >/dev/null
@@ -163,6 +163,10 @@ dotfiles:
     dst: ~/.finicky.js
     trans_install: _decrypt
     trans_update: _encrypt
+  f_codew:
+    src: local/bin/codew
+    dst: ~/.local/bin/codew
+    chmod: '700'
 profiles:
   meta_base:
     variables:
@@ -172,6 +176,7 @@ profiles:
     dotfiles:
     - d_colors
     - f_agenix_helper
+    - f_codew
     - f_commonfunc
     - f_config
     - f_p10k_mise
