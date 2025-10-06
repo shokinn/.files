@@ -1,3 +1,4 @@
+tap "AlexStrNik/Browserino"
 brew "asciinema"
 brew "age"
 brew "bash"
