@@ -184,8 +184,8 @@ alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix'
 alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/identities/agenix-phg -e"
 alias ane='agenix-edit'
 alias cane="EDITOR='code -w' agenix-edit"
-alias ade='age-edit -t /tmp/ -M -a {{@@ env['HOME'] @@}}/.age/phg-age-dotfiles'
-alias cade='age-edit -e "${HOME}/.local/bin/codew" -t /tmp/ -M -a {{@@ env['HOME'] @@}}/.age/phg-age-dotfiles'
+alias ade='age-edit -t /tmp/ -M -a {{@@ ageidentity @@}}'
+alias cade='age-edit -e "${HOME}/.local/bin/codew" -t /tmp/ -M -a {{@@ ageidentity @@}}'
 alias du="duf"
 alias ssh-no-check="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 alias ssh-strongbox-keys="SSH_AUTH_SOCK=~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock ssh-add -l"
