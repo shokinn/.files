@@ -148,6 +148,61 @@ zi () {
 	__zoxide_zi "$@"
 }
 
+#######################################
+# Runs dotdrop installed by uv with the cfg option set to my dotdrop config file in my .files repo
+# Globals:
+#   None
+# Arguments:
+#   n arguments for using / configuring dotdrop
+# Outputs:
+#   None
+# Returns:
+#   None
+#######################################
+dotdrop() {
+  {{@@ env['HOME'] @@}}/.local/bin/dotdrop --cfg={{@@ env['HOME'] @@}}/.files/config.yaml ${@}
+}
+
+#######################################
+# Age encryption for my dotfiles.
+# Globals:
+#   None
+# Arguments:
+#   - source file (unencrypted)
+#   - target file (encrypted)
+# Outputs:
+#   age encrypted file
+# Returns:
+#   None
+#######################################
+adenc() {
+  if [ -z "${1}" ] || [ -z "${2}" ]; then
+    echo "Usage: adencrypt <source file> <target file>"
+    return 1
+  fi
+  age -a -R {{@@ ageidentity_pub @@}} -o "${2}" "${1}"
+}
+
+#######################################
+# Age decryption for my dotfiles.
+# Globals:
+#   None
+# Arguments:
+#   - source file (encrypted)
+#   - target file (unencrypted)
+# Outputs:
+#   age decrypted file
+# Returns:
+#   None
+#######################################
+addec() {
+  if [ -z "${1}" ] || [ -z "${2}" ]; then
+    echo "Usage: addecrypt <source file> <target file>"
+    return 1
+  fi
+  age -d -i {{@@ ageidentity @@}} -o "${2}" "${1}"
+}
+
 {%@@ if distro == 'macos' @@%}
 #######################################
 # Shows a netstat -tulpn styled output on mac.
@@ -358,21 +413,6 @@ confv6() {
   confv6::unset
   >&2 echo "General error. Actually I don't know what went wrong ¯\_(ツ)_/¯"
   return 5
-}
-
-#######################################
-# Runs dotdrop installed by uv with the cfg option set to my dotdrop config file in my .files repo
-# Globals:
-#   None
-# Arguments:
-#   n arguments for using / configuring dotdrop
-# Outputs:
-#   None
-# Returns:
-#   None
-#######################################
-dotdrop() {
-  {{@@ env['HOME'] @@}}/.local/bin/dotdrop --cfg={{@@ env['HOME'] @@}}/.files/config.yaml ${@}
 }
 
 {%@@ endif @@%}{%@@ if vw == true @@%}
