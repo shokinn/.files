@@ -7,6 +7,7 @@ brew "bat"
 brew "btop"
 brew "colima", restart_service: :changed
 brew "coreutils"
+brew "d2"
 brew "docker"
 brew "duf"
 brew "eza"
