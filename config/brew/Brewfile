@@ -1,10 +1,12 @@
 tap "AlexStrNik/Browserino"
+tap "philocalyst/tap"
 brew "asciinema"
 brew "age"
 brew "bash"
 brew "bash-language-server"
 brew "bat"
 brew "btop"
+brew "caligula"
 brew "colima", restart_service: :changed
 brew "coreutils"
 brew "d2"
