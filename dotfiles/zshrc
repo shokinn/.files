@@ -224,6 +224,8 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Functions (or more complex aliases)
 source {{@@ env['HOME'] @@}}/.commonfunc
+{%@@ if vw == true @@%}source {{@@ env['HOME'] @@}}/.vwfunc
+source {{@@ env['HOME'] @@}}/.vwrc{%@@ endif @@%}
 
 {%@@ if profile == 'ymir' @@%}
 autoload -Uz compinit

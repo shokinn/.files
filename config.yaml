@@ -4,7 +4,7 @@ config:
   dotpath: dotfiles
 variables:
   ageidentity: "{{@@ env['HOME'] @@}}/.age/phg-age-dotfiles"
-  ageidentity_pub: "{{@@ ageidentity@@}}.pub"
+  ageidentity_pub: '{{@@ ageidentity@@}}.pub'
   SHELL_ERR_MESSAGE: \033[41;30m
   SHELL_RESET_COLOR: \033[0m
 trans_install:
@@ -168,6 +168,16 @@ dotfiles:
     src: local/bin/codew
     dst: ~/.local/bin/codew
     chmod: '700'
+  f_vwrc:
+    src: vwrc.age
+    dst: ~/.vwrc
+    trans_install: _decrypt
+    trans_update: _encrypt
+  f_vwfunc:
+    src: vwfunc.age
+    dst: ~/.vwfunc
+    trans_install: _decrypt
+    trans_update: _encrypt
 profiles:
   meta_base:
     variables:
@@ -199,6 +209,8 @@ profiles:
     dotfiles:
     - f_pu
     - f_rpki
+    - f_vwrc
+    - f_vwfunc
   meta_wsl:
     variables:
       wsl: true
@@ -229,15 +241,7 @@ profiles:
   workspace:
     include:
     - os_ubuntu
-  WVDEWOBMC001307:
-    include:
-    - os_macos
-    - meta_vw
-  WVDEWOBMC002277:
-    include:
-    - os_macos
-    - meta_vw
-  WVDEWOBMC007670:
+  WVDEWOBMC009075:
     include:
     - os_macos
     - meta_vw

@@ -52,3 +52,4 @@ export HOMEBREW_CASK_OPTS="--appdir={{@@ env['HOME'] @@}}/Applications"
 {%@@ endif @@%}
 
 source {{@@ env['HOME'] @@}}/.commonfunc
+{%@@ if vw == true @@%}source {{@@ env['HOME'] @@}}/.vwfunc{%@@ endif @@%}

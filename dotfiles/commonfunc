@@ -1,7 +1,7 @@
 #! /usr/bin/env sed 2,5!d;s/^#.//
 # This script must be sourced from within a shell
 # and not executed. For instance with:
-# 
+#
 #   . ~/.commonfunc
 
 #
@@ -352,7 +352,7 @@ confv6() {
   if [[ -n ${prefixlength} ]]; then
     prefixlength=${(q+)prefixlength[-1]/=}
   fi
-  
+
   if [[ -n ${router} ]]; then
     router=${(q+)router[-1]/=}
   fi
@@ -406,7 +406,7 @@ confv6() {
   fi
 
   if [[ -z ${return_code} ]]; then
-    
+
     return 5
   fi
 
@@ -415,70 +415,4 @@ confv6() {
   return 5
 }
 
-{%@@ endif @@%}{%@@ if vw == true @@%}
-setProxyEnv() {
-  local HIGHLIGHT='\033[36;1m'
-  local RESET='\033[0;0m'
-
-  local PROXY='127.0.0.1:9000'
-  local PROXY_CFG_HTTP="${PROXY}"
-  local PROXY_CFG_HTTPS="${PROXY}"
-  local NO_PROXY_CFG="127.0.0.1,localhost,vw.vwg"
-  
-  export NO_PROXY="${NO_PROXY_CFG}"
-  export no_proxy="${NO_PROXY_CFG}"
-  export HTTP_PROXY="${PROXY_CFG_HTTP}"
-  export HTTPS_PROXY="${PROXY_CFG_HTTPS}"
-  export http_proxy="${PROXY_CFG_HTTP}"
-  export https_proxy="${PROXY_CFG_HTTPS}"
-  export GIT_SSH_COMMAND='ssh -o ProxyCommand="/opt/homebrew/bin/corkscrew localhost 9000 %h %p"'
-
-  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data/tailscaled-env.txt" || true
-  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data/tailscaled-env.txt" || true
-  [[ -d "/etc/tailscale" ]] && local TAILSCALEPATH="/etc/tailscale/tailscaled-env.txt" || true
-  if [[ -n ${TAILSCALEPATH} ]]; then
-    cat <<EOF > "${TAILSCALEPATH}"
-NO_PROXY="${NO_PROXY_CFG}"
-no_proxy="${NO_PROXY_CFG}"
-HTTP_PROXY="${PROXY_CFG_HTTP}"
-HTTPS_PROXY="${PROXY_CFG_HTTPS}"
-http_proxy="${PROXY_CFG_HTTP}"
-https_proxy="${PROXY_CFG_HTTPS}"
-
-EOF
-  fi
-
-  echo -e "\n✈️  exported zscaler proxy: ${HIGHLIGHT}http://${PROXY}${RESET}"
-}
-
-unsetProxyEnv() {
-  unset NO_PROXY
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset no_proxy
-  unset http_proxy
-  unset https_proxy
-  unset GIT_SSH_COMMAND
-
-  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macsys/Data/tailscaled-env.txt" || true
-  [[ -d "{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data" ]] && local TAILSCALEPATH="{{@@ env['HOME'] @@}}/Library/Containers/io.tailscale.ipn.macos.network-extension/Data/tailscaled-env.txt" || true
-  [[ -d "/etc/tailscale" ]] && local TAILSCALEPATH="/etc/tailscale/tailscaled-env.txt" || true
-
-  if [[ -n ${TAILSCALEPATH} ]]; then
-    rm "${TAILSCALEPATH}"
-  fi
-
-  echo -e "\n🔄 removed zscaler proxy cofiguration"
-}
-
-setVpnGitRemote() {
-  local ORIGIN=vpn #e.g.
-  local HIGHLIGHT='\033[36;1m'
-  local RESET='\033[0;0m'
-
-  local repo="ssh://git@vpn.github.com:443/${$(git config remote.origin.url)#*git@github.com:}"
-  git remote add ${ORIGIN} "${repo}" 2> /dev/null
-
-  echo -e "🔗 git remote (${HIGHLIGHT}${ORIGIN}${RESET}): ${HIGHLIGHT}${repo}${RESET}\n"
-}
 {%@@ endif @@%}
