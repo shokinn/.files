@@ -6,7 +6,7 @@ brew "bash"
 brew "bash-language-server"
 brew "bat"
 brew "btop"
-brew "caligula"
+brew "philocalyst/tap/caligula"
 brew "colima", restart_service: :changed
 brew "coreutils"
 brew "d2"
@@ -15,6 +15,7 @@ brew "duf"
 brew "eza"
 brew "fabric-ai"
 brew "fzf"
+brew "gh"
 brew "git"
 brew "gnu-getopt"
 brew "go-task"
@@ -61,7 +62,7 @@ cask "airfoil"
 cask "aldente"
 cask "alfred"
 cask "betterzip"
-cask "browserino", args: { no_quarantine: true }
+cask "AlexStrNik/Browserino/browserino", args: { no_quarantine: true }
 cask "bruno"
 cask "crossover"
 cask "crystalfetch"
@@ -71,7 +72,6 @@ cask "finicky"
 cask "iina"
 cask "istat-menus"
 cask "iterm2"
-cask "jordanbaird-ice"
 cask "keycastr"
 cask "little-snitch", args: { appdir: "/Applications" }
 cask "mist"
@@ -83,13 +83,15 @@ cask "rambox"
 cask "snagit"
 cask "soundsource"
 cask "sublime-text"
+cask "thaw"
 cask "visual-studio-code"
+go "dbohdan.com/age-edit"
 mas "AdGuard for Safari", id: 1440147259
 mas "Amphetamine", id: 937984704
 mas "AusweisApp", id: 948660805
 mas "DeArrow", id: 6451469297
 mas "openterface", id: 6478481082
-mas "Parcel", id: 639968404
+mas "Parcel", id: 375589283
 mas "Perplexity", id: 6714467650
 mas "reMarkable", id: 1276493162
 mas "Slack", id: 803453959
