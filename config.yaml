@@ -160,7 +160,7 @@ dotfiles:
     dst: ~/.config/zsh/p10k.mise.zsh
     src: config/zsh/p10k.mise.zsh
   f_finicky.js:
-    src: finicky.js
+    src: finicky.js.age
     dst: ~/.finicky.js
     trans_install: _decrypt
     trans_update: _encrypt
