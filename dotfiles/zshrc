@@ -185,6 +185,7 @@ alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix'
 alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/identities/agenix-phg -e"
 alias ane='agenix-edit'
 alias cane="EDITOR='code -w' agenix-edit"
+alias agenix-rekey="EDITOR=: agenix-edit"
 alias ade='age-edit -t /tmp/ -M -a {{@@ ageidentity @@}}'
 alias cade='age-edit -e "${HOME}/.local/bin/codew" -t /tmp/ -M -a {{@@ ageidentity @@}}'
 alias du="duf"
