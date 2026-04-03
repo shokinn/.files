@@ -181,8 +181,8 @@ source ${ZSH}/oh-my-zsh.sh
 #[[ $(command -v kubectl) ]] && alias pk='proxy_kubectl'
 #{%@@ endif @@%}
 
-alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix'
-alias agenix-edit="agenix -i {{@@ env['HOME'] @@}}/.ssh/identities/agenix-phg -e"
+alias agenix='RULES='\''./secrets/secrets.nix'\'' agenix -i {{@@ env['HOME'] @@}}/.ssh/identities/agenix-phg'
+alias agenix-edit="agenix -e"
 alias ane='agenix-edit'
 alias cane="EDITOR='code -w' agenix-edit"
 alias agenix-rekey="EDITOR=: agenix-edit"
