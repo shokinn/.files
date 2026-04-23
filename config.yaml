@@ -41,9 +41,6 @@ dotfiles:
   d_colors:
     dst: ~/.vim/colors
     src: vim/colors
-  d_fonts:
-    dst: ~/.local/share/fonts
-    src: local/share/fonts
   d_polybar:
     dst: ~/.config/polybar
     src: config/polybar
@@ -201,7 +198,6 @@ profiles:
     variables:
       linux: true
     dotfiles:
-    - d_fonts
     - f_profile
   meta_vw:
     variables:
