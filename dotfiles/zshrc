@@ -9,19 +9,15 @@ if [[ -r "${XDG_CACHE_HOME:-{{@@ env['HOME'] @@}}/.cache}/p10k-instant-prompt-${
   source "${XDG_CACHE_HOME:-{{@@ env['HOME'] @@}}/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f {{@@ env['HOME'] @@}}/.p10k.zsh ]] || source {{@@ env['HOME'] @@}}/.p10k.zsh
-[[ -f {{@@ env['HOME'] @@}}/.config/zsh/p10k.mise.zsh ]] && source ~/.config/zsh/p10k.mise.zsh
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=${HOME}/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH={{@@ env['HOME'] @@}}/.oh-my-zsh
+export ZSH={{@@ env['HOME'] @@}}/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# it'll load a random theme each time that Oh My Zsh is loaded.
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 if [[ ${TERM} == 'linux' ]]; then
   ZSH_THEME="agnoster"
 else
@@ -42,11 +38,16 @@ fi
 # sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Uncomment one of the following lines to change Oh My Zsh update behavior.
+# zstyle ':omz:update' mode disabled
+# zstyle ':omz:update' mode auto
+# zstyle ':omz:update' mode reminder
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line to limit update output.
+zstyle ':omz:update' verbose default
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -117,10 +118,8 @@ plugins=(
   uv
   vscode
   zoxide
-  zsh-autosuggestions
   zsh-navigation-tools
   zsh-ssh
-  zsh-syntax-highlighting
 {%@@ if distro == 'macos' @@%}  # Mac specifics
   brew
   iterm2
@@ -128,9 +127,9 @@ plugins=(
 {%@@ endif @@%}{%@@ if distro == 'arch' @@%}  # Archlinux specifics
   archlinux
 {%@@ endif @@%}
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
-
-autoload -U compinit && compinit
 
 # Source fzf-tab-completions
 # source {{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/fzf-tab-completion/zsh/fzf-zsh-completion.sh
@@ -141,8 +140,16 @@ autoload -U compinit && compinit
 fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/zsh-completions/src
 # A set of custom completions
 fpath+={{@@ env['HOME'] @@}}/.oh-my-zsh/custom/plugins/custom-completions
+{%@@ if profile == 'ymir' @@%}
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
+{%@@ endif @@%}
 
 source ${ZSH}/oh-my-zsh.sh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f {{@@ env['HOME'] @@}}/.p10k.zsh ]] || source {{@@ env['HOME'] @@}}/.p10k.zsh
+[[ -f {{@@ env['HOME'] @@}}/.config/zsh/p10k.mise.zsh ]] && source {{@@ env['HOME'] @@}}/.config/zsh/p10k.mise.zsh
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -202,9 +209,9 @@ alias hosts="uvx git+https://git.s1q.dev/phg/hosts.git"
 {%@@ if distro == 'macos' @@%}
 # Decide which homebrew installation (x64_86 / arm64) should be used
 if [ "$(sysctl -n sysctl.proc_translated)" = "1" ]; then
-  local brew_path="/usr/local/homebrew/bin"
+  brew_path="/usr/local/homebrew/bin"
 else
-  local brew_path="/opt/homebrew/bin"
+  brew_path="/opt/homebrew/bin"
 fi
 export PATH="${brew_path}:${PATH}"
 
@@ -227,9 +234,3 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 source {{@@ env['HOME'] @@}}/.commonfunc
 {%@@ if vw == true @@%}source {{@@ env['HOME'] @@}}/.vwfunc
 source {{@@ env['HOME'] @@}}/.vwrc{%@@ endif @@%}
-
-{%@@ if profile == 'ymir' @@%}
-autoload -Uz compinit
-zstyle ':completion:*' menu select
-fpath+=~/.zfunc
-{%@@ endif @@%}
