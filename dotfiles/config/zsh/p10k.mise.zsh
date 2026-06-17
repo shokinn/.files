@@ -12,11 +12,20 @@
   function prompt_mise() {
     local plugins=("${(@f)$(mise ls --current --offline 2>/dev/null | awk '!/\(symlink\)/ && $3!="~/.tool-versions" && $3!="~/.config/mise/config.toml" && $3!="(missing)" {if ($1) print $1, $2}')}")
     local plugin
-    for plugin in ${(k)plugins}; do
+
+    for plugin in "${plugins[@]}"; do
       local parts=("${(@s/ /)plugin}")
-      local tool=${(U)parts[1]}
-      local version=${parts[2]}
-      p10k segment -r -i "${tool}_ICON" -s $tool -t "$version"
+      local tool_raw="${parts[1]}"
+      local version="${parts[2]}"
+
+      [[ -z "$tool_raw" || -z "$version" ]] && continue
+
+      # P10k segment state/icon names must be zsh-identifier-safe.
+      # Example: aqua:raviqqe/muffet -> AQUA_RAVIQQE_MUFFET
+      local tool="${(U)tool_raw}"
+      tool="${tool//[^A-Z0-9_]/_}"
+
+      p10k segment -r -i "${tool}_ICON" -s "$tool" -t "$version"
     done
   }
 
@@ -39,8 +48,8 @@
   typeset -g POWERLEVEL9K_MISE_PYTHON_BACKGROUND=33
   typeset -g POWERLEVEL9K_MISE_RUBY_BACKGROUND=196
   typeset -g POWERLEVEL9K_MISE_RUST_BACKGROUND=208
+  typeset -g POWERLEVEL9K_MISE_AQUA_RAVIQQE_MUFFET_BACKGROUND=33
 
   # Substitute the default asdf prompt element
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=("${POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS[@]/asdf/mise}")
 }
-
