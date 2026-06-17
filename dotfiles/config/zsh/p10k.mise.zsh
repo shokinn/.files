@@ -9,6 +9,38 @@
 #   [[ -f ~/.config/zsh/p10k.mise.zsh ]] && source ~/.config/zsh/p10k.mise.zsh
 
 () {
+  function _prompt_mise_has_visual_identifier() {
+    local tool="$1"
+    local icon_name="${tool}_ICON"
+    local icon_override="POWERLEVEL9K_${icon_name}"
+    local state_visual_identifier="POWERLEVEL9K_MISE_${tool}_VISUAL_IDENTIFIER_EXPANSION"
+    local segment_visual_identifier="POWERLEVEL9K_MISE_VISUAL_IDENTIFIER_EXPANSION"
+    local parameter value
+
+    for parameter in "$state_visual_identifier" "$segment_visual_identifier" "$icon_override"; do
+      if (( ${+parameters[$parameter]} )); then
+        value="${(P)parameter}"
+        [[ -n "$value" ]] && return 0
+        return 1
+      fi
+    done
+
+    if (( ${+functions[print_icon]} )); then
+      [[ -n "$(print_icon "$icon_name")" ]] && return 0
+    elif (( ${+functions[_p9k_init_icons]} )); then
+      _p9k_init_icons
+      (( ${+icons[$icon_name]} )) && [[ -n "${icons[$icon_name]}" ]] && return 0
+    fi
+
+    return 1
+  }
+
+  function _prompt_mise_fallback_label() {
+    local label="${1:t}"
+    label="${label##*:}"
+    print -r -- "${label:-$1}"
+  }
+
   function prompt_mise() {
     local plugins=("${(@f)$(mise ls --current --offline 2>/dev/null | awk '!/\(symlink\)/ && $3!="~/.tool-versions" && $3!="~/.config/mise/config.toml" && $3!="(missing)" {if ($1) print $1, $2}')}")
     local plugin
@@ -25,7 +57,11 @@
       local tool="${(U)tool_raw}"
       tool="${tool//[^A-Z0-9_]/_}"
 
-      p10k segment -r -i "${tool}_ICON" -s "$tool" -t "$version"
+      if _prompt_mise_has_visual_identifier "$tool"; then
+        p10k segment -r -i "${tool}_ICON" -s "$tool" -t "$version"
+      else
+        p10k segment -r -s "$tool" -t "$(_prompt_mise_fallback_label "$tool_raw") $version"
+      fi
     done
   }
 
