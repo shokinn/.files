@@ -60,7 +60,7 @@
       if _prompt_mise_has_visual_identifier "$tool"; then
         p10k segment -r -i "${tool}_ICON" -s "$tool" -t "$version"
       else
-        p10k segment -r -s "$tool" -t "$(_prompt_mise_fallback_label "$tool_raw") $version"
+        p10k segment -r -s "$tool" -t "$version $(_prompt_mise_fallback_label "$tool_raw")"
       fi
     done
   }
