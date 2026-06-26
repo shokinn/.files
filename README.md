@@ -23,7 +23,7 @@ I manage my dotfiles using [dotdrop](https://github.com/deadc0de6/dotdrop).
   && read DOTDROP_PROFILE \
   && [[ -n ${DOTDROP_PROFILE} ]] && DOTDROP_PROFILE="-p${DOTDROP_PROFILE}" || DOTDROP_PROFILE="" \
   && ~/.local/bin/dotdrop ${DOTDROP_PROFILE} --cfg=~/.files/config.yaml install \
-  ; unset DOTDROP_PROFILE \
+  && unset DOTDROP_PROFILE \
   && export HOMEBREW_CASK_OPTS="--appdir=${HOME}/Applications" \
   && brew bundle install --file=~/.files/config/brew/Brewfile \
   && mkdir -p ~/workspace/{privat,work} \
