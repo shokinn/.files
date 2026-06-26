@@ -121,6 +121,15 @@ defaults export <domain> ~/.files/config/plist/<app>.plist
 defaults import <domain>  ~/.files/config/plist/<app>.plist
 ```
 
+## Brew
+
+### Install age encrypted Brewfile
+
+```shell
+age --decrypt -i ~/.age/phg-age-dotfiles -o - ~/.files/config/brew/vw.Brewfile.age | brew bundle install --file=-
+```
+
+
 ## Documentation
 
 ~~Maybe you should [take a look to my documentation](https://docs.pphg.tech/) to understand how I use my dotfiles.~~
