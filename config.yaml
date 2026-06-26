@@ -237,6 +237,10 @@ profiles:
   workspace:
     include:
     - os_ubuntu
+  WVDEWOBMC005505:
+    include:
+    - os_macos
+    - meta_vw
   WVDEWOBMC009075:
     include:
     - os_macos
