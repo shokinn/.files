@@ -1,89 +1,183 @@
 tap "AlexStrNik/Browserino"
 tap "philocalyst/tap"
-brew "asciinema"
+tap "us/tap"
+# Simple, modern, secure file encryption
 brew "age"
+# Record and share terminal sessions
+brew "asciinema"
+# Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Language Server for Bash
 brew "bash-language-server"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
-brew "philocalyst/tap/caligula"
+# Container runtimes on MacOS (and Linux) with minimal setup
 brew "colima", restart_service: :changed
+# Create and run Linux containers using lightweight virtual machines
+brew "container"
+# GNU File, Shell, and Text utilities
 brew "coreutils"
-brew "d2"
+# Pack, ship and run any application as a lightweight container
 brew "docker"
+# Disk Usage/Free Utility - a better 'df' alternative
 brew "duf"
+# Modern, maintained replacement for ls
 brew "eza"
+# Open-source framework for augmenting humans using AI
 brew "fabric-ai"
+# Like neofetch, but much faster because written mostly in C
+brew "fastfetch"
+# macOS CLI for managing custom icons for files and folders
+brew "fileicon"
+# Command-line fuzzy finder written in Go
 brew "fzf"
+# GitHub command-line tool
 brew "gh"
+# Distributed revision control system
 brew "git"
+# Command-line option parsing utility
 brew "gnu-getopt"
-brew "go-task"
+# Command-line tool for generating regular expressions
 brew "grex"
+# Improved top (interactive process viewer)
 brew "htop"
+# Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
+# CLI wrapper for basic network utilities on macOS - ip command
 brew "iproute2mac"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
+# Lazier way to manage everything docker
 brew "lazydocker"
+# Implementation of the file(1) command
 brew "libmagic"
+# Sudoless performance monitoring for Apple Silicon processors
 brew "macmon"
+# Securely transfers data between computers
 brew "magic-wormhole"
+# Mac App Store command-line interface
 brew "mas"
+# Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
+# Remote terminal application
 brew "mosh"
+# Media player based on MPlayer and mplayer2
 brew "mpv"
+# 'traceroute' and 'ping' in a single tool
 brew "mtr"
-brew "neofetch"
+# NCurses Disk Usage
 brew "ncdu"
+# Port scanning utility for large networks
 brew "nmap"
-brew "pssh"
+# Coreutils progress viewer
 brew "progress"
+# Monitor data's progress through a pipe
 brew "pv"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Static analysis and lint tool, for (ba)sh scripts
 brew "ruff"
+# Autoformat shell script source code
 brew "shellcheck"
+# Autoformat shell script source code
 brew "shfmt"
+# User interface to the TELNET protocol
 brew "telnet"
+# Terminal UI for tshark, inspired by Wireshark
 brew "termshark"
+# Code-search similar to ack
 brew "the_silver_searcher"
+# Text interface for Git repositories
 brew "tig"
+# Simplified and community-driven man pages
 brew "tldr"
+# Terminal multiplexer
 brew "tmux"
+# Unpack everything with one command
 brew "unp"
+# Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
+# Executes a program periodically, showing output fullscreen
 brew "watch"
+# Internet file retriever
 brew "wget"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# Shell extension to navigate your filesystem faster
 brew "zoxide"
+# UNIX shell (command interpreter)
 brew "zsh"
+# User-friendly, lightweight TUI for disk imaging
+brew "philocalyst/tap/caligula", trusted: true
+# Docker-compatible container CLI built on Apple's Containerization framework
+brew "us/tap/mocker", trusted: true
+# Sends audio from computer to outputs
 cask "airfoil"
+# Menu bar tool to limit maximum charging percentage
 cask "aldente"
+# Application launcher and productivity software
 cask "alfred"
+# Utility to create and modify archives
 cask "betterzip"
-cask "AlexStrNik/Browserino/browserino", args: { no_quarantine: true }
+# Browserino is a tiny browser selector for MacOS written in SwiftUI
+cask "AlexStrNik/Browserino/browserino", args: { no_quarantine: true }, trusted: true
+# Open source IDE for exploring and testing APIs
 cask "bruno"
+# Menu bar usage monitor for Codex and Claude
+cask "codexbar"
+# Tool to run Windows software
 cask "crossover"
+# UI for creating Windows installer ISO from UUPDump
 cask "crystalfetch"
+# Web browser
 cask "firefox"
+# Web browser
 cask "firefox@developer-edition"
+# Utility for customizing which browser to start
 cask "finicky"
+# Free and open-source media player
 cask "iina"
+# System monitoring app
 cask "istat-menus"
+# Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
+# Open-source keystroke visualiser
 cask "keycastr"
+# Host-based application firewall
 cask "little-snitch", args: { appdir: "/Applications" }
+# Speech recognition tool
+cask "macwhisper"
+# Utility that automatically downloads firmwares and installers
 cask "mist"
+# Tool to control external monitor brightness & volume
 cask "monitorcontrol"
+# Utility to move and zoom windows—on one display
 cask "moom"
+# Desktop sync client for Nextcloud software products
+cask "nextcloud"
+# Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Remote pair programming
 cask "pop-app"
+# Workspace simplifier - to organize your workspace and boost your productivity
 cask "rambox"
+# Screen capture software
 cask "snagit"
+# Sound and audio controller
 cask "soundsource"
+# Text editor for code, markup and prose
 cask "sublime-text"
+# Minimal GUI for AI code agents
+cask "t3-code"
+# Menu bar manager
 cask "thaw"
+# Open-source code editor
 cask "visual-studio-code"
 go "dbohdan.com/age-edit"
 mas "AdGuard for Safari", id: 1440147259

@@ -1,7 +1,14 @@
+# Simple, modern, secure file encryption
 brew "age"
+# GNU File, Shell, and Text utilities
 brew "coreutils"
+# Command-line fuzzy finder written in Go
 brew "fzf"
+# Implementation of the file(1) command
 brew "libmagic"
+# Mac App Store command-line interface
 brew "mas"
+# Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
+# UNIX shell (command interpreter)
 brew "zsh"
