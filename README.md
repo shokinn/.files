@@ -126,6 +126,8 @@ defaults import <domain>  ~/.files/config/plist/<app>.plist
 ### Install age encrypted Brewfile
 
 ```shell
+gh auth login
+ssh-keygen -F github.com >/dev/null || ssh-keyscan -t rsa,ed25519 github.com >> ~/.ssh/known_hosts
 age --decrypt -i ~/.age/phg-age-dotfiles -o - ~/.files/config/brew/vw.Brewfile.age | brew bundle install --file=-
 ```
 
