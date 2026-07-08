@@ -19,6 +19,8 @@ brew "colima", restart_service: :changed
 brew "container"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# Cross-platform disk diagnostics TUI
+brew "diskwatch"
 # Pack, ship and run any application as a lightweight container
 brew "docker"
 # Disk Usage/Free Utility - a better 'df' alternative
@@ -71,6 +73,8 @@ brew "mpv"
 brew "mtr"
 # NCurses Disk Usage
 brew "ncdu"
+# Cross-platform realtime network diagnostics TUI
+brew "netwatch"
 # Port scanning utility for large networks
 brew "nmap"
 # Coreutils progress viewer
@@ -85,6 +89,8 @@ brew "ruff"
 brew "shellcheck"
 # Autoformat shell script source code
 brew "shfmt"
+# Cross-platform system diagnostics TUI
+brew "syswatch"
 # User interface to the TELNET protocol
 brew "telnet"
 # Terminal UI for tshark, inspired by Wireshark
