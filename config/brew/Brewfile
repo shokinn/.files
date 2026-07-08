@@ -11,6 +11,8 @@ brew "bash"
 brew "bash-language-server"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# TUI for managing Homebrew, Flatpak, and Mac App Store packages
+brew "bbrew"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Container runtimes on MacOS (and Linux) with minimal setup
