@@ -204,6 +204,22 @@ addec() {
 }
 
 {%@@ if distro == 'macos' @@%}
+
+#######################################
+# Shows all devices matching a given IP address Pattern.
+# Globals:
+#   None
+# Arguments:
+#   IP address pattern to match
+# Outputs:
+#   Matching network device information
+# Returns:
+#   None
+#######################################
+ifgrep() {
+  ifconfig | awk -v q="$1" '/^[^ \t]/ {if(block&&hit) print block; block=$0; hit=0; next} {block=block ORS $0} $1=="inet" && index($2,q) {hit=1} END{if(block&&hit) print block}';
+}
+
 #######################################
 # Shows a netstat -tulpn styled output on mac.
 # Globals:
