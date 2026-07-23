@@ -102,6 +102,60 @@ fabric() {
 }
 
 #######################################
+# Run Claude Code through the local Codex gateway with an interactively selected model.
+# Globals:
+#   CLAUDE_CODEX_BASE_URL
+# Arguments:
+#   Arguments to pass to claude
+# Outputs:
+#   Model picker and output from claude
+# Returns:
+#   Exit code from fzf, the model picker, or claude
+#######################################
+claude-codex() {
+  local gateway_url="${CLAUDE_CODEX_BASE_URL:-http://localhost:18765}"
+  local model
+  local -a models=()
+  local -a fallback_models=(
+    gpt-5.6-sol
+    gpt-5.6-terra
+    gpt-5.6-luna
+  )
+
+  if (( ${+commands[curl]} && ${+commands[jq]} )); then
+    models=(${(f)"$(
+      curl -fsS --max-time 2 "${gateway_url}/v1/models" 2>/dev/null |
+        jq -r '.data[] | select((.display_name // "") | endswith(" (codex)")) | .id' |
+        sort -u
+    )"})
+  fi
+
+  (( ${#models[@]} )) || models=("${fallback_models[@]}")
+
+  if (( ${+commands[fzf]} )); then
+    model=$(
+      printf '%s\n' "${models[@]}" |
+        fzf --height=60% --reverse --prompt='Claude Codex model> '
+    ) || return $?
+  else
+    local PS3='Claude Codex model: '
+    select model in "${models[@]}"; do
+      [[ -n "${model}" ]] && break
+      print -u2 -- "Invalid selection."
+    done
+  fi
+
+  ANTHROPIC_BASE_URL="${gateway_url}" \
+    ANTHROPIC_AUTH_TOKEN=unused \
+    ANTHROPIC_MODEL="${model}[1m]" \
+    ANTHROPIC_SMALL_FAST_MODEL=gpt-5.6-luna[1m] \
+    CLAUDE_CODE_AUTO_COMPACT_WINDOW=272000 \
+    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+    CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK=1 \
+    command claude "$@"
+}
+
+#######################################
 # wttr - show the weather forecast in Terminal.
 # Globals:
 #   None
