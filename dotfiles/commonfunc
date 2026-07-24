@@ -115,6 +115,8 @@ fabric() {
 claude-codex() {
   local gateway_url="${CLAUDE_CODEX_BASE_URL:-http://localhost:18765}"
   local model
+  local yolo_reply
+  local -a claude_args=("$@")
   local -a models=()
   local -a fallback_models=(
     gpt-5.6-sol
@@ -145,6 +147,11 @@ claude-codex() {
     done
   fi
 
+  if read -q "yolo_reply?Run Claude in YOLO mode? [y/N] "; then
+    claude_args+=(--dangerously-skip-permissions)
+  fi
+  print
+
   ANTHROPIC_BASE_URL="${gateway_url}" \
     ANTHROPIC_AUTH_TOKEN=unused \
     ANTHROPIC_MODEL="${model}[1m]" \
@@ -152,7 +159,7 @@ claude-codex() {
     CLAUDE_CODE_AUTO_COMPACT_WINDOW=272000 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
     CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK=1 \
-    command claude "$@"
+    command claude "${claude_args[@]}"
 }
 
 #######################################
