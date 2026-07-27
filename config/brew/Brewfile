@@ -167,6 +167,8 @@ cask "mist"
 cask "monitorcontrol"
 # Utility to move and zoom windows—on one display
 cask "moom"
+# Read-only disk space visualiser
+cask "neodisk"
 # Desktop sync client for Nextcloud software products
 cask "nextcloud"
 # Knowledge base that works on top of a local folder of plain text Markdown files
