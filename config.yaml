@@ -175,6 +175,11 @@ dotfiles:
     dst: ~/.vwfunc
     trans_install: _decrypt
     trans_update: _encrypt
+  f_vws2-artifacts-config:
+    src: vws2-artifacts-config
+    dst: ~/.vws2-artifacts-config
+    trans_install: _decrypt
+    trans_update: _encrypt
 profiles:
   meta_base:
     variables:
@@ -207,6 +212,7 @@ profiles:
     - f_rpki
     - f_vwrc
     - f_vwfunc
+    - f_vws2-artifacts-config
   meta_wsl:
     variables:
       wsl: true
