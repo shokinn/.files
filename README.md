@@ -97,6 +97,58 @@ age-edit -e "${HOME}/.local/bin/codew" -t /tmp/ -M -a ~/.age/phg-age-dotfiles <p
 
 Both aliases are configured via my `.zshrc`.
 
+## Deployment secrets
+
+`age-docker` manages armored age secrets from a project-local
+`.age-docker.toml`. It searches upward for the nearest policy file, stopping
+at the Git root. A policy declares public keys, reusable groups, and the exact
+recipients for every encrypted file:
+
+```toml
+version = 1
+
+[keys]
+phg = "age1..."
+server = "ssh-ed25519 AAAA..."
+
+[groups]
+users = ["phg"]
+production = ["server"]
+
+[secrets]
+"secrets/prod.env.age" = ["users", "production"]
+```
+
+Recipients are never added implicitly. New ciphertext is verified by
+decrypting it with `~/.age/phg-age-dotfiles` before the configured file is
+atomically replaced. Use repeatable `--identity <path>` options before the
+subcommand when rotating keys.
+
+```shell
+age-docker init
+age-docker check
+age-docker list
+age-docker edit secrets/prod.env.age
+age-docker encrypt prod.env secrets/prod.env.age
+age-docker decrypt secrets/prod.env.age prod.env
+age-docker rekey secrets/prod.env.age
+age-docker rekey --all
+```
+
+Manage public keys without changing groups or file policies:
+
+```shell
+age-docker key add operator 'age1...'
+age-docker key scan server server.example.com
+age-docker key remove unused-server
+```
+
+`key scan` displays the retrieved SSH key and its SHA256 fingerprint before
+asking for confirmation. `ssh-keyscan` does not authenticate the result;
+compare the fingerprint through a trusted channel. Replacing an existing
+alias requires `--replace`, and non-interactive confirmation requires
+`--yes`.
+
 ## Backup/Restore settings for macOS native user preferences
 
 See here for a defaults documentation: <https://macos-defaults.com/>

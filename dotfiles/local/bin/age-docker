@@ -1,0 +1,991 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.14"
+# ///
+
+# {{@@ header() @@}}
+#
+# Manage age-encrypted deployment secrets from a project-local policy file.
+
+from __future__ import annotations
+
+import argparse
+import fcntl
+import filecmp
+import hashlib
+import json
+import os
+import re
+import shlex
+import signal
+import subprocess
+import sys
+import tempfile
+from dataclasses import dataclass
+from pathlib import Path
+
+import tomllib
+
+CONFIG_NAME = ".age-docker.toml"
+EMPTY_CONFIG = "version = 1\n\n[keys]\n\n[groups]\n\n[secrets]\n"
+NAME_PATTERN = re.compile(r"^[A-Za-z0-9_-]+$")
+SUPPORTED_SHELLS = ("bash", "zsh")
+
+
+class AgeDockerError(Exception):
+    pass
+
+
+def install_signal_handlers() -> None:
+    def interrupted(signum: int, _frame: object) -> None:
+        raise AgeDockerError(f"Interrupted by {signal.Signals(signum).name}")
+
+    for signum in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+        signal.signal(signum, interrupted)
+
+
+@dataclass(frozen=True)
+class SecretRule:
+    relative_path: str
+    path: Path
+    aliases: tuple[str, ...]
+    recipients: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class Policy:
+    path: Path
+    keys: dict[str, str]
+    groups: dict[str, list[str]]
+    secrets: dict[str, SecretRule]
+
+
+def discover_config(explicit: str | None, start: Path | None = None) -> Path:
+    configured = explicit or os.environ.get("AGE_DOCKER_CONFIG")
+    if configured:
+        path = Path(configured).expanduser().resolve()
+        if not path.is_file():
+            raise AgeDockerError(f"Config does not exist: {path}")
+        return path
+
+    current = (start or Path.cwd()).resolve()
+    if not current.is_dir():
+        current = current.parent
+    while True:
+        candidate = current / CONFIG_NAME
+        if candidate.is_file():
+            return candidate
+        if (current / ".git").exists() or current.parent == current:
+            break
+        current = current.parent
+    raise AgeDockerError(f"Could not find {CONFIG_NAME}")
+
+
+def _string_list(value: object, location: str) -> list[str]:
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        raise AgeDockerError(f"{location} must be an array of names")
+    return value
+
+
+def validate_recipient(recipient: str) -> None:
+    result = subprocess.run(
+        ["age", "--encrypt", "--recipient", recipient, "--output", os.devnull],
+        input=b"",
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        message = result.stderr.decode(errors="replace").strip()
+        raise AgeDockerError(f"Invalid age recipient {recipient!r}: {message}")
+
+
+def load_policy(path: Path) -> Policy:
+    try:
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as error:
+        raise AgeDockerError(f"Could not read {path}: {error}") from error
+    if data.get("version") != 1:
+        raise AgeDockerError("Config version must be 1")
+
+    keys_raw = data.get("keys", {})
+    groups_raw = data.get("groups", {})
+    secrets_raw = data.get("secrets", {})
+    if (
+        not isinstance(keys_raw, dict)
+        or not isinstance(groups_raw, dict)
+        or not isinstance(secrets_raw, dict)
+    ):
+        raise AgeDockerError("[keys], [groups], and [secrets] must be TOML tables")
+
+    keys: dict[str, str] = {}
+    for name, recipient in keys_raw.items():
+        if not NAME_PATTERN.fullmatch(name) or not isinstance(recipient, str):
+            raise AgeDockerError(f"Invalid key entry: {name}")
+        validate_recipient(recipient)
+        keys[name] = recipient
+
+    groups = {
+        name: _string_list(value, f"groups.{name}")
+        for name, value in groups_raw.items()
+    }
+    for name in groups:
+        if not NAME_PATTERN.fullmatch(name):
+            raise AgeDockerError(f"Invalid group name: {name}")
+        if name in keys:
+            raise AgeDockerError(f"Name is both a key and a group: {name}")
+
+    resolved_groups: dict[str, tuple[str, ...]] = {}
+
+    def resolve_name(name: str, stack: tuple[str, ...]) -> tuple[str, ...]:
+        if name in keys:
+            return (name,)
+        if name not in groups:
+            raise AgeDockerError(f"Unknown key or group: {name}")
+        if name in stack:
+            chain = " -> ".join((*stack, name))
+            raise AgeDockerError(f"Recipient group cycle: {chain}")
+        if name not in resolved_groups:
+            aliases: list[str] = []
+            for member in groups[name]:
+                aliases.extend(resolve_name(member, (*stack, name)))
+            resolved_groups[name] = tuple(dict.fromkeys(aliases))
+        return resolved_groups[name]
+
+    for group_name in groups:
+        resolve_name(group_name, ())
+
+    root = path.parent.resolve()
+    secrets: dict[str, SecretRule] = {}
+    for relative_path, names_value in secrets_raw.items():
+        if not isinstance(relative_path, str):
+            raise AgeDockerError("Secret paths must be strings")
+        configured_path = Path(relative_path)
+        if configured_path.is_absolute():
+            raise AgeDockerError(f"Secret path must be relative: {relative_path}")
+        resolved_path = (root / configured_path).resolve(strict=False)
+        try:
+            resolved_path.relative_to(root)
+        except ValueError as error:
+            raise AgeDockerError(
+                f"Secret path escapes the config directory: {relative_path}"
+            ) from error
+        if resolved_path.is_symlink() or (root / configured_path).is_symlink():
+            raise AgeDockerError(f"Secret path must not be a symlink: {relative_path}")
+        aliases: list[str] = []
+        for name in _string_list(names_value, f"secrets.{relative_path}"):
+            aliases.extend(resolve_name(name, ()))
+        aliases = list(dict.fromkeys(aliases))
+        if not aliases:
+            raise AgeDockerError(f"Secret has no recipients: {relative_path}")
+        normalized = resolved_path.relative_to(root).as_posix()
+        if normalized in secrets:
+            raise AgeDockerError(f"Duplicate secret path: {normalized}")
+        secrets[normalized] = SecretRule(
+            relative_path=normalized,
+            path=resolved_path,
+            aliases=tuple(aliases),
+            recipients=tuple(dict.fromkeys(keys[alias] for alias in aliases)),
+        )
+    return Policy(path=path, keys=keys, groups=groups, secrets=secrets)
+
+
+def find_rule(policy: Policy, value: str) -> SecretRule:
+    requested = Path(value).expanduser()
+    if not requested.is_absolute():
+        requested = Path.cwd() / requested
+    requested = requested.resolve(strict=False)
+    for rule in policy.secrets.values():
+        if requested == rule.path:
+            return rule
+    raise AgeDockerError(f"Secret is not configured: {value}")
+
+
+def identity_arguments(identities: list[str] | None) -> list[str]:
+    configured = os.environ.get("AGE_DOCKER_IDENTITY")
+    values = identities or ([configured] if configured else [])
+    if not values:
+        raise AgeDockerError(
+            "No age identity configured; set AGE_DOCKER_IDENTITY or use --identity"
+        )
+    paths = [Path(value).expanduser() for value in values]
+    for path in paths:
+        if not path.is_file():
+            raise AgeDockerError(f"Identity is not readable: {path}")
+    return [argument for path in paths for argument in ("--identity", str(path))]
+
+
+def run_age(arguments: list[str], *, input_path: Path | None = None) -> None:
+    command = ["age", *arguments]
+    if input_path is not None:
+        command.append(str(input_path))
+    result = subprocess.run(command, capture_output=True, check=False)
+    if result.returncode != 0:
+        raise AgeDockerError(
+            result.stderr.decode(errors="replace").strip() or "age failed"
+        )
+
+
+def temporary_output(parent: Path, prefix: str) -> Path:
+    descriptor, name = tempfile.mkstemp(prefix=prefix, dir=parent)
+    os.close(descriptor)
+    path = Path(name)
+    path.unlink()
+    return path
+
+
+def decrypt_to(source: Path, destination: Path, identities: list[str] | None) -> None:
+    run_age(
+        [
+            "--decrypt",
+            *identity_arguments(identities),
+            "--output",
+            str(destination),
+            "--",
+        ],
+        input_path=source,
+    )
+    destination.chmod(0o600)
+
+
+def stage_encryption(
+    rule: SecretRule,
+    plaintext: Path,
+    identities: list[str] | None,
+    *,
+    allow_empty: bool,
+) -> Path:
+    if not plaintext.is_file() or plaintext.is_symlink():
+        raise AgeDockerError(f"Plaintext source is not a regular file: {plaintext}")
+    if plaintext.stat().st_size == 0 and not allow_empty:
+        raise AgeDockerError("Refusing to encrypt an empty file; use --allow-empty")
+    rule.path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if rule.path.is_symlink():
+        raise AgeDockerError(f"Secret path must not be a symlink: {rule.relative_path}")
+    staged = temporary_output(rule.path.parent, f".{rule.path.name}.tmp.")
+    try:
+        recipients = [
+            argument
+            for recipient in rule.recipients
+            for argument in ("--recipient", recipient)
+        ]
+        run_age(
+            ["--encrypt", "--armor", *recipients, "--output", str(staged), "--"],
+            input_path=plaintext,
+        )
+        staged.chmod(0o600)
+        with tempfile.TemporaryDirectory(prefix="age-docker-verify-") as directory:
+            verification = Path(directory) / "plaintext"
+            decrypt_to(staged, verification, identities)
+            if not filecmp.cmp(plaintext, verification, shallow=False):
+                raise AgeDockerError(
+                    "Encrypted-file verification did not reproduce the plaintext"
+                )
+        return staged
+    except BaseException:
+        staged.unlink(missing_ok=True)
+        raise
+
+
+def encrypt_file(
+    rule: SecretRule,
+    plaintext: Path,
+    identities: list[str] | None,
+    *,
+    allow_empty: bool,
+) -> None:
+    staged = stage_encryption(rule, plaintext, identities, allow_empty=allow_empty)
+    try:
+        os.replace(staged, rule.path)
+    finally:
+        staged.unlink(missing_ok=True)
+
+
+def decrypt_file(
+    rule: SecretRule,
+    output: Path,
+    identities: list[str] | None,
+    *,
+    force: bool,
+) -> None:
+    if not rule.path.is_file():
+        raise AgeDockerError(f"Encrypted secret does not exist: {rule.relative_path}")
+    if output.is_symlink():
+        raise AgeDockerError(f"Plaintext destination must not be a symlink: {output}")
+    if output.exists() and not force:
+        raise AgeDockerError(
+            f"Plaintext destination already exists: {output}; use --force"
+        )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    staged = temporary_output(output.parent, f".{output.name}.tmp.")
+    try:
+        decrypt_to(rule.path, staged, identities)
+        os.replace(staged, output)
+        output.chmod(0o600)
+    finally:
+        staged.unlink(missing_ok=True)
+
+
+def edit_file(
+    rule: SecretRule,
+    identities: list[str] | None,
+    *,
+    allow_empty: bool,
+) -> bool:
+    with tempfile.TemporaryDirectory(prefix="age-docker-edit-") as directory:
+        temporary_directory = Path(directory)
+        temporary_directory.chmod(0o700)
+        plaintext = temporary_directory / rule.path.name.removesuffix(".age")
+        existed = rule.path.is_file()
+        if existed:
+            decrypt_to(rule.path, plaintext, identities)
+            before = plaintext.read_bytes()
+        else:
+            plaintext.touch(mode=0o600)
+            before = None
+
+        editor_value = os.environ.get("VISUAL") or os.environ.get("EDITOR") or "vi"
+        editor = shlex.split(editor_value)
+        if not editor:
+            raise AgeDockerError("VISUAL or EDITOR is empty")
+        result = subprocess.run([*editor, str(plaintext)], check=False)
+        if result.returncode != 0:
+            raise AgeDockerError(f"Editor exited with status {result.returncode}")
+        if not plaintext.is_file() or plaintext.is_symlink():
+            raise AgeDockerError("Editor did not leave a regular plaintext file")
+        if before is not None and plaintext.read_bytes() == before:
+            return False
+        encrypt_file(rule, plaintext, identities, allow_empty=allow_empty)
+        return True
+
+
+def rekey_files(
+    rules: list[SecretRule],
+    identities: list[str] | None,
+    *,
+    skip_missing: bool,
+) -> int:
+    staged_files: list[tuple[SecretRule, Path]] = []
+    rekeyed = 0
+    try:
+        for rule in rules:
+            if not rule.path.is_file():
+                if skip_missing:
+                    print(
+                        f"Warning: skipping missing secret {rule.relative_path}",
+                        file=sys.stderr,
+                    )
+                    continue
+                raise AgeDockerError(
+                    f"Encrypted secret does not exist: {rule.relative_path}"
+                )
+            with tempfile.TemporaryDirectory(prefix="age-docker-rekey-") as directory:
+                plaintext = Path(directory) / "plaintext"
+                decrypt_to(rule.path, plaintext, identities)
+                staged = stage_encryption(rule, plaintext, identities, allow_empty=True)
+                staged_files.append((rule, staged))
+        for rule, staged in staged_files:
+            os.replace(staged, rule.path)
+            rekeyed += 1
+        return rekeyed
+    finally:
+        for _, staged in staged_files:
+            staged.unlink(missing_ok=True)
+
+
+def normalize_recipient(value: str) -> str:
+    fields = value.strip().split()
+    if fields and fields[0].startswith("ssh-"):
+        if len(fields) < 2:
+            raise AgeDockerError(
+                "SSH recipients must contain a key type and key material"
+            )
+        recipient = f"{fields[0]} {fields[1]}"
+    elif len(fields) == 1:
+        recipient = fields[0]
+    else:
+        raise AgeDockerError(
+            "Recipient must be an SSH public key or native age recipient"
+        )
+    validate_recipient(recipient)
+    return recipient
+
+
+def recipient_description(recipient: str) -> str:
+    if not recipient.startswith("ssh-"):
+        return recipient
+    with tempfile.TemporaryDirectory(prefix="age-docker-fingerprint-") as directory:
+        public_key = Path(directory) / "key.pub"
+        public_key.write_text(f"{recipient}\n", encoding="utf-8")
+        result = subprocess.run(
+            ["ssh-keygen", "-lf", str(public_key), "-E", "sha256"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    if result.returncode != 0:
+        raise AgeDockerError(
+            result.stderr.strip() or "ssh-keygen could not fingerprint the key"
+        )
+    return result.stdout.strip()
+
+
+def confirm(message: str, *, assume_yes: bool) -> None:
+    if assume_yes:
+        return
+    if not sys.stdin.isatty():
+        raise AgeDockerError(f"{message}; pass --yes after verifying the key")
+    answer = input(f"{message} [y/N] ")
+    if answer.casefold() not in {"y", "yes"}:
+        raise AgeDockerError("Cancelled")
+
+
+def mutate_key(policy: Policy, name: str, recipient: str | None) -> None:
+    if not NAME_PATTERN.fullmatch(name):
+        raise AgeDockerError(f"Invalid key name: {name}")
+    lines = policy.path.read_text(encoding="utf-8").splitlines(keepends=True)
+    try:
+        section_start = next(
+            index for index, line in enumerate(lines) if line.strip() == "[keys]"
+        )
+    except StopIteration as error:
+        raise AgeDockerError("Config has no [keys] section") from error
+    section_end = next(
+        (
+            index
+            for index in range(section_start + 1, len(lines))
+            if lines[index].lstrip().startswith("[")
+        ),
+        len(lines),
+    )
+    entry_pattern = re.compile(
+        rf'^(?P<indent>\s*){re.escape(name)}\s*=\s*"(?:\\.|[^"\\])*"(?P<suffix>\s*(?:#.*)?)(?P<newline>\r?\n)?$'
+    )
+    entry_index = next(
+        (
+            index
+            for index in range(section_start + 1, section_end)
+            if entry_pattern.match(lines[index])
+        ),
+        None,
+    )
+    if recipient is None:
+        if entry_index is None:
+            raise AgeDockerError(f"Unknown key: {name}")
+        del lines[entry_index]
+    elif entry_index is not None:
+        match = entry_pattern.match(lines[entry_index])
+        assert match is not None
+        lines[entry_index] = (
+            f"{match.group('indent')}{name} = {json.dumps(recipient)}"
+            f"{match.group('suffix')}{match.group('newline') or ''}"
+        )
+    else:
+        insertion = section_end
+        while insertion > section_start + 1 and not lines[insertion - 1].strip():
+            insertion -= 1
+        lines.insert(insertion, f"{name} = {json.dumps(recipient)}\n")
+
+    staged = temporary_output(policy.path.parent, f".{policy.path.name}.tmp.")
+    try:
+        staged.write_text("".join(lines), encoding="utf-8")
+        staged.chmod(policy.path.stat().st_mode & 0o777)
+        load_policy(staged)
+        os.replace(staged, policy.path)
+    finally:
+        staged.unlink(missing_ok=True)
+
+
+def key_is_referenced(policy: Policy, name: str) -> bool:
+    if any(name in members for members in policy.groups.values()):
+        return True
+    data = tomllib.loads(policy.path.read_text(encoding="utf-8"))
+    secrets = data.get("secrets", {})
+    return isinstance(secrets, dict) and any(
+        isinstance(members, list) and name in members for members in secrets.values()
+    )
+
+
+def add_or_replace_key(
+    policy: Policy,
+    name: str,
+    recipient: str,
+    *,
+    replace: bool,
+    assume_yes: bool,
+) -> bool:
+    recipient = normalize_recipient(recipient)
+    existing = policy.keys.get(name)
+    if existing == recipient:
+        print(f"Key {name} is already configured")
+        return False
+    if existing is not None:
+        if not replace:
+            raise AgeDockerError(
+                f"Key {name} already exists with a different value; use --replace"
+            )
+        print(f"Old: {recipient_description(existing)}")
+        print(f"New: {recipient_description(recipient)}")
+        confirm(f"Replace key {name}?", assume_yes=assume_yes)
+    mutate_key(policy, name, recipient)
+    print(f"{'Replaced' if existing is not None else 'Added'} key {name}")
+    if existing is not None:
+        print("Recipient policy changed; run age-docker rekey --all")
+    return True
+
+
+def scan_host_key(host: str, port: int, key_type: str) -> str:
+    scan_type = {"ssh-ed25519": "ed25519", "ssh-rsa": "rsa"}.get(key_type, key_type)
+    recipient_type = {"ed25519": "ssh-ed25519", "rsa": "ssh-rsa"}.get(
+        scan_type, key_type
+    )
+    result = subprocess.run(
+        ["ssh-keyscan", "-p", str(port), "-t", scan_type, host],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise AgeDockerError(result.stderr.strip() or f"ssh-keyscan failed for {host}")
+    for line in result.stdout.splitlines():
+        fields = line.split()
+        if len(fields) >= 3 and fields[1] == recipient_type:
+            return normalize_recipient(f"{fields[1]} {fields[2]}")
+    raise AgeDockerError(f"ssh-keyscan returned no {recipient_type} key for {host}")
+
+
+def acquire_policy_lock(policy: Policy):
+    digest = hashlib.sha256(str(policy.path.resolve()).encode()).hexdigest()[:24]
+    lock_path = Path(tempfile.gettempdir()) / f"age-docker-{digest}.lock"
+    lock_file = lock_path.open("a+")
+    lock_path.chmod(0o600)
+    try:
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError as error:
+        lock_file.close()
+        raise AgeDockerError(
+            f"Another age-docker command is active for {policy.path}"
+        ) from error
+    return lock_file
+
+
+def bash_completion() -> str:
+    return r'''# bash completion for age-docker
+_age_docker() {
+    local cur prev command key_command word index command_index
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    case "$prev" in
+        --config|--identity)
+            COMPREPLY=( $(compgen -f -- "$cur") )
+            return
+            ;;
+    esac
+
+    for (( index = 1; index < COMP_CWORD; index++ )); do
+        word="${COMP_WORDS[index]}"
+        case "$word" in
+            --config|--identity)
+                (( index++ ))
+                ;;
+            --config=*|--identity=*)
+                ;;
+            init|check|list|encrypt|decrypt|edit|rekey|key|completion)
+                command="$word"
+                command_index="$index"
+                break
+                ;;
+        esac
+    done
+
+    if [[ -z "$command" ]]; then
+        COMPREPLY=( $(compgen -W '--config --identity --help init check list encrypt decrypt edit rekey key completion' -- "$cur") )
+        return
+    fi
+
+    case "$command" in
+        init|check|list)
+            COMPREPLY=( $(compgen -W '--help' -- "$cur") )
+            ;;
+        encrypt)
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $(compgen -W '--allow-empty --help' -- "$cur") )
+            else
+                COMPREPLY=( $(compgen -f -- "$cur") )
+            fi
+            ;;
+        decrypt)
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $(compgen -W '--force --help' -- "$cur") )
+            else
+                COMPREPLY=( $(compgen -f -- "$cur") )
+            fi
+            ;;
+        edit)
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $(compgen -W '--allow-empty --help' -- "$cur") )
+            else
+                COMPREPLY=( $(compgen -f -- "$cur") )
+            fi
+            ;;
+        rekey)
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $(compgen -W '--all --help' -- "$cur") )
+            else
+                COMPREPLY=( $(compgen -f -- "$cur") )
+            fi
+            ;;
+        completion)
+            COMPREPLY=( $(compgen -W 'bash zsh --help' -- "$cur") )
+            ;;
+        key)
+            for (( index = command_index + 1; index < COMP_CWORD; index++ )); do
+                word="${COMP_WORDS[index]}"
+                case "$word" in
+                    add|scan|remove)
+                        key_command="$word"
+                        break
+                        ;;
+                esac
+            done
+            case "$key_command" in
+                add)
+                    COMPREPLY=( $(compgen -W '--replace --yes --help' -- "$cur") )
+                    ;;
+                scan)
+                    COMPREPLY=( $(compgen -W '--port --type --replace --yes --help' -- "$cur") )
+                    ;;
+                remove)
+                    COMPREPLY=( $(compgen -W '--help' -- "$cur") )
+                    ;;
+                *)
+                    COMPREPLY=( $(compgen -W 'add scan remove --help' -- "$cur") )
+                    ;;
+            esac
+            ;;
+    esac
+}
+complete -F _age_docker age-docker
+'''
+
+
+def zsh_completion() -> str:
+    return r'''#compdef age-docker
+# zsh completion for age-docker
+_age_docker() {
+  local command key_command word
+  local -i command_index key_command_index
+
+  for (( command_index = 2; command_index < CURRENT; command_index++ )); do
+    word="${words[command_index]}"
+    case "$word" in
+      --config|--identity)
+        (( command_index++ ))
+        ;;
+      --config=*|--identity=*)
+        ;;
+      init|check|list|encrypt|decrypt|edit|rekey|key|completion)
+        command="$word"
+        break
+        ;;
+    esac
+  done
+
+  if [[ -z "$command" ]]; then
+    _arguments \
+      '(-h --help)'{-h,--help}'[show help and exit]' \
+      '--config[path to .age-docker.toml]:config file:_files' \
+      '*--identity[age identity used to decrypt and verify]:identity file:_files' \
+      '1:command:((init\:"create an empty deployment secrets policy" check\:"validate the deployment secrets policy" list\:"list secrets and resolved key aliases" encrypt\:"encrypt a plaintext file" decrypt\:"decrypt a configured secret" edit\:"edit a configured secret" rekey\:"re-encrypt configured secrets" key\:"manage public keys" completion\:"generate shell completion"))'
+    return
+  fi
+
+  words=("${words[1]}" "${words[@]:$command_index}")
+  (( CURRENT = CURRENT - command_index + 1 ))
+
+  case "$command" in
+    init|check|list)
+      _arguments '(-h --help)'{-h,--help}'[show help and exit]'
+      ;;
+    encrypt)
+      _arguments \
+        '(-h --help)'{-h,--help}'[show help and exit]' \
+        '--allow-empty[allow an empty plaintext file]' \
+        '1:plaintext file:_files' \
+        '2:configured secret:_files'
+      ;;
+    decrypt)
+      _arguments \
+        '(-h --help)'{-h,--help}'[show help and exit]' \
+        '--force[overwrite an existing plaintext destination]' \
+        '1:configured secret:_files' \
+        '2:plaintext destination:_files'
+      ;;
+    edit)
+      _arguments \
+        '(-h --help)'{-h,--help}'[show help and exit]' \
+        '--allow-empty[allow an empty plaintext file]' \
+        '1:configured secret:_files'
+      ;;
+    rekey)
+      _arguments \
+        '(-h --help)'{-h,--help}'[show help and exit]' \
+        '--all[rekey all configured secrets]' \
+        '*:configured secret:_files'
+      ;;
+    completion)
+      _arguments \
+        '(-h --help)'{-h,--help}'[show help and exit]' \
+        '1:shell:(bash zsh)'
+      ;;
+    key)
+      for (( key_command_index = 2; key_command_index < CURRENT; key_command_index++ )); do
+        word="${words[key_command_index]}"
+        case "$word" in
+          add|scan|remove)
+            key_command="$word"
+            break
+            ;;
+        esac
+      done
+      if [[ -n "$key_command" ]]; then
+        words=("${words[1]}" "${words[@]:$key_command_index}")
+        (( CURRENT = CURRENT - key_command_index + 1 ))
+      fi
+      case "$key_command" in
+        add)
+          _arguments \
+            '(-h --help)'{-h,--help}'[show help and exit]' \
+            '--replace[replace an existing key]' \
+            '--yes[skip confirmation]' \
+            '1:key name:' \
+            '2:age recipient:'
+          ;;
+        scan)
+          _arguments \
+            '(-h --help)'{-h,--help}'[show help and exit]' \
+            '--port[SSH port]:port:' \
+            '--type[SSH key type]:key type:(ssh-ed25519 ssh-rsa)' \
+            '--replace[replace an existing key]' \
+            '--yes[skip confirmation]' \
+            '1:key name:' \
+            '2:SSH host:_hosts'
+          ;;
+        remove)
+          _arguments \
+            '(-h --help)'{-h,--help}'[show help and exit]' \
+            '1:key name:'
+          ;;
+        *)
+          _arguments \
+            '(-h --help)'{-h,--help}'[show help and exit]' \
+            '1:key command:((add\:"add an existing age recipient" scan\:"retrieve an SSH host public key" remove\:"remove an unreferenced public key"))'
+          ;;
+      esac
+      ;;
+  esac
+}
+compdef _age_docker age-docker
+'''
+
+
+def generate_completion(shell: str) -> str:
+    if shell == "bash":
+        return bash_completion()
+    if shell == "zsh":
+        return zsh_completion()
+    raise AgeDockerError(f"Unsupported shell: {shell}")
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="age-docker")
+    parser.add_argument("--config", help="path to .age-docker.toml")
+    parser.add_argument(
+        "--identity", action="append", help="age identity used to decrypt and verify"
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser("init", help="create an empty deployment secrets policy")
+    subparsers.add_parser("check", help="validate the deployment secrets policy")
+    subparsers.add_parser("list", help="list secrets and their resolved key aliases")
+    encrypt = subparsers.add_parser(
+        "encrypt", help="encrypt a plaintext file for a configured secret"
+    )
+    encrypt.add_argument("plaintext")
+    encrypt.add_argument("secret")
+    encrypt.add_argument("--allow-empty", action="store_true")
+    decrypt = subparsers.add_parser(
+        "decrypt", help="decrypt a configured secret to a persistent file"
+    )
+    decrypt.add_argument("secret")
+    decrypt.add_argument("plaintext")
+    decrypt.add_argument("--force", action="store_true")
+    edit = subparsers.add_parser("edit", help="edit a configured secret")
+    edit.add_argument("secret")
+    edit.add_argument("--allow-empty", action="store_true")
+    rekey = subparsers.add_parser(
+        "rekey", help="re-encrypt secrets using the configured recipients"
+    )
+    rekey.add_argument("secrets", nargs="*")
+    rekey.add_argument("--all", action="store_true", dest="all_secrets")
+    key = subparsers.add_parser("key", help="manage public keys in the policy")
+    key_commands = key.add_subparsers(dest="key_command", required=True)
+    key_add = key_commands.add_parser("add", help="add an existing age recipient")
+    key_add.add_argument("name")
+    key_add.add_argument("recipient")
+    key_add.add_argument("--replace", action="store_true")
+    key_add.add_argument("--yes", action="store_true")
+    key_scan = key_commands.add_parser("scan", help="retrieve an SSH host public key")
+    key_scan.add_argument("name")
+    key_scan.add_argument("host")
+    key_scan.add_argument("--port", type=int, default=22)
+    key_scan.add_argument("--type", default="ssh-ed25519", dest="key_type")
+    key_scan.add_argument("--replace", action="store_true")
+    key_scan.add_argument("--yes", action="store_true")
+    key_remove = key_commands.add_parser(
+        "remove", help="remove an unreferenced public key"
+    )
+    key_remove.add_argument("name")
+    completion = subparsers.add_parser(
+        "completion", help="generate shell completion code"
+    )
+    completion.add_argument("shell", choices=SUPPORTED_SHELLS)
+    return parser
+
+
+def command_start(args: argparse.Namespace) -> Path:
+    value: str | None = None
+    if args.command in {"encrypt", "decrypt", "edit"}:
+        value = args.secret
+    elif args.command == "rekey" and args.secrets:
+        value = args.secrets[0]
+    if value is None:
+        return Path.cwd()
+    path = Path(value).expanduser()
+    if not path.is_absolute():
+        path = Path.cwd() / path
+    return path.parent
+
+
+def main(argv: list[str] | None = None) -> int:
+    install_signal_handlers()
+    args = build_parser().parse_args(argv)
+    if args.command == "completion":
+        print(generate_completion(args.shell), end="")
+        return 0
+    if args.command == "init":
+        configured = args.config or os.environ.get("AGE_DOCKER_CONFIG")
+        config = (
+            Path(configured).expanduser() if configured else Path.cwd() / CONFIG_NAME
+        )
+        if not config.is_absolute():
+            config = Path.cwd() / config
+        try:
+            with config.open("x", encoding="utf-8") as file:
+                file.write(EMPTY_CONFIG)
+        except FileExistsError:
+            print(f"Config already exists: {config}", file=sys.stderr)
+            return 1
+        print(f"Created {config}")
+        return 0
+    policy = load_policy(discover_config(args.config, command_start(args)))
+    _lock_file = (
+        acquire_policy_lock(policy)
+        if args.command in {"encrypt", "decrypt", "edit", "rekey", "key"}
+        else None
+    )
+    if args.command == "check":
+        count = len(policy.secrets)
+        print(f"Config is valid: {count} secret{'s' if count != 1 else ''}")
+        return 0
+    if args.command == "list":
+        for rule in policy.secrets.values():
+            print(f"{rule.relative_path}: {', '.join(rule.aliases)}")
+        return 0
+    if args.command == "encrypt":
+        rule = find_rule(policy, args.secret)
+        encrypt_file(
+            rule,
+            Path(args.plaintext).expanduser().resolve(),
+            args.identity,
+            allow_empty=args.allow_empty,
+        )
+        print(f"Encrypted {rule.relative_path}")
+        return 0
+    if args.command == "decrypt":
+        rule = find_rule(policy, args.secret)
+        decrypt_file(
+            rule,
+            Path(args.plaintext).expanduser().resolve(strict=False),
+            args.identity,
+            force=args.force,
+        )
+        print(f"Decrypted {rule.relative_path} to {args.plaintext}")
+        return 0
+    if args.command == "edit":
+        rule = find_rule(policy, args.secret)
+        changed = edit_file(rule, args.identity, allow_empty=args.allow_empty)
+        print(
+            f"Encrypted {rule.relative_path}"
+            if changed
+            else f"{rule.relative_path} is unchanged"
+        )
+        return 0
+    if args.command == "rekey":
+        if args.all_secrets == bool(args.secrets):
+            raise AgeDockerError("Specify configured secret paths or --all")
+        rules = (
+            list(policy.secrets.values())
+            if args.all_secrets
+            else [find_rule(policy, value) for value in args.secrets]
+        )
+        rekeyed = rekey_files(rules, args.identity, skip_missing=args.all_secrets)
+        print(f"Rekeyed {rekeyed} secret{'s' if rekeyed != 1 else ''}")
+        return 0
+    if args.command == "key":
+        if args.key_command == "add":
+            add_or_replace_key(
+                policy,
+                args.name,
+                args.recipient,
+                replace=args.replace,
+                assume_yes=args.yes,
+            )
+            return 0
+        if args.key_command == "scan":
+            recipient = scan_host_key(args.host, args.port, args.key_type)
+            print(f"Retrieved: {recipient}")
+            print(f"Fingerprint: {recipient_description(recipient)}")
+            print(
+                "Verify this fingerprint through a trusted channel; ssh-keyscan does not authenticate it."
+            )
+            replacing = args.name in policy.keys
+            if not replacing:
+                confirm(f"Store key as {args.name}?", assume_yes=args.yes)
+            add_or_replace_key(
+                policy,
+                args.name,
+                recipient,
+                replace=args.replace,
+                assume_yes=args.yes if replacing else True,
+            )
+            return 0
+        if args.key_command == "remove":
+            if args.name not in policy.keys:
+                raise AgeDockerError(f"Unknown key: {args.name}")
+            if key_is_referenced(policy, args.name):
+                raise AgeDockerError(
+                    f"Key {args.name} is still referenced by a group or secret"
+                )
+            mutate_key(policy, args.name, None)
+            print(f"Removed key {args.name}")
+            return 0
+    return 2
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except (AgeDockerError, OSError, subprocess.SubprocessError) as error:
+        print(f"age-docker: {error}", file=sys.stderr)
+        raise SystemExit(1)

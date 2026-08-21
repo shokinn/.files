@@ -264,6 +264,38 @@ addec() {
   age -d -i {{@@ ageidentity @@}} -o "${2}" "${1}"
 }
 
+#######################################
+# Manage age-encrypted deployment secrets using a project-local policy.
+# Globals:
+#   AGE_DOCKER_IDENTITY
+# Arguments:
+#   age-docker command and arguments
+# Outputs:
+#   Writes command output to stdout and errors to stderr
+# Returns:
+#   age-docker exit status
+#######################################
+export AGE_DOCKER_IDENTITY="${AGE_DOCKER_IDENTITY:-{{@@ agedockersecretsidentity @@}}}"
+
+age-docker() {
+  {{@@ env['HOME'] @@}}/.local/bin/age-docker "$@"
+}
+
+# Register completion only when commonfunc is sourced from an interactive Zsh
+# after its completion system has been initialized.
+if [[ -n "${ZSH_VERSION:-}" ]] && [[ -o interactive ]] && \
+  command -v compdef >/dev/null 2>&1 && \
+  [[ -z "${AGE_DOCKER_ZSH_COMPLETION_LOADED:-}" ]]; then
+  _age_docker_completion="$({{@@ env['HOME'] @@}}/.local/bin/age-docker completion zsh 2>/dev/null)" || \
+    _age_docker_completion=""
+  if [[ -n "${_age_docker_completion}" ]]; then
+    if eval "${_age_docker_completion}" 2>/dev/null; then
+      AGE_DOCKER_ZSH_COMPLETION_LOADED=1
+    fi
+  fi
+  unset _age_docker_completion
+fi
+
 {%@@ if distro == 'macos' @@%}
 
 #######################################

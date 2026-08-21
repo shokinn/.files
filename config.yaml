@@ -5,6 +5,7 @@ config:
 variables:
   ageidentity: "{{@@ env['HOME'] @@}}/.age/phg-age-dotfiles"
   ageidentity_pub: '{{@@ ageidentity@@}}.pub'
+  agedockersecretsidentity: "{{@@ env['HOME'] @@}}/.age/phg-age-docker-secrets"
   SHELL_ERR_MESSAGE: \033[41;30m
   SHELL_RESET_COLOR: \033[0m
 trans_install:
@@ -149,6 +150,10 @@ dotfiles:
   f_agenix_helper:
     dst: ~/.local/bin/agenix-helper
     src: local/bin/agenix-helper
+  f_age_docker:
+    dst: ~/.local/bin/age-docker
+    src: local/bin/age-docker
+    chmod: '700'
   f_config:
     src: ssh/config
     dst: ~/.ssh/config
@@ -188,6 +193,7 @@ profiles:
       wsl: false
     dotfiles:
     - d_colors
+    - f_age_docker
     - f_agenix_helper
     - f_codew
     - f_commonfunc
