@@ -1,5 +1,6 @@
 tap "AlexStrNik/Browserino"
 tap "philocalyst/tap"
+tap "steipete/tap", trusted: { formulae: ["codexbar"], casks: ["codexbar"] }
 tap "us/tap"
 # Simple, modern, secure file encryption
 brew "age"
@@ -27,6 +28,8 @@ brew "diskwatch"
 brew "docker"
 # Disk Usage/Free Utility - a better 'df' alternative
 brew "duf"
+# Program that can automate interactive applications
+brew "expect"
 # Modern, maintained replacement for ls
 brew "eza"
 # Open-source framework for augmenting humans using AI
@@ -189,7 +192,6 @@ cask "t3-code"
 cask "thaw"
 # Open-source code editor
 cask "visual-studio-code"
-go "dbohdan.com/age-edit"
 mas "AdGuard for Safari", id: 1440147259
 mas "Amphetamine", id: 937984704
 mas "AusweisApp", id: 948660805
@@ -205,3 +207,10 @@ mas "Tailscale", id: 1475387142
 mas "Tampermonkey", id: 6738342400
 mas "WireGuard", id: 1451685025
 mas "Yubico Authenticator", id: 1497506650
+go "dbohdan.com/age-edit"
+krew "access-matrix"
+krew "blame"
+krew "ctx"
+krew "krew"
+krew "ns"
+krew "tree"
