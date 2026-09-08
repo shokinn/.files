@@ -185,7 +185,17 @@ dotfiles:
     dst: ~/.vws2-artifacts-config
     trans_install: _decrypt
     trans_update: _encrypt
+  f_b23func:
+    src: b23func.age
+    dst: ~/.b23func
+    trans_install: _decrypt
+    trans_update: _encrypt
 profiles:
+  meta_b23:
+    variables:
+      b23: true
+    dotfiles:
+    - f_b23func
   meta_base:
     variables:
       linux: false
@@ -246,6 +256,7 @@ profiles:
   susanoo.local:
     include:
     - os_macos
+    - meta_b23
   workspace:
     include:
     - os_ubuntu
