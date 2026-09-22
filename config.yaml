@@ -161,6 +161,9 @@ dotfiles:
   f_p10k_mise:
     dst: ~/.config/zsh/p10k.mise.zsh
     src: config/zsh/p10k.mise.zsh
+  f_mocker_completion:
+    dst: ~/.oh-my-zsh/custom/plugins/custom-completions/_mocker
+    src: config/zsh/completions/_mocker
   f_finicky.js:
     src: finicky.js.age
     dst: ~/.finicky.js
@@ -208,6 +211,7 @@ profiles:
     - f_codew
     - f_commonfunc
     - f_config
+    - f_mocker_completion
     - f_p10k_mise
     - f_powerlevel10krc
     - f_secretfiles
